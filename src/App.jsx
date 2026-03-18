@@ -262,26 +262,29 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           <img
             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
             alt="avatar"
-            className="h-12 w-12 rounded-[14px] object-cover ring-2 ring-white"
+            className="h-12 w-12 rounded-full object-cover ring-2 ring-white"
           />
           <div className="min-w-0">
-            <div className="truncate text-[15px] font-semibold text-[#1d2333]">Нана</div>
-            <div className="truncate text-[12px] text-[#7d8ca5]">Премиум доступ</div>
+            <div className="flex items-center gap-1">
+              <div className="truncate text-[18px] font-semibold text-[#1f3b67]">Сергей</div>
+              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9bb0d0] opacity-0 transition group-hover:opacity-100" />
+            </div>
+            <div className="text-[13px] text-[#7e8ba3]">Мой профиль</div>
           </div>
         </button>
 
-        <button
-          onClick={onOpenBalance}
-          className="flex items-center gap-2 rounded-[18px] bg-[#eef5ff] px-4 py-3 text-[#2b7de9] shadow-[0_10px_22px_rgba(43,125,233,0.1)] transition hover:bg-[#e3efff]"
-        >
-          <Coins className="h-5 w-5" strokeWidth={2.1} />
-          <div className="text-left">
-            <div className="text-[11px] font-medium text-[#6f84a7]">Баланс</div>
-            <div className="text-[16px] font-semibold tracking-[-0.02em]">
-              {isBonusCounting ? "..." : balance}
-            </div>
+        <div className="flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
+          <div className="flex items-center gap-2 px-4 py-2.5 text-[18px] font-semibold">
+            <span>{isBonusCounting ? "..." : balance}</span>
+            <Sparkles className="h-4.5 w-4.5" strokeWidth={2.1} />
           </div>
-        </button>
+          <button
+            onClick={onOpenBalance}
+            className="flex h-12 w-12 items-center justify-center bg-[#2b7de9] text-white"
+          >
+            <Plus className="h-6 w-6" />
+          </button>
+        </div>
       </div>
     </div>
   );
