@@ -34,6 +34,14 @@ const filters = [
   { id: "style", label: "Видео", icon: Film },
 ];
 
+const styleSections = [
+  { id: "all", label: "Все" },
+  { id: "march8", label: "8 марта" },
+  { id: "spring", label: "Весна" },
+  { id: "business", label: "Деловой" },
+  { id: "street", label: "Улица" },
+];
+
 const tasks = [
   {
     id: 1,
@@ -105,6 +113,7 @@ const cards = [
     title: "Вечерний портрет",
     likes: 14,
     badge: null,
+    section: "business",
     image:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -119,6 +128,7 @@ const cards = [
     title: "Модный образ",
     likes: 6,
     badge: "new",
+    section: "street",
     image:
       "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -133,6 +143,7 @@ const cards = [
     title: "Пара в городе",
     likes: 141,
     badge: null,
+    section: "street",
     image:
       "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -147,6 +158,7 @@ const cards = [
     title: "Светлый портрет",
     likes: 14,
     badge: "popular",
+    section: "spring",
     image:
       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -161,6 +173,7 @@ const cards = [
     title: "Street style",
     likes: 6,
     badge: null,
+    section: "street",
     image:
       "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -175,6 +188,7 @@ const cards = [
     title: "Праздник вдвоём",
     likes: 141,
     badge: "free",
+    section: "march8",
     image:
       "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -189,6 +203,7 @@ const cards = [
     title: "Тёплый кадр",
     likes: 14,
     badge: null,
+    section: "spring",
     image:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -203,6 +218,7 @@ const cards = [
     title: "Нежный стиль",
     likes: 6,
     badge: "new",
+    section: "march8",
     image:
       "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -217,6 +233,7 @@ const cards = [
     title: "Яркий образ",
     likes: 141,
     badge: "popular",
+    section: "street",
     image:
       "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -231,6 +248,7 @@ const cards = [
     title: "Портрет в студии",
     likes: 23,
     badge: null,
+    section: "business",
     image:
       "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -245,6 +263,7 @@ const cards = [
     title: "Винтаж",
     likes: 58,
     badge: null,
+    section: "business",
     image:
       "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -259,6 +278,7 @@ const cards = [
     title: "Лайфстайл",
     likes: 91,
     badge: null,
+    section: "spring",
     image:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -353,7 +373,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-1 pb-2 pt-[50px]">
+    <div className="px-1 pb-2 pt-[80px]">
       <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
@@ -512,12 +532,12 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
     const swipeThreshold = 45;
 
     if (info.offset.x <= -swipeThreshold) {
-      setActiveSlide((currentSlide) => (currentSlide + 1) % styleGallery.length);
+      setActiveSlide((currentSlide) => Math.min(currentSlide + 1, styleGallery.length - 1));
       return;
     }
 
     if (info.offset.x >= swipeThreshold) {
-      setActiveSlide((currentSlide) => (currentSlide - 1 + styleGallery.length) % styleGallery.length);
+      setActiveSlide((currentSlide) => Math.max(currentSlide - 1, 0));
     }
   };
 
@@ -615,9 +635,10 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
               drag={canSlideGallery ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.08}
+              dragMomentum={false}
               onDragEnd={handleGalleryDragEnd}
               animate={{ x: `-${activeSlide * styleSlideOffset}%` }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className={`flex ${canSlideGallery ? "cursor-grab active:cursor-grabbing" : ""}`}
               style={{ width: `${styleGallery.length * 100}%` }}
             >
@@ -765,11 +786,11 @@ function ProductCard({ product, isSelected, onSelect }) {
             <div className={`text-[18px] font-medium ${isFeatured ? "text-white/78" : "text-[#767f93]"}`}>
               {product.subtitle}
             </div>
-            <div className={`mt-2 text-[32px] font-semibold tracking-[-0.045em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
+            <div className={`mt-2 text-[16px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
               {product.amount} фотографий
             </div>
           </div>
-          <div className={`shrink-0 text-right text-[34px] font-semibold tracking-[-0.045em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
+          <div className={`shrink-0 text-right text-[17px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
             {product.price}
           </div>
         </div>
@@ -803,7 +824,7 @@ function ShopScreen({
         isBonusCounting={isBonusCounting}
       />
 
-      <div className="space-y-6 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+      <div className="space-y-6 rounded-[30px] bg-white px-4 pb-28 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="space-y-3 px-1">
           <div className="max-w-[320px] text-[34px] font-semibold leading-[0.95] tracking-[-0.055em] text-[#161c2c]">
             Твоя идеальная съемка за 1 минуту
@@ -835,6 +856,9 @@ function ShopScreen({
           ))}
         </div>
 
+      </div>
+
+      <div className="sticky bottom-3 z-20 px-1">
         <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#2fb7ff_0%,#1d9fff_45%,#0b7cff_100%)] px-5 py-5 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(27,145,255,0.28)]">
           Перейти к оплате
         </button>
@@ -1094,6 +1118,14 @@ function FeedScreen({
   balance,
   isBonusCounting,
 }) {
+  const feedSections = styleSections
+    .filter((section) => section.id !== "all")
+    .map((section) => ({
+      ...section,
+      cards: visibleCards.filter((card) => card.section === section.id),
+    }))
+    .filter((section) => section.cards.length > 0);
+
   return (
     <>
       <Header
@@ -1104,9 +1136,26 @@ function FeedScreen({
       />
       <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
 
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        {visibleCards.map((card) => (
-          <FeedCard key={card.id} card={card} onClick={onSelectCard} />
+      <div className="mt-3 space-y-5">
+        {feedSections.map((section) => (
+          <section key={section.id} className="space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-[20px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
+                {section.label}
+              </h2>
+              <button className="shrink-0 rounded-full bg-white px-3 py-1.5 text-[12px] font-semibold text-[#5a6e90] ring-1 ring-[#dce4f2]">
+                Все
+              </button>
+            </div>
+
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {section.cards.map((card) => (
+                <div key={card.id} className="w-[168px] shrink-0">
+                  <FeedCard card={card} onClick={onSelectCard} />
+                </div>
+              ))}
+            </div>
+          </section>
         ))}
       </div>
     </>
@@ -1128,11 +1177,14 @@ export default function App() {
   const [isBonusClaimClosing, setIsBonusClaimClosing] = useState(false);
 
   const visibleCards = useMemo(() => {
-    if (activeFilter === "liked") return cards.filter((card) => card.likes >= 50);
-    if (activeFilter === "new") return cards.slice(0, 6);
-    if (activeFilter === "winter") return cards.filter((card) => card.badge === "free");
-    if (activeFilter === "style") return [...cards].reverse();
-    return cards;
+    let filteredCards = cards;
+
+    if (activeFilter === "liked") filteredCards = cards.filter((card) => card.likes >= 50);
+    else if (activeFilter === "new") filteredCards = cards.slice(0, 6);
+    else if (activeFilter === "winter") filteredCards = cards.filter((card) => card.badge === "free");
+    else if (activeFilter === "style") filteredCards = [...cards].reverse();
+
+    return filteredCards;
   }, [activeFilter]);
 
   const handleSelectCard = (card) => {
@@ -1148,6 +1200,31 @@ export default function App() {
   const handleOpenProfile = () => {
     setScreen("profile");
   };
+
+  useEffect(() => {
+    const backButton = window.Telegram?.WebApp?.BackButton;
+    if (!backButton) return undefined;
+
+    const handleBack = () => {
+      setScreen((currentScreen) => {
+        if (currentScreen === "feed") return currentScreen;
+        return "feed";
+      });
+    };
+
+    if (screen === "feed") {
+      backButton.hide();
+      backButton.offClick(handleBack);
+      return undefined;
+    }
+
+    backButton.show();
+    backButton.onClick(handleBack);
+
+    return () => {
+      backButton.offClick(handleBack);
+    };
+  }, [screen]);
 
   const claimWelcomeBonus = () => {
     if (isBonusCounting || isBonusClaimClosing) return;
