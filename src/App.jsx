@@ -1067,35 +1067,39 @@ export default function App() {
   const claimWelcomeBonus = () => {
     if (isBonusFlying || isBonusCounting || isBonusClaimClosing) return;
     setIsBonusClaimClosing(true);
-    setIsBonusCounting(true);
 
     const duration = 900;
     const total = 20;
     const closeDelay = 280;
     const takeoffDelay = 320;
+    const flightDuration = 11500;
+    const counterDelayAfterFlight = 180;
 
     setTimeout(() => {
       setShowWelcomeBonus(false);
       setTimeout(() => {
         setIsBonusFlying(true);
+        setTimeout(() => {
+          setIsBonusFlying(false);
+          setIsBonusCounting(true);
 
-        const start = performance.now();
+          const start = performance.now();
 
-        const tick = (now) => {
-          const progress = Math.min((now - start) / duration, 1);
-          setBalance(Math.round(total * progress));
-          if (progress < 1) {
-            requestAnimationFrame(tick);
-          } else {
-            setTimeout(() => {
-              setIsBonusFlying(false);
-              setIsBonusCounting(false);
-              setIsBonusClaimClosing(false);
-            }, 180);
-          }
-        };
+          const tick = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            setBalance(Math.round(total * progress));
+            if (progress < 1) {
+              requestAnimationFrame(tick);
+            } else {
+              setTimeout(() => {
+                setIsBonusCounting(false);
+                setIsBonusClaimClosing(false);
+              }, 180);
+            }
+          };
 
-        requestAnimationFrame(tick);
+          requestAnimationFrame(tick);
+        }, flightDuration + counterDelayAfterFlight);
       }, takeoffDelay);
     }, closeDelay);
   };
@@ -1186,7 +1190,7 @@ export default function App() {
                 opacity: [1, 1, 0],
                 rotate: [0, 80, 220],
               }}
-              transition={{ duration: 1.15, times: [0, 0.28, 1], ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 11.5, times: [0, 0.28, 1], ease: [0.22, 1, 0.36, 1] }}
               className="pointer-events-none absolute left-1/2 top-[430px] z-[60]"
             >
               <Sparkles className="h-7 w-7 text-[#2b7de9] drop-shadow-[0_8px_18px_rgba(43,125,233,0.28)]" strokeWidth={2.2} />
@@ -1200,7 +1204,7 @@ export default function App() {
                 opacity: [0.95, 0.95, 0],
                 rotate: [0, -70, -210],
               }}
-              transition={{ duration: 1.2, times: [0, 0.28, 1], ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
+              transition={{ duration: 12, times: [0, 0.28, 1], ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
               className="pointer-events-none absolute left-1/2 top-[446px] z-[60]"
             >
               <Sparkles className="h-5 w-5 text-[#67c3ff] drop-shadow-[0_8px_18px_rgba(43,125,233,0.24)]" strokeWidth={2.2} />
