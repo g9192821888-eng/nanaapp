@@ -358,10 +358,10 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   return (
     <div className="fixed left-1/2 top-0 z-40 w-full max-w-[516px] -translate-x-1/2 px-3 pb-2 pt-[calc(max(8px,env(safe-area-inset-top))+20px)]">
       <div className="overflow-hidden rounded-b-[28px] border-b border-[#dce4f2] bg-white px-5 pb-4 pt-[calc(env(safe-area-inset-top)+56px)] shadow-[0_8px_32px_rgba(70,89,122,0.08)] -mt-[calc(env(safe-area-inset-top)+52px)]">
-        <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[15px]">
+        <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[35px]">
           <button
             onClick={onOpenProfile}
-            className="-ml-[5px] group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
+            className="-ml-[10px] group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
           >
             <img
               src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
@@ -377,7 +377,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
             </div>
           </button>
 
-          <div className="ml-[5px] flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
+          <div className="ml-[10px] flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
             <div className="flex items-center gap-1.5 px-3.5 py-2 text-[16px] font-semibold">
               <BalanceDigits value={balance} />
               <Sparkles className="h-4 w-4" strokeWidth={2.1} />
