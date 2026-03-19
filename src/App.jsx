@@ -10,6 +10,7 @@ import {
   Heart,
   Plus,
   Search,
+  Settings,
   Flower2,
   Film,
   History,
@@ -1000,11 +1001,11 @@ function ShopScreen({
 
       <div className="space-y-5 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         {discountActive ? (
-          <div className="flex items-center justify-between gap-3 overflow-hidden rounded-[18px] bg-[linear-gradient(90deg,#ff8b2c_0%,#ff5630_45%,#ff2a2a_100%)] px-4 py-2 text-white shadow-[0_10px_24px_rgba(255,102,56,0.18)]">
+          <div className="flex items-center justify-between gap-3 overflow-hidden rounded-[16px] bg-[linear-gradient(90deg,#ff8b2c_0%,#ff5630_45%,#ff2a2a_100%)] px-4 py-1.5 text-white shadow-[0_10px_24px_rgba(255,102,56,0.18)]">
             <span className="text-[17px] font-bold uppercase tracking-[-0.03em]">
               Скидка активирована -5%
             </span>
-            <span className="shrink-0 rounded-full bg-white/18 px-3 py-1 text-[17px] font-bold tabular-nums">
+            <span className="shrink-0 rounded-full bg-white/18 px-3 py-0.5 text-[17px] font-bold tabular-nums">
               {discountTimeLeft}
             </span>
           </div>
@@ -1087,6 +1088,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
           <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-2 pr-2">
               {[
+                { id: "settings", label: "Настройки", icon: Settings },
                 { id: "tasks", label: "Задания", icon: ClipboardList },
                 { id: "bonus", label: "Бонус", icon: Gift },
                 { id: "photos", label: "Фотографии", icon: Image },
@@ -1113,7 +1115,26 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         </div>
       </PinnedSectionHeader>
 
-      {profileTab === "tasks" ? (
+      {profileTab === "settings" ? (
+        <div className="space-y-2.5">
+          {[
+            { label: "Уведомления", value: "Включены" },
+            { label: "Язык интерфейса", value: "Русский" },
+            { label: "Автосохранение фото", value: "Включено" },
+            { label: "Поддержка", value: "Написать" },
+          ].map((item) => (
+            <button
+              key={item.label}
+              className="flex w-full items-center justify-between gap-4 rounded-[18px] border border-[#dce4f2] bg-white px-4 py-4 text-left shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
+            >
+              <div className="min-w-0 flex-1">
+                <div className="text-[15px] font-semibold text-[#234677]">{item.label}</div>
+              </div>
+              <div className="shrink-0 text-[13px] font-medium text-[#8a97ad]">{item.value}</div>
+            </button>
+          ))}
+        </div>
+      ) : profileTab === "tasks" ? (
         <div className="space-y-2.5">
           {tasks.map((task) => (
             <TaskCard key={task.id} task={task} />
