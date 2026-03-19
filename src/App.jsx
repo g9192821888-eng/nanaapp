@@ -427,7 +427,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
   return (
     <div className="px-1 pb-0 pt-[180px]">
-      <div className="mx-auto mt-[-95px] flex w-full max-w-[516px] items-center justify-between gap-3">
+      <div className="mx-auto mt-[-85px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(232,238,248,0.78)] bg-[rgba(255,255,255,0.72)] px-1 py-1 text-left transition active:scale-[0.98]"
@@ -569,7 +569,17 @@ function FeedCard({ card, onClick }) {
   );
 }
 
-function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, balance, isBonusCounting }) {
+function StyleScreen({
+  card,
+  sectionStyles,
+  onSelectStyle,
+  onBack,
+  onOpenBalance,
+  onOpenProfile,
+  onCreate,
+  balance,
+  isBonusCounting,
+}) {
   const [isLiked, setIsLiked] = useState(false);
   const isPairStyle = card.title === "Пара в городе";
   const [hasPhoto, setHasPhoto] = useState(false);
@@ -700,6 +710,26 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, bal
           balance={balance}
           isBonusCounting={isBonusCounting}
         />
+
+        {sectionStyles?.length ? (
+          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(248,250,253,0.82)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex items-center gap-2 pr-2">
+              {sectionStyles.map((styleCard) => (
+                <button
+                  key={styleCard.id}
+                  onClick={() => onSelectStyle(styleCard)}
+                  className={`shrink-0 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
+                    styleCard.id === card.id
+                      ? "bg-[rgba(43,125,233,0.92)] text-white"
+                      : "bg-[rgba(245,247,251,0.82)] text-[#5a6e90]"
+                  }`}
+                >
+                  {styleCard.title}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </PinnedSectionHeader>
 
       <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
@@ -1230,8 +1260,6 @@ function SectionPanel({ section, onSelectCard }) {
 
   return (
     <div className="space-y-3 bg-white px-2 pb-6">
-      <div className="text-[24px] font-semibold tracking-[-0.04em] text-[#1c2b45]">{section.label}</div>
-      <div className="mt-1 text-[13px] text-[#8a97ad]">Все стили раздела в одной ленте</div>
       <div className="grid grid-cols-2 gap-2">
         {section.cards.map((card) => (
           <FeedCard key={card.id} card={card} onClick={onSelectCard} />
@@ -1243,6 +1271,8 @@ function SectionPanel({ section, onSelectCard }) {
 
 function SectionScreen({
   section,
+  sections,
+  onChangeSection,
   onSelectCard,
   onOpenBalance,
   onOpenProfile,
@@ -1258,6 +1288,24 @@ function SectionScreen({
           balance={balance}
           isBonusCounting={isBonusCounting}
         />
+
+        <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(248,250,253,0.82)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex items-center gap-2 pr-2">
+            {sections.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => onChangeSection(item)}
+                className={`shrink-0 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
+                  item.id === section.id
+                    ? "bg-[rgba(43,125,233,0.92)] text-white"
+                    : "bg-[rgba(245,247,251,0.82)] text-[#5a6e90]"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </PinnedSectionHeader>
 
       <SectionPanel section={section} onSelectCard={onSelectCard} />
@@ -1362,6 +1410,11 @@ export default function App() {
         }))
         .filter((section) => section.cards.length > 0),
     [visibleCards],
+  );
+
+  const currentSectionStyles = useMemo(
+    () => cards.filter((item) => item.section === selectedCard.section),
+    [selectedCard],
   );
 
   const handleSelectCard = (card) => {
@@ -1508,6 +1561,8 @@ export default function App() {
         ) : screen === "style" ? (
           <StyleScreen
             card={selectedCard}
+            sectionStyles={currentSectionStyles}
+            onSelectStyle={setSelectedCard}
             onBack={() => setScreen("feed")}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
