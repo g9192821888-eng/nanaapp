@@ -484,7 +484,7 @@ function PinnedSectionHeader({ children, className = "" }) {
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-[-5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(248,250,253,0.82)] px-2 py-2">
+    <div className="mt-[-5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2">
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -494,8 +494,8 @@ function FilterBar({ activeFilter, setActiveFilter }) {
             onClick={() => setActiveFilter(filter.id)}
             className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
               isActive
-                ? "bg-[rgba(43,125,233,0.92)] text-white"
-                : "bg-[rgba(245,247,251,0.82)] text-[#5a6e90]"
+                ? "border border-[rgba(43,125,233,0.18)] bg-[rgba(43,125,233,0.92)] text-white"
+                : "border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
             }`}
           >
             <Icon className="h-4 w-4" strokeWidth={2.2} fill={filter.id === "liked" ? "currentColor" : "none"} />
@@ -583,7 +583,9 @@ function FeedCard({ card, onClick }) {
 function StyleScreen({
   card,
   sectionStyles,
+  sectionLabel,
   onSelectStyle,
+  onOpenSection,
   onBack,
   onOpenBalance,
   onOpenProfile,
@@ -723,16 +725,24 @@ function StyleScreen({
         />
 
         {sectionStyles?.length ? (
-          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(248,250,253,0.82)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-2 pr-2">
+              {sectionLabel ? (
+                <button
+                  onClick={onOpenSection}
+                  className="shrink-0 rounded-full border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] px-3.5 py-2 text-[12px] font-semibold text-[#5a6e90] transition"
+                >
+                  {sectionLabel}:
+                </button>
+              ) : null}
               {sectionStyles.map((styleCard) => (
                 <button
                   key={styleCard.id}
                   onClick={() => onSelectStyle(styleCard)}
                   className={`shrink-0 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
                     styleCard.id === card.id
-                      ? "bg-[rgba(43,125,233,0.92)] text-white"
-                      : "bg-[rgba(245,247,251,0.82)] text-[#5a6e90]"
+                      ? "border border-[rgba(43,125,233,0.18)] bg-[rgba(43,125,233,0.92)] text-white"
+                      : "border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
                   }`}
                 >
                   {styleCard.title}
@@ -1003,7 +1013,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         />
 
         <div className="px-0 pt-0">
-          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(248,250,253,0.82)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-2 pr-2">
               {[
                 { id: "tasks", label: "Задания", icon: ClipboardList },
@@ -1018,8 +1028,8 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                     onClick={() => setProfileTab(item.id)}
                     className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
                       profileTab === item.id
-                        ? "bg-[rgba(43,125,233,0.92)] text-white"
-                        : "bg-[rgba(245,247,251,0.82)] text-[#5a6e90]"
+                        ? "border border-[rgba(43,125,233,0.18)] bg-[rgba(43,125,233,0.92)] text-white"
+                        : "border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
                     }`}
                   >
                     <Icon className="h-4 w-4" strokeWidth={2.2} />
@@ -1345,7 +1355,7 @@ function SectionScreen({
           isBonusCounting={isBonusCounting}
         />
 
-        <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(248,250,253,0.82)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="flex items-center gap-2 pr-2">
             {sections.map((item) => (
               <button
@@ -1353,8 +1363,8 @@ function SectionScreen({
                 onClick={() => onChangeSection(item)}
                 className={`shrink-0 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
                   item.id === section.id
-                    ? "bg-[rgba(43,125,233,0.92)] text-white"
-                    : "bg-[rgba(245,247,251,0.82)] text-[#5a6e90]"
+                    ? "border border-[rgba(43,125,233,0.18)] bg-[rgba(43,125,233,0.92)] text-white"
+                    : "border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
                 }`}
               >
                 {item.label}
@@ -1406,7 +1416,7 @@ function FeedScreen({
             <div className="flex items-center justify-between gap-3 px-2">
               <button
                 onClick={() => onOpenSection(section)}
-                className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(238,244,251,0.8)] px-3 py-1.5 text-[#6f87ab]"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[#6f87ab]"
               >
                 <h2 className="text-[15px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
                   {section.label}
@@ -1611,7 +1621,9 @@ export default function App() {
           <StyleScreen
             card={selectedCard}
             sectionStyles={currentSectionStyles}
+            sectionLabel={selectedSection}
             onSelectStyle={setSelectedCard}
+            onOpenSection={() => setScreen("section")}
             onBack={() => setScreen("feed")}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
