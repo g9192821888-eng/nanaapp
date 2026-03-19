@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Check,
   ClipboardList,
+  Copy,
   Heart,
   Plus,
   Search,
@@ -1010,6 +1011,16 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
             <div className="mt-2 text-[13px] leading-5 text-[#7d8ca5]">
               За каждого нового друга можно получать бонусные фотографии и ускорять генерацию.
             </div>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#246fd1]">
+                <Send className="h-4 w-4" strokeWidth={2.2} />
+                Отправить
+              </button>
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#eef5ff] px-4 py-3 text-[14px] font-semibold text-[#2b7de9] transition hover:bg-[#e1ecff]">
+                <Copy className="h-4 w-4" strokeWidth={2.2} />
+                Скопировать
+              </button>
+            </div>
           </div>
         </div>
       ) : profileTab === "photos" ? (
@@ -1316,6 +1327,7 @@ function FeedScreen({
 
 export default function App() {
   const { isTelegram } = useTelegramWebApp();
+  const appShellRef = useRef(null);
   const [activeFilter, setActiveFilter] = useState("all");
   const [screen, setScreen] = useState("feed");
   const [selectedCard, setSelectedCard] = useState(cards[0]);
@@ -1428,8 +1440,33 @@ export default function App() {
     }, closeDelay);
   };
 
+  useEffect(() => {
+    if (!isTelegram || !appShellRef.current) return undefined;
+
+    const handleButtonHaptic = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const button = target.closest("button");
+      if (!(button instanceof HTMLButtonElement) || button.disabled) return;
+
+      const haptic = window.Telegram?.WebApp?.HapticFeedback;
+      if (!haptic?.impactOccurred) return;
+
+      haptic.impactOccurred("light");
+    };
+
+    const shell = appShellRef.current;
+    shell.addEventListener("click", handleButtonHaptic, true);
+
+    return () => {
+      shell.removeEventListener("click", handleButtonHaptic, true);
+    };
+  }, [isTelegram]);
+
   return (
     <div
+      ref={appShellRef}
       className="relative overflow-hidden bg-white text-[#1b1d22]"
       style={{ height: "var(--app-height, 100dvh)" }}
     >
@@ -1442,7 +1479,7 @@ export default function App() {
       ) : null}
 
       <div
-        className="mx-auto w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-5"
+        className="mx-auto w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-0"
         style={{ height: "var(--app-height, 100dvh)" }}
       >
         {screen === "feed" ? (
