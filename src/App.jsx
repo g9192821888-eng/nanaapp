@@ -429,7 +429,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
       <div className="mx-auto mt-[15px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
-          className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(220,228,242,0.55)] px-1 py-1 text-left transition active:scale-[0.98]"
+          className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(232,238,248,0.78)] bg-[rgba(255,255,255,0.72)] px-1 py-1 text-left transition active:scale-[0.98]"
         >
           <img
             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
@@ -464,7 +464,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
 function PinnedSectionHeader({ children, className = "" }) {
   return (
-    <div className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-3 backdrop-blur-[10px] ${className}`}>
+    <div className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-[32px] backdrop-blur-[10px] ${className}`}>
       {children}
     </div>
   );
@@ -1163,13 +1163,13 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
   );
 }
 
-function SectionPanel({ section, onSelectCard, dimmed = false }) {
+function SectionPanel({ section, onSelectCard }) {
   if (!section) {
     return <div className="w-full shrink-0" />;
   }
 
   return (
-    <div className={`w-full shrink-0 space-y-3 bg-white px-2 pb-6 ${dimmed ? "opacity-85" : ""}`}>
+    <div className="space-y-3 bg-white px-2 pb-6">
       <div className="text-[24px] font-semibold tracking-[-0.04em] text-[#1c2b45]">{section.label}</div>
       <div className="mt-1 text-[13px] text-[#8a97ad]">Все стили раздела в одной ленте</div>
       <div className="grid grid-cols-2 gap-2">
@@ -1183,82 +1183,12 @@ function SectionPanel({ section, onSelectCard, dimmed = false }) {
 
 function SectionScreen({
   section,
-  sections,
-  onChangeSection,
   onSelectCard,
   onOpenBalance,
   onOpenProfile,
   balance,
   isBonusCounting,
 }) {
-  const viewportRef = useRef(null);
-  const touchStartXRef = useRef(0);
-  const [viewportWidth, setViewportWidth] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const currentSectionIndex = sections.findIndex((item) => item.id === section.id);
-  const previousSection = currentSectionIndex > 0 ? sections[currentSectionIndex - 1] : null;
-  const nextSection = currentSectionIndex >= 0 && currentSectionIndex < sections.length - 1 ? sections[currentSectionIndex + 1] : null;
-
-  useLayoutEffect(() => {
-    const updateViewportWidth = () => {
-      if (!viewportRef.current) return;
-      setViewportWidth(viewportRef.current.clientWidth);
-    };
-
-    updateViewportWidth();
-    window.addEventListener("resize", updateViewportWidth);
-
-    return () => {
-      window.removeEventListener("resize", updateViewportWidth);
-    };
-  }, []);
-
-  const handleTouchStart = (event) => {
-    touchStartXRef.current = event.touches[0]?.clientX ?? 0;
-    setIsDragging(true);
-  };
-
-  const handleTouchMove = (event) => {
-    const currentX = event.touches[0]?.clientX ?? 0;
-    let nextOffset = currentX - touchStartXRef.current;
-
-    if (!previousSection && nextOffset > 0) nextOffset *= 0.35;
-    if (!nextSection && nextOffset < 0) nextOffset *= 0.35;
-
-    setDragOffset(nextOffset);
-  };
-
-  const handleTouchEnd = () => {
-    const swipeThreshold = 70;
-
-    if (dragOffset <= -swipeThreshold && nextSection) {
-      setDragOffset(-viewportWidth);
-      setTimeout(() => {
-        onChangeSection(nextSection);
-        setDragOffset(0);
-        setIsDragging(false);
-      }, 180);
-      return;
-    }
-
-    if (dragOffset >= swipeThreshold && previousSection) {
-      setDragOffset(viewportWidth);
-      setTimeout(() => {
-        onChangeSection(previousSection);
-        setDragOffset(0);
-        setIsDragging(false);
-      }, 180);
-      return;
-    }
-
-    setDragOffset(0);
-    setIsDragging(false);
-  };
-
-  const baseOffset = viewportWidth ? -viewportWidth : 0;
-
   return (
     <div className="space-y-4">
       <PinnedSectionHeader className="pt-0">
@@ -1270,27 +1200,7 @@ function SectionScreen({
         />
       </PinnedSectionHeader>
 
-      <div
-        ref={viewportRef}
-        className="overflow-hidden bg-white"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        style={{ touchAction: "pan-y" }}
-      >
-        <div
-          className="flex"
-          style={{
-            width: "300%",
-            transform: `translateX(${baseOffset + dragOffset}px)`,
-            transition: isDragging ? "none" : "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)",
-          }}
-        >
-          <SectionPanel section={previousSection} onSelectCard={onSelectCard} dimmed />
-          <SectionPanel section={section} onSelectCard={onSelectCard} />
-          <SectionPanel section={nextSection} onSelectCard={onSelectCard} dimmed />
-        </div>
-      </div>
+      <SectionPanel section={section} onSelectCard={onSelectCard} />
     </div>
   );
 }
