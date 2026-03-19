@@ -73,7 +73,7 @@ const products = [
   {
     id: 1,
     subtitle: "Новичок",
-    amount: 10,
+    amount: 100,
     price: "199 ₽",
     badge: null,
     icon: null,
@@ -90,7 +90,7 @@ const products = [
     id: 3,
     subtitle: "✨ Стандарт",
     amount: 100,
-    price: "899 ₽",
+    price: "990 ₽",
     badge: "Популярный",
     badgeColor: "bg-[#53d11f] text-white",
     featured: true,
@@ -99,7 +99,7 @@ const products = [
     id: 4,
     subtitle: "🚀 Профи",
     amount: 250,
-    price: "1 499 ₽",
+    price: "1 590 ₽",
     badge: "Выгодно",
     badgeColor: "bg-[#2fb8ff] text-white",
   },
@@ -107,7 +107,7 @@ const products = [
     id: 5,
     subtitle: "⭐ Создатель",
     amount: 500,
-    price: "2 499 ₽",
+    price: "2 790 ₽",
     badge: "Лучший",
     badgeColor: "bg-[#ffbf1f] text-white",
   },
@@ -906,6 +906,7 @@ function TaskCard({ task }) {
 
 function ProductCard({ product, isSelected, onSelect }) {
   const isFeatured = !!product.featured;
+  const hasDiscount = Boolean(product.discountedPrice);
 
   return (
     <button
@@ -930,12 +931,19 @@ function ProductCard({ product, isSelected, onSelect }) {
             <div className={`text-[18px] font-medium ${isFeatured ? "text-[#5b6f92]" : "text-[#767f93]"}`}>
               {product.subtitle}
             </div>
-            <div className={`mt-1 text-[18px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
+            <div className={`mt-1 text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
               {product.amount} фотографий
             </div>
           </div>
-          <div className={`shrink-0 text-right text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
-            {product.price}
+          <div className="shrink-0 text-right">
+            {hasDiscount ? (
+              <div className={`mb-0.5 text-[14px] font-semibold leading-none line-through ${isFeatured ? "text-[#7a8fb2]" : "text-[#8d98ad]"}`}>
+                {product.price}
+              </div>
+            ) : null}
+            <div className={`text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
+              {product.discountedPrice ?? product.price}
+            </div>
           </div>
         </div>
       </div>
@@ -951,6 +959,10 @@ function ShopScreen({
   setSelectedProductId,
   balance,
   isBonusCounting,
+  showExitOffer,
+  onActivateDiscount,
+  onDismissExitOffer,
+  discountActive,
 }) {
   const shopBenefits = [
     "Создавай виральный контент за минуты",
@@ -958,8 +970,24 @@ function ShopScreen({
     "Разовая оплата без подписок",
   ];
 
+  const discountedProducts = useMemo(
+    () =>
+      products.map((product) => {
+        if (!discountActive) return product;
+
+        const originalPrice = Number(product.price.replace(/[^\d]/g, ""));
+        const discountedPrice = Math.round(originalPrice * 0.9);
+
+        return {
+          ...product,
+          discountedPrice: `${discountedPrice.toLocaleString("ru-RU")} ₽`,
+        };
+      }),
+    [discountActive],
+  );
+
   return (
-    <div className="space-y-3">
+    <div className="relative space-y-3">
       <PinnedSectionHeader className="pt-0">
         <Header
           onOpenBalance={onOpenBalance}
@@ -970,14 +998,20 @@ function ShopScreen({
       </PinnedSectionHeader>
 
       <div className="space-y-5 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+        {discountActive ? (
+          <div className="overflow-hidden rounded-[18px] bg-[linear-gradient(90deg,#ff8b2c_0%,#ff5630_45%,#ff2a2a_100%)] px-4 py-2 text-center text-[18px] font-bold uppercase tracking-[-0.03em] text-white shadow-[0_10px_24px_rgba(255,102,56,0.18)]">
+            Ваша скидка 10%
+          </div>
+        ) : null}
+
         <div className="space-y-3 px-1">
-          <div className="max-w-[320px] text-[34px] font-semibold leading-[0.95] tracking-[-0.055em] text-[#161c2c]">
+          <div className="max-w-[320px] text-[31px] font-semibold leading-[0.95] tracking-[-0.055em] text-[#161c2c]">
             Идеальные фото и видео за 1 минуту
           </div>
         </div>
 
         <div className="space-y-2.5">
-          {products.map((product) => (
+          {discountedProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
@@ -1004,6 +1038,32 @@ function ShopScreen({
           </button>
         </div>
       </div>
+
+      {showExitOffer ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-5">
+          <div className="w-full max-w-[420px] rounded-[28px] bg-white px-6 pb-5 pt-7 text-center shadow-[0_24px_70px_rgba(15,23,42,0.26)]">
+            <div className="text-[70px] leading-none">💔</div>
+            <div className="mt-4 text-[22px] font-semibold tracking-[-0.04em] text-[#1d2333]">
+              Вы хотите уйти?
+            </div>
+            <div className="mt-4 text-[17px] leading-8 text-[#6f7d95]">
+              Давайте мы дадим вам скидку.
+            </div>
+            <button
+              onClick={onActivateDiscount}
+              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#39beff_0%,#199dff_55%,#0c7eff_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_16px_34px_rgba(27,145,255,0.22)]"
+            >
+              Активировать скидку
+            </button>
+            <button
+              onClick={onDismissExitOffer}
+              className="mt-3 text-[14px] font-medium text-[#8a97ad]"
+            >
+              Выйти без скидки
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -1464,6 +1524,9 @@ export default function App() {
   const [balance, setBalance] = useState(0);
   const [isBonusCounting, setIsBonusCounting] = useState(false);
   const [isBonusClaimClosing, setIsBonusClaimClosing] = useState(false);
+  const [shopDiscountActive, setShopDiscountActive] = useState(false);
+  const [showShopExitOffer, setShowShopExitOffer] = useState(false);
+  const [pendingScreenAfterShop, setPendingScreenAfterShop] = useState("feed");
 
   const visibleCards = useMemo(() => {
     let filteredCards = cards;
@@ -1526,6 +1589,16 @@ export default function App() {
     setScreen("profile");
   };
 
+  const requestShopExit = (nextScreen = "feed") => {
+    if (shopDiscountActive) {
+      setScreen(nextScreen);
+      return;
+    }
+
+    setPendingScreenAfterShop(nextScreen);
+    setShowShopExitOffer(true);
+  };
+
   useEffect(() => {
     const backButton = window.Telegram?.WebApp?.BackButton;
     if (!backButton) return undefined;
@@ -1533,6 +1606,14 @@ export default function App() {
     const handleBack = () => {
       setScreen((currentScreen) => {
         if (currentScreen === "feed") return currentScreen;
+        if (currentScreen === "shop") {
+          if (!shopDiscountActive) {
+            setPendingScreenAfterShop("feed");
+            setShowShopExitOffer(true);
+            return currentScreen;
+          }
+          return "feed";
+        }
         return "feed";
       });
     };
@@ -1549,7 +1630,7 @@ export default function App() {
     return () => {
       backButton.offClick(handleBack);
     };
-  }, [screen]);
+  }, [screen, shopDiscountActive]);
 
   const claimWelcomeBonus = () => {
     if (isBonusCounting || isBonusClaimClosing) return;
@@ -1699,13 +1780,23 @@ export default function App() {
           />
         ) : screen === "shop" ? (
           <ShopScreen
-            onBack={() => setScreen("feed")}
+            onBack={() => requestShopExit("feed")}
             onOpenBalance={handleOpenBalance}
-            onOpenProfile={handleOpenProfile}
+            onOpenProfile={() => requestShopExit("profile")}
             selectedProductId={selectedProductId}
             setSelectedProductId={setSelectedProductId}
             balance={balance}
             isBonusCounting={isBonusCounting}
+            showExitOffer={showShopExitOffer}
+            onActivateDiscount={() => {
+              setShopDiscountActive(true);
+              setShowShopExitOffer(false);
+            }}
+            onDismissExitOffer={() => {
+              setShowShopExitOffer(false);
+              setScreen(pendingScreenAfterShop);
+            }}
+            discountActive={shopDiscountActive}
           />
         ) : (
           <ProfileScreen
