@@ -596,7 +596,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
             <div className="mt-1 max-w-[85%] text-[13px] leading-5 text-white/85">{card.description}</div>
           </div>
           {styleGallery.length > 1 ? (
-            <div className="absolute bottom-4 left-5 flex items-center gap-1.5">
+            <div className="absolute bottom-3 left-5 flex items-center gap-1.5">
               {styleGallery.map((_, index) => (
                 <span
                   key={`${card.id}-dot-${index}`}
