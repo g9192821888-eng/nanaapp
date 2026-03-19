@@ -849,19 +849,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
       </div>
 
       <div className="rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-        <div className="flex items-center gap-4 rounded-[22px] bg-[#f7fbff] p-4 ring-1 ring-[#e4ecf8]">
-          <img
-            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
-            alt="avatar"
-            className="h-16 w-16 rounded-[20px] object-cover"
-          />
-          <div>
-            <div className="text-[20px] font-semibold tracking-[-0.03em] text-[#234677]">Нана</div>
-            <div className="mt-1 text-[13px] text-[#7d8ca5]">@nana_user</div>
-          </div>
-        </div>
-
-        <div className="mt-4 space-y-3">
+        <div className="space-y-3">
           {tasks.map((task) => (
             <TaskCard key={task.id} task={task} />
           ))}
