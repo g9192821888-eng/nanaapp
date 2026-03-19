@@ -251,37 +251,39 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   return (
-    <div className="rounded-[28px] bg-white px-5 pb-4 pt-[max(16px,env(safe-area-inset-top))] shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-      <div className="flex items-center justify-between gap-3">
-        <button
-          onClick={onOpenProfile}
-          className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
-            alt="avatar"
-            className="h-12 w-12 rounded-full object-cover ring-2 ring-white"
-          />
-          <div className="min-w-0">
-            <div className="flex items-center gap-1">
-              <div className="truncate text-[18px] font-semibold text-[#1f3b67]">Сергей</div>
-              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9bb0d0] opacity-0 transition group-hover:opacity-100" />
-            </div>
-            <div className="text-[13px] text-[#7e8ba3]">Мой профиль</div>
-          </div>
-        </button>
-
-        <div className="flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
-          <div className="flex items-center gap-2 px-4 py-2.5 text-[18px] font-semibold">
-            <span>{isBonusCounting ? "..." : balance}</span>
-            <Sparkles className="h-4.5 w-4.5" strokeWidth={2.1} />
-          </div>
+    <div className="sticky top-0 z-40 -mx-1 px-1 pb-2 pt-[max(8px,env(safe-area-inset-top))] backdrop-blur-[10px]">
+      <div className="rounded-[28px] bg-white px-5 pb-4 pt-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+        <div className="flex items-center justify-between gap-3">
           <button
-            onClick={onOpenBalance}
-            className="flex h-12 w-12 items-center justify-center bg-[#2b7de9] text-white"
+            onClick={onOpenProfile}
+            className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
           >
-            <Plus className="h-6 w-6" />
+            <img
+              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
+              alt="avatar"
+              className="h-12 w-12 rounded-full object-cover ring-2 ring-white"
+            />
+            <div className="min-w-0">
+              <div className="flex items-center gap-1">
+                <div className="truncate text-[18px] font-semibold text-[#1f3b67]">Сергей</div>
+                <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9bb0d0] opacity-0 transition group-hover:opacity-100" />
+              </div>
+              <div className="text-[13px] text-[#7e8ba3]">Мой профиль</div>
+            </div>
           </button>
+
+          <div className="flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
+            <div className="flex items-center gap-2 px-4 py-2.5 text-[18px] font-semibold">
+              <span>{isBonusCounting ? "..." : balance}</span>
+              <Sparkles className="h-4.5 w-4.5" strokeWidth={2.1} />
+            </div>
+            <button
+              onClick={onOpenBalance}
+              className="flex h-12 w-12 items-center justify-center bg-[#2b7de9] text-white"
+            >
+              <Plus className="h-6 w-6" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
