@@ -441,7 +441,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
       <div className={`mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 ${headerRowOffset}`}>
         <button
           onClick={onOpenProfile}
-          className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(232,238,248,0.78)] bg-[rgba(255,255,255,0.72)] px-1 py-1 text-left transition active:scale-[0.98]"
+          className="group flex min-w-0 items-center gap-3 rounded-full border border-[rgba(226,234,245,0.82)] bg-[rgba(250,252,255,0.86)] px-2 py-1.5 text-left shadow-[0_4px_14px_rgba(82,103,138,0.04)] transition active:scale-[0.98]"
         >
           <img
             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
@@ -1621,7 +1621,7 @@ export default function App() {
           <StyleScreen
             card={selectedCard}
             sectionStyles={currentSectionStyles}
-            sectionLabel={selectedSection}
+            sectionLabel={selectedSection?.label ?? ""}
             onSelectStyle={setSelectedCard}
             onOpenSection={() => setScreen("section")}
             onBack={() => setScreen("feed")}
