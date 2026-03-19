@@ -298,13 +298,13 @@ function FilterBar({ activeFilter, setActiveFilter }) {
           <button
             key={filter.id}
             onClick={() => setActiveFilter(filter.id)}
-            className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-[14px] font-semibold transition ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
               isActive
                 ? "bg-[#2b7de9] text-white shadow-[0_10px_20px_rgba(43,125,233,0.22)]"
                 : "bg-white text-[#5a6e90] ring-1 ring-[#dce4f2]"
             }`}
           >
-            <Icon className="h-4.5 w-4.5" strokeWidth={2.2} fill={filter.id === "liked" ? "currentColor" : "none"} />
+            <Icon className="h-4 w-4" strokeWidth={2.2} fill={filter.id === "liked" ? "currentColor" : "none"} />
             {filter.label ? <span>{filter.label}</span> : null}
           </button>
         );
