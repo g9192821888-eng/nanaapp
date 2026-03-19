@@ -1224,7 +1224,7 @@ export default function App() {
               scale: isBonusClaimClosing ? 0.94 : 1,
             }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full max-w-[388px] rounded-[30px] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.18)] ring-1 ring-[#dce4f2]"
+            className="w-full max-w-[388px] rounded-[30px] bg-white p-4.5 shadow-[0_30px_80px_rgba(15,23,42,0.24)] ring-1 ring-[#dce4f2]"
           >
             <div className="mt-2 text-center">
               <div className="flex items-center justify-center gap-2 text-[24px] font-semibold tracking-[-0.03em] text-[#234677]">
@@ -1233,8 +1233,8 @@ export default function App() {
               </div>
             </div>
 
-            <div className="mt-4 rounded-[22px] bg-[#f7fbff] px-4 py-4 ring-1 ring-[#e6eef9]">
-              <div className="flex items-center justify-between rounded-[18px] bg-white px-4 py-3 shadow-[0_8px_18px_rgba(70,89,122,0.06)]">
+            <div className="mt-3 rounded-[22px] bg-white px-3 py-3 ring-1 ring-[#e6eef9] shadow-[0_10px_24px_rgba(70,89,122,0.08)]">
+              <div className="flex items-center justify-between rounded-[18px] bg-white px-4 py-3">
                 <div>
                   <div className="text-[13px] font-medium text-[#7d8ca5]">Стартовый бонус</div>
                   <div className="mt-1 text-[22px] font-semibold tracking-[-0.03em] text-[#234677]">2 фотографии</div>
@@ -1249,7 +1249,7 @@ export default function App() {
             <button
               onClick={claimWelcomeBonus}
               disabled={isBonusClaimClosing || isBonusCounting}
-              className="mt-5 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-3.5 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]"
             >
               <span>Забрать 20</span>
               <Sparkles className="h-5 w-5" strokeWidth={2.1} />
