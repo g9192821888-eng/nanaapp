@@ -298,8 +298,14 @@ function useTelegramWebApp() {
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
 
+    const syncViewportHeight = () => {
+      const viewportHeight = tg.viewportStableHeight || tg.viewportHeight || window.innerHeight;
+      document.documentElement.style.setProperty("--app-height", `${viewportHeight}px`);
+    };
+
     setIsTelegram(true);
     tg.ready();
+    syncViewportHeight();
 
     if (typeof tg.expand === "function") {
       tg.expand();
@@ -319,6 +325,39 @@ function useTelegramWebApp() {
     if (tg.setBackgroundColor) {
       tg.setBackgroundColor("#ffffff");
     }
+
+    const handleViewportChanged = () => {
+      syncViewportHeight();
+      if (typeof tg.expand === "function") {
+        tg.expand();
+      }
+    };
+
+    if (typeof tg.onEvent === "function") {
+      tg.onEvent("viewportChanged", handleViewportChanged);
+    }
+
+    const delayedFullscreen = window.setTimeout(() => {
+      syncViewportHeight();
+      if (typeof tg.expand === "function") {
+        tg.expand();
+      }
+      if (typeof tg.requestFullscreen === "function") {
+        try {
+          tg.requestFullscreen();
+        } catch {
+          // Ignore unsupported fullscreen attempts.
+        }
+      }
+    }, 120);
+
+    return () => {
+      window.clearTimeout(delayedFullscreen);
+      if (typeof tg.offEvent === "function") {
+        tg.offEvent("viewportChanged", handleViewportChanged);
+      }
+      document.documentElement.style.removeProperty("--app-height");
+    };
   }, []);
 
   return { isTelegram };
@@ -1431,7 +1470,10 @@ export default function App() {
   };
 
   return (
-    <div className="relative h-[100dvh] overflow-hidden bg-white text-[#1b1d22]">
+    <div
+      className="relative overflow-hidden bg-white text-[#1b1d22]"
+      style={{ height: "var(--app-height, 100dvh)" }}
+    >
       {!isTelegram ? (
         <div className="sticky top-0 z-[70] px-3 pt-3">
           <div className="mx-auto max-w-[516px] rounded-[18px] bg-[#1f6feb] px-4 py-3 text-[13px] font-medium text-white shadow-[0_14px_28px_rgba(31,111,235,0.22)]">
@@ -1440,7 +1482,10 @@ export default function App() {
         </div>
       ) : null}
 
-      <div className="mx-auto h-[100dvh] w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-5">
+      <div
+        className="mx-auto w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-5"
+        style={{ height: "var(--app-height, 100dvh)" }}
+      >
         {screen === "feed" ? (
           <FeedScreen
             activeFilter={activeFilter}
