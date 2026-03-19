@@ -730,7 +730,7 @@ function StyleScreen({
               {sectionLabel ? (
                 <button
                   onClick={onOpenSection}
-                  className="shrink-0 rounded-full border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] px-3.5 py-2 text-[12px] font-semibold text-[#5a6e90] transition"
+                  className="shrink-0 px-3.5 py-2 text-[12px] font-semibold text-[#5a6e90] transition"
                 >
                   {sectionLabel}:
                 </button>
@@ -1484,8 +1484,15 @@ export default function App() {
     [selectedCard],
   );
 
+  const currentStyleSection = useMemo(
+    () => styleSections.find((section) => section.id === selectedCard.section) ?? selectedSection,
+    [selectedCard, selectedSection],
+  );
+
   const handleSelectCard = (card) => {
     setSelectedCard(card);
+    const nextSection = styleSections.find((section) => section.id === card.section);
+    if (nextSection) setSelectedSection(nextSection);
     setResultImage(card.image);
     setScreen("style");
   };
@@ -1621,9 +1628,16 @@ export default function App() {
           <StyleScreen
             card={selectedCard}
             sectionStyles={currentSectionStyles}
-            sectionLabel={selectedSection?.label ?? ""}
-            onSelectStyle={setSelectedCard}
-            onOpenSection={() => setScreen("section")}
+            sectionLabel={currentStyleSection?.label ?? ""}
+            onSelectStyle={(card) => {
+              setSelectedCard(card);
+              const nextSection = styleSections.find((section) => section.id === card.section);
+              if (nextSection) setSelectedSection(nextSection);
+            }}
+            onOpenSection={() => {
+              if (currentStyleSection) setSelectedSection(currentStyleSection);
+              setScreen("section");
+            }}
             onBack={() => setScreen("feed")}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
