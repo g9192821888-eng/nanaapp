@@ -456,18 +456,34 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
   const uploadedPreview =
     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80";
   const styleGallery = card.gallery?.length ? card.gallery : [card.image];
+  const canSlideGallery = styleGallery.length > 1;
 
   useEffect(() => {
     setActiveSlide(0);
 
-    if (styleGallery.length < 2) return undefined;
+    if (!canSlideGallery) return undefined;
 
     const intervalId = window.setInterval(() => {
       setActiveSlide((currentSlide) => (currentSlide + 1) % styleGallery.length);
     }, 3200);
 
     return () => window.clearInterval(intervalId);
-  }, [styleGallery]);
+  }, [canSlideGallery, styleGallery]);
+
+  const handleGalleryDragEnd = (_, info) => {
+    if (!canSlideGallery) return;
+
+    const swipeThreshold = 45;
+
+    if (info.offset.x <= -swipeThreshold) {
+      setActiveSlide((currentSlide) => (currentSlide + 1) % styleGallery.length);
+      return;
+    }
+
+    if (info.offset.x >= swipeThreshold) {
+      setActiveSlide((currentSlide) => (currentSlide - 1 + styleGallery.length) % styleGallery.length);
+    }
+  };
 
   const handleUpload = () => {
     setIsUploading(true);
@@ -560,9 +576,13 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
         <div className="relative">
           <div className="overflow-hidden">
             <motion.div
+              drag={canSlideGallery ? "x" : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.08}
+              onDragEnd={handleGalleryDragEnd}
               animate={{ x: `-${activeSlide * 100}%` }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="flex"
+              className={`flex ${canSlideGallery ? "cursor-grab active:cursor-grabbing" : ""}`}
             >
               {styleGallery.map((image, index) => (
                 <img
