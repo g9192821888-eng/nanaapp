@@ -464,7 +464,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
 function PinnedSectionHeader({ children, className = "" }) {
   return (
-    <div className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-[14px] backdrop-blur-[10px] ${className}`}>
+    <div className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-0 backdrop-blur-[10px] ${className}`}>
       {children}
     </div>
   );
