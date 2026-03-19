@@ -21,8 +21,8 @@ import {
 const filters = [
   { id: "liked", label: "", icon: Heart },
   { id: "all", label: "Все", icon: Check },
-  { id: "new", label: "Новые", icon: Zap },
-  { id: "winter", label: "Зимние", icon: Snowflake },
+  { id: "new", label: "Тренд", icon: Zap },
+  { id: "winter", label: "8 марта", icon: Snowflake },
   { id: "style", label: "Стильные", icon: Sparkles },
 ];
 
