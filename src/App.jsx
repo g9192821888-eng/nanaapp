@@ -329,16 +329,16 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
     const digitTrack = Array.from({ length: 10 }, (_, digit) => digit);
 
     const DigitWheel = ({ digit }) => (
-      <span className="relative h-[20px] w-[10px] overflow-hidden">
+      <span className="relative h-[18px] w-[9px] overflow-hidden">
         <motion.span
-          animate={{ y: `-${digit * 20}px` }}
+          animate={{ y: `-${digit * 18}px` }}
           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           className="absolute left-0 top-0 flex flex-col items-center"
         >
           {digitTrack.map((trackDigit) => (
             <span
               key={trackDigit}
-              className="flex h-[20px] w-[10px] items-center justify-center leading-none"
+              className="flex h-[18px] w-[9px] items-center justify-center leading-none"
             >
               {trackDigit}
             </span>
@@ -378,15 +378,15 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           </button>
 
           <div className="ml-[50px] flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
-            <div className="flex items-center gap-1.5 px-3.5 py-2 text-[16px] font-semibold">
+            <div className="flex items-center gap-1 px-3 py-1.5 text-[14px] font-semibold">
               <BalanceDigits value={balance} />
-              <Sparkles className="h-4 w-4" strokeWidth={2.1} />
+              <Sparkles className="h-3.5 w-3.5" strokeWidth={2.1} />
             </div>
             <button
               onClick={onOpenBalance}
-              className="flex h-11 w-11 items-center justify-center bg-[#2b7de9] text-white"
+              className="flex h-10 w-10 items-center justify-center bg-[#2b7de9] text-white"
             >
-              <Plus className="h-5 w-5" />
+              <Plus className="h-4.5 w-4.5" />
             </button>
           </div>
         </div>
