@@ -331,6 +331,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
     const DigitWheel = ({ digit }) => (
       <span className="relative h-[18px] w-[9px] overflow-hidden">
         <motion.span
+          initial={false}
           animate={{ y: `-${digit * 18}px` }}
           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           className="absolute left-0 top-0 flex flex-col items-center"
