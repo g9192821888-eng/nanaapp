@@ -376,7 +376,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
             </div>
           </button>
 
-          <div className="flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
+          <div className="ml-[5px] flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
             <div className="flex items-center gap-1.5 px-3.5 py-2 text-[16px] font-semibold">
               <BalanceDigits value={balance} />
               <Sparkles className="h-4 w-4" strokeWidth={2.1} />
