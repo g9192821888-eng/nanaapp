@@ -3,11 +3,14 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Check,
+  ClipboardList,
   Heart,
   Plus,
   Search,
   Flower2,
   Film,
+  History,
+  Image,
   Snowflake,
   Sparkles,
   Upload,
@@ -854,6 +857,8 @@ function ShopScreen({
 }
 
 function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusCounting }) {
+  const [profileTab, setProfileTab] = useState("tasks");
+
   return (
     <div className="space-y-3">
       <Header
@@ -863,31 +868,88 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         isBonusCounting={isBonusCounting}
       />
 
-      <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
+      <div className="px-0 py-0">
         <div className="flex items-center justify-between gap-3">
           <button
             onClick={onBack}
-            className="flex h-10 min-w-[108px] items-center justify-center gap-2 rounded-full border border-[#dde6f4] bg-white px-4 text-[#5a6e90]"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e2e9f5] bg-white text-[#5a6e90]"
           >
-            <ArrowLeft className="h-4.5 w-4.5" strokeWidth={2.2} />
-            <span className="text-[14px] font-semibold">Главная</span>
+            <ArrowLeft className="h-5 w-5" strokeWidth={2.2} />
           </button>
 
-          <div className="flex-1 text-center">
-            <div className="text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">Профиль</div>
+          <div className="flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex items-center gap-2">
+              {[
+                { id: "tasks", label: "Задания", icon: ClipboardList },
+                { id: "photos", label: "Фотографии", icon: Image },
+                { id: "history", label: "История", icon: History },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setProfileTab(item.id)}
+                    className={`flex shrink-0 items-center gap-1.5 rounded-[20px] border px-4 py-2.5 text-[14px] font-medium transition ${
+                      profileTab === item.id
+                        ? "border-[#2b7de9] bg-[#2b7de9] text-white shadow-[0_8px_16px_rgba(43,125,233,0.22)]"
+                        : "border-[#e1e7f1] bg-[#f2f5fa] text-[#607394]"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" strokeWidth={2.1} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="h-10 w-10" />
+          <div className="h-8 w-8" />
         </div>
       </div>
 
-      <div className="rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-        <div className="space-y-3">
+      {profileTab === "tasks" ? (
+        <div className="space-y-2.5">
           {tasks.map((task) => (
             <TaskCard key={task.id} task={task} />
           ))}
         </div>
-      </div>
+      ) : profileTab === "photos" ? (
+        <div className="grid grid-cols-2 gap-2">
+          {cards.slice(0, 6).map((card) => (
+            <div
+              key={card.id}
+              className="relative overflow-hidden rounded-[18px] border border-[#dbe4f2] bg-white shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
+            >
+              <img
+                src={card.image}
+                alt={card.title}
+                className="aspect-[0.92] w-full object-cover"
+              />
+              <button className="absolute bottom-3 right-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#2b7de9] text-white shadow-[0_10px_22px_rgba(43,125,233,0.28)]">
+                <Download className="h-6 w-6" strokeWidth={2.2} />
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-2.5">
+          {[
+            { text: "Создан стиль «Пара в городе»", time: "2 часа назад" },
+            { text: "Куплен пакет 100 изображений", time: "вчера" },
+            { text: "Выполнено задание «Подпишись на канал»", time: "2 дня назад" },
+          ].map((item) => (
+            <div
+              key={item.text}
+              className="flex items-center justify-between gap-4 rounded-[18px] border border-[#dce4f2] bg-white px-4 py-4 text-[14px] font-medium text-[#607394] shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
+            >
+              <div className="min-w-0 flex-1 text-[#607394]">{item.text}</div>
+              <div className="shrink-0 text-right text-[13px] text-[#9aa8bf]">
+                {item.time}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
