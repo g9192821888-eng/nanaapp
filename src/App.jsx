@@ -882,10 +882,10 @@ function ProductCard({ product, isSelected, onSelect }) {
           : "bg-[#f3f5fb]"
       } ${isSelected ? "ring-2 ring-[#2b7de9] ring-offset-2 ring-offset-transparent" : ""}`}
     >
-      <div className={`relative px-5 py-5 ${isFeatured ? "text-white" : "text-[#1d2333]"}`}>
+      <div className={`relative px-5 py-4 ${isFeatured ? "text-white" : "text-[#1d2333]"}`}>
         {product.badge ? (
           <div
-            className={`absolute right-5 top-5 rounded-[12px] px-3 py-1.5 text-[11px] font-semibold leading-none ${product.badgeColor}`}
+            className={`absolute right-5 top-4 rounded-[12px] px-3 py-1.5 text-[11px] font-semibold leading-none ${product.badgeColor}`}
           >
             {product.badge}
           </div>
@@ -896,7 +896,7 @@ function ProductCard({ product, isSelected, onSelect }) {
             <div className={`text-[18px] font-medium ${isFeatured ? "text-white/78" : "text-[#767f93]"}`}>
               {product.subtitle}
             </div>
-            <div className={`mt-2 text-[16px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
+            <div className={`mt-1.5 text-[16px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
               {product.amount} фотографий
             </div>
           </div>
