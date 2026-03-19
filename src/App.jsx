@@ -730,7 +730,7 @@ function StyleScreen({
               {sectionLabel ? (
                 <button
                   onClick={onOpenSection}
-                  className="shrink-0 px-3.5 py-2 text-[12px] font-semibold text-[#5a6e90] transition"
+                  className="shrink-0 rounded-full border border-[rgba(216,226,240,0.9)] bg-[rgba(239,245,252,0.96)] px-3.5 py-2 text-[12px] font-semibold text-[#5a6e90] transition"
                 >
                   {sectionLabel}:
                 </button>
