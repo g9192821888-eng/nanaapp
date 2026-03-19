@@ -301,11 +301,23 @@ function useTelegramWebApp() {
     setIsTelegram(true);
     tg.ready();
 
+    if (typeof tg.expand === "function") {
+      tg.expand();
+    }
+
+    if (typeof tg.requestFullscreen === "function") {
+      try {
+        tg.requestFullscreen();
+      } catch {
+        // Some Telegram clients expose the method but may reject the call.
+      }
+    }
+
     if (tg.setHeaderColor) {
-      tg.setHeaderColor("#eef2f8");
+      tg.setHeaderColor("#ffffff");
     }
     if (tg.setBackgroundColor) {
-      tg.setBackgroundColor("#eef2f8");
+      tg.setBackgroundColor("#ffffff");
     }
   }, []);
 
