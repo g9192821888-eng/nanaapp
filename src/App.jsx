@@ -436,19 +436,6 @@ function FeedCard({ card, onClick }) {
           </div>
         </div>
 
-        {gallery.length > 1 ? (
-          <div className="pointer-events-none absolute left-3 top-3 flex items-center gap-1.5">
-            {gallery.map((_, index) => (
-              <span
-                key={`${card.id}-feed-dot-${index}`}
-                className={`h-1 rounded-full transition-all ${
-                  index === activeSlide ? "w-4 bg-white" : "w-1 bg-white/55"
-                }`}
-              />
-            ))}
-          </div>
-        ) : null}
-
         <div className="pointer-events-none absolute bottom-2 right-2 flex items-center gap-1 text-white">
           <Heart className="h-5 w-5 fill-current" />
           <span className="text-[14px] font-medium leading-none">{card.likes}</span>
