@@ -400,8 +400,8 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[96px]";
-  const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-[-8px]";
+  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[40px]";
+  const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-0";
 
   const BalanceDigits = ({ value }) => {
     const safeValue = Math.max(0, Math.min(99, value));
@@ -1580,14 +1580,6 @@ export default function App() {
       className="relative overflow-hidden bg-white text-[#1b1d22]"
       style={{ height: "var(--app-height, 100dvh)" }}
     >
-      {!isTelegram ? (
-        <div className="sticky top-0 z-[70] px-3 pt-3">
-          <div className="mx-auto max-w-[516px] rounded-[18px] bg-[#1f6feb] px-4 py-3 text-[13px] font-medium text-white shadow-[0_14px_28px_rgba(31,111,235,0.22)]">
-            Предпросмотр открыт вне Telegram. После деплоя этот интерфейс будет работать как Mini App внутри бота.
-          </div>
-        </div>
-      ) : null}
-
       <div
         className="mx-auto w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-0"
         style={{ height: "var(--app-height, 100dvh)" }}
