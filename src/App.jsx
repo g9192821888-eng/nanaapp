@@ -97,7 +97,7 @@ const products = [
   },
   {
     id: 4,
-    subtitle: "🚀 Продвинутый",
+    subtitle: "🚀 Профи",
     amount: 250,
     price: "1 499 ₽",
     badge: "Выгодно",
@@ -105,7 +105,7 @@ const products = [
   },
   {
     id: 5,
-    subtitle: "⭐ Генератор",
+    subtitle: "⭐ Создатель",
     amount: 500,
     price: "2 499 ₽",
     badge: "Лучший",
@@ -919,22 +919,22 @@ function ProductCard({ product, isSelected, onSelect }) {
       <div className={`relative px-5 py-[10px] ${isFeatured ? "text-[#183b6d]" : "text-[#1d2333]"}`}>
         {product.badge ? (
           <div
-            className={`absolute right-3 top-2 rounded-[12px] px-3 py-1.5 text-[11px] font-semibold leading-none shadow-[0_8px_18px_rgba(15,23,42,0.08)] ${product.badgeColor}`}
+            className={`absolute right-3 top-1 rounded-[12px] px-[10px] py-[5px] text-[10px] font-semibold leading-none shadow-[0_8px_18px_rgba(15,23,42,0.08)] ${product.badgeColor}`}
           >
             {product.badge}
           </div>
         ) : null}
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-end justify-between gap-4">
           <div className="min-w-0 pr-3">
             <div className={`text-[18px] font-medium ${isFeatured ? "text-[#5b6f92]" : "text-[#767f93]"}`}>
               {product.subtitle}
             </div>
-            <div className={`mt-1 text-[16px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
+            <div className={`mt-1 text-[18px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
               {product.amount} фотографий
             </div>
           </div>
-          <div className={`shrink-0 text-right text-[17px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
+          <div className={`shrink-0 text-right text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
             {product.price}
           </div>
         </div>
