@@ -294,12 +294,17 @@ const cards = [
   },
 ];
 
+function hasTelegramContext() {
+  const tg = window.Telegram?.WebApp;
+  return !!(tg && (tg.initData?.length || tg.initDataUnsafe?.user));
+}
+
 function useTelegramWebApp() {
   const [isTelegram, setIsTelegram] = useState(false);
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    if (!tg) return;
+    if (!tg || !hasTelegramContext()) return;
 
     const syncViewportHeight = () => {
       const viewportHeight = tg.viewportStableHeight || tg.viewportHeight || window.innerHeight;
@@ -394,7 +399,7 @@ function CardBadge({ type }) {
 }
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
-  const isTelegramClient = typeof window !== "undefined" && !!window.Telegram?.WebApp;
+  const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
   const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[96px]";
   const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-[-8px]";
 
