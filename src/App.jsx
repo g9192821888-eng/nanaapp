@@ -1013,7 +1013,7 @@ function ShopScreen({
         {!discountActive ? (
           <div className="space-y-3 px-1 pt-[5px]">
             <div className="text-[22px] font-semibold leading-[1.02] tracking-[-0.04em] text-[#161c2c]">
-              Твои идеальны фото за 1 минуту
+              Твои идеальные фото за 1 минуту
             </div>
           </div>
         ) : null}
@@ -1054,7 +1054,7 @@ function ShopScreen({
             <div className="mt-4 text-[22px] font-semibold tracking-[-0.04em] text-[#1d2333]">
               Так быстро уходите?
             </div>
-            <div className="mt-4 text-[17px] leading-8 text-[#6f7d95]">
+            <div className="mt-4 text-[17px] leading-7 text-[#6f7d95]">
               Мы для вас подготовили персональную скидку. Она сгорит через 10 минут 🙈
             </div>
             <button
@@ -1062,12 +1062,6 @@ function ShopScreen({
               className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#39beff_0%,#199dff_55%,#0c7eff_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_16px_34px_rgba(27,145,255,0.22)]"
             >
               Активировать скидку
-            </button>
-            <button
-              onClick={onDismissExitOffer}
-              className="mt-3 text-[14px] font-medium text-[#8a97ad]"
-            >
-              Выйти без скидки
             </button>
           </div>
         </div>
