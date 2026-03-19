@@ -899,7 +899,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
           isBonusCounting={isBonusCounting}
         />
 
-        <div className="px-0 pt-[5px]">
+        <div className="px-0 pt-[10px]">
           <div className="overflow-x-auto rounded-[20px] bg-[rgba(245,247,251,0.72)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-2 pr-2">
               {[
@@ -1255,8 +1255,6 @@ function FeedScreen({
   balance,
   isBonusCounting,
 }) {
-  const pinnedTopRef = useRef(null);
-  const [pinnedTopHeight, setPinnedTopHeight] = useState(0);
   const feedSections = styleSections
     .filter((section) => section.id !== "all")
     .map((section) => ({
@@ -1265,38 +1263,19 @@ function FeedScreen({
     }))
     .filter((section) => section.cards.length > 0);
 
-  useLayoutEffect(() => {
-    const updatePinnedHeight = () => {
-      if (!pinnedTopRef.current) return;
-      setPinnedTopHeight(pinnedTopRef.current.offsetHeight);
-    };
-
-    updatePinnedHeight();
-    window.addEventListener("resize", updatePinnedHeight);
-
-    return () => {
-      window.removeEventListener("resize", updatePinnedHeight);
-    };
-  }, []);
-
   return (
     <>
       <PinnedSectionHeader className="pt-0">
-        <div ref={pinnedTopRef}>
-          <Header
-            onOpenBalance={onOpenBalance}
-            onOpenProfile={onOpenProfile}
-            balance={balance}
-            isBonusCounting={isBonusCounting}
-          />
-          <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
-        </div>
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
+        <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </PinnedSectionHeader>
 
-      <div
-        className="space-y-[0px] bg-white pb-3 pt-0"
-        style={{ paddingTop: pinnedTopHeight }}
-      >
+      <div className="space-y-[0px] bg-white pb-3 pt-0">
         {feedSections.map((section) => (
           <section key={section.id} className="space-y-1.5">
             <div className="flex items-center justify-between gap-3 px-2">
