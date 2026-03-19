@@ -1164,6 +1164,32 @@ export default function App() {
     setScreen("profile");
   };
 
+  useEffect(() => {
+    const backButton = window.Telegram?.WebApp?.BackButton;
+    if (!backButton) return undefined;
+
+    const handleBack = () => {
+      setScreen((currentScreen) => {
+        if (currentScreen === "feed") return currentScreen;
+        if (currentScreen === "loading" || currentScreen === "result") return "feed";
+        return "feed";
+      });
+    };
+
+    if (screen === "feed") {
+      backButton.hide();
+      backButton.offClick(handleBack);
+      return undefined;
+    }
+
+    backButton.show();
+    backButton.onClick(handleBack);
+
+    return () => {
+      backButton.offClick(handleBack);
+    };
+  }, [screen]);
+
   const claimWelcomeBonus = () => {
     if (isBonusCounting || isBonusClaimClosing) return;
     setIsBonusClaimClosing(true);
