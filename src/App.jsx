@@ -378,7 +378,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
       <div className="mx-auto mt-[15px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
-          className="group flex min-w-0 items-center gap-3 rounded-[16px] px-1 py-1 text-left transition active:scale-[0.98]"
+          className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(220,228,242,0.55)] px-1 py-1 text-left transition active:scale-[0.98]"
         >
           <img
             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
@@ -411,9 +411,17 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   );
 }
 
+function PinnedSectionHeader({ children }) {
+  return (
+    <div className="sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-3 backdrop-blur-[10px]">
+      {children}
+    </div>
+  );
+}
+
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-[10px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(245,247,251,0.72)] px-2 py-2">
+    <div className="mt-[5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(245,247,251,0.72)] px-2 py-2">
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -423,8 +431,8 @@ function FilterBar({ activeFilter, setActiveFilter }) {
             onClick={() => setActiveFilter(filter.id)}
             className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
               isActive
-                ? "bg-[#2b7de9] text-white"
-                : "bg-[#f5f7fb] text-[#5a6e90]"
+                ? "bg-[rgba(43,125,233,0.92)] text-white"
+                : "bg-[rgba(245,247,251,0.82)] text-[#5a6e90]"
             }`}
           >
             <Icon className="h-4 w-4" strokeWidth={2.2} fill={filter.id === "liked" ? "currentColor" : "none"} />
@@ -609,16 +617,18 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
 
   return (
     <div className="space-y-3 pb-24">
-      <Header onOpenBalance={onOpenBalance} onOpenProfile={onOpenProfile} />
+      <PinnedSectionHeader>
+        <Header onOpenBalance={onOpenBalance} onOpenProfile={onOpenProfile} />
 
-      <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
-        <div className="flex items-center justify-center gap-3">
-          <div className="text-center">
-            <div className="text-[14px] font-semibold text-[#234677]">Выбранный стиль</div>
-            <div className="text-[11px] text-[#7d8ca5]">Загрузи свое фото и нажми Создать</div>
+        <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
+          <div className="flex items-center justify-center gap-3">
+            <div className="text-center">
+              <div className="text-[14px] font-semibold text-[#234677]">Выбранный стиль</div>
+              <div className="text-[11px] text-[#7d8ca5]">Загрузи свое фото и нажми Создать</div>
+            </div>
           </div>
         </div>
-      </div>
+      </PinnedSectionHeader>
 
       <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="relative">
@@ -811,12 +821,14 @@ function ShopScreen({
 
   return (
     <div className="space-y-3">
-      <Header
-        onOpenBalance={onOpenBalance}
-        onOpenProfile={onOpenProfile}
-        balance={balance}
-        isBonusCounting={isBonusCounting}
-      />
+      <PinnedSectionHeader>
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
+      </PinnedSectionHeader>
 
       <div className="space-y-6 rounded-[30px] bg-white px-4 pb-28 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="space-y-3 px-1">
@@ -866,51 +878,51 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
 
   return (
     <div className="space-y-3">
-      <Header
-        onOpenBalance={onOpenBalance}
-        onOpenProfile={onOpenProfile}
-        balance={balance}
-        isBonusCounting={isBonusCounting}
-      />
+      <PinnedSectionHeader>
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
 
-      <div className="px-0 py-0">
-        <div className="flex items-center justify-between gap-3">
-          <button
-            onClick={onBack}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e2e9f5] bg-white text-[#5a6e90]"
-          >
-            <ArrowLeft className="h-5 w-5" strokeWidth={2.2} />
-          </button>
+        <div className="px-0 py-0">
+          <div className="flex items-center justify-between gap-3">
+            <button
+              onClick={onBack}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e2e9f5] bg-white text-[#5a6e90]"
+            >
+              <ArrowLeft className="h-5 w-5" strokeWidth={2.2} />
+            </button>
 
-          <div className="flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex items-center gap-2">
-              {[
-                { id: "tasks", label: "Задания", icon: ClipboardList },
-                { id: "photos", label: "Фотографии", icon: Image },
-                { id: "history", label: "История", icon: History },
-              ].map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setProfileTab(item.id)}
-                    className={`flex shrink-0 items-center gap-1.5 rounded-[20px] border px-4 py-2.5 text-[14px] font-medium transition ${
-                      profileTab === item.id
-                        ? "border-[#2b7de9] bg-[#2b7de9] text-white shadow-[0_8px_16px_rgba(43,125,233,0.22)]"
-                        : "border-[#e1e7f1] bg-[#f2f5fa] text-[#607394]"
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" strokeWidth={2.1} />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
+            <div className="flex-1 overflow-x-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex items-center gap-2 pr-2">
+                {[
+                  { id: "tasks", label: "Задания", icon: ClipboardList },
+                  { id: "photos", label: "Фотографии", icon: Image },
+                  { id: "history", label: "История", icon: History },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setProfileTab(item.id)}
+                      className={`flex shrink-0 items-center gap-1.5 rounded-[20px] border px-4 py-2.5 text-[14px] font-medium transition ${
+                        profileTab === item.id
+                          ? "border-[#2b7de9] bg-[#2b7de9] text-white shadow-[0_8px_16px_rgba(43,125,233,0.22)]"
+                          : "border-[#e1e7f1] bg-[#f2f5fa] text-[#607394]"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" strokeWidth={2.1} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
-
-          <div className="h-8 w-8" />
         </div>
-      </div>
+      </PinnedSectionHeader>
 
       {profileTab === "tasks" ? (
         <div className="space-y-2.5">
@@ -979,12 +991,14 @@ function LoadingScreen({
 
   return (
     <div className="space-y-3">
-      <Header
-        onOpenBalance={onOpenBalance}
-        onOpenProfile={onOpenProfile}
-        balance={balance}
-        isBonusCounting={isBonusCounting}
-      />
+      <PinnedSectionHeader>
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
+      </PinnedSectionHeader>
 
       <div className="rounded-[28px] bg-white p-3.5 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="grid grid-cols-2 gap-3">
@@ -1021,33 +1035,35 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
 
   return (
     <div className="space-y-3">
-      <Header
-        onOpenBalance={onOpenBalance}
-        onOpenProfile={onOpenProfile}
-        balance={balance}
-        isBonusCounting={isBonusCounting}
-      />
+      <PinnedSectionHeader>
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
 
-      <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
-        <div className="flex items-center justify-between gap-3">
-          <button
-            onClick={onBack}
-            className="flex h-10 min-w-[108px] items-center justify-center gap-2 rounded-full border border-[#dde6f4] bg-white px-4 text-[#5a6e90]"
-          >
-            <ArrowLeft className="h-4.5 w-4.5" strokeWidth={2.2} />
-            <span className="text-[14px] font-semibold">Главная</span>
-          </button>
+        <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
+          <div className="flex items-center justify-between gap-3">
+            <button
+              onClick={onBack}
+              className="flex h-10 min-w-[108px] items-center justify-center gap-2 rounded-full border border-[#dde6f4] bg-white px-4 text-[#5a6e90]"
+            >
+              <ArrowLeft className="h-4.5 w-4.5" strokeWidth={2.2} />
+              <span className="text-[14px] font-semibold">Главная</span>
+            </button>
 
-          <div className="flex-1 text-center">
-            <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
-              <Check className="h-5 w-5 text-[#3cc95a]" strokeWidth={2.6} />
-              <span>Фото готово</span>
+            <div className="flex-1 text-center">
+              <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
+                <Check className="h-5 w-5 text-[#3cc95a]" strokeWidth={2.6} />
+                <span>Фото готово</span>
+              </div>
             </div>
-          </div>
 
-          <div className="h-10 w-10" />
+            <div className="h-10 w-10" />
+          </div>
         </div>
-      </div>
+      </PinnedSectionHeader>
 
       <div className="overflow-hidden rounded-[28px] bg-white p-3.5 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="relative overflow-hidden rounded-[24px]">
