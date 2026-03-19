@@ -358,38 +358,36 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
   return (
     <div className="px-3 pb-2 pt-4">
-      <div className="overflow-hidden rounded-b-[18px] border-b border-[#dce4f2] bg-white px-5 pb-3 pt-3 shadow-[0_8px_32px_rgba(70,89,122,0.08)]">
-        <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[10px]">
-          <button
-            onClick={onOpenProfile}
-            className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
-              alt="avatar"
-              className="h-12 w-12 rounded-full object-cover ring-2 ring-white"
-            />
-            <div className="min-w-0">
-              <div className="flex items-center gap-1">
-                <div className="truncate text-[18px] font-semibold text-[#1f3b67]">Сергей</div>
-                <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9bb0d0] opacity-0 transition group-hover:opacity-100" />
-              </div>
-              <div className="text-[13px] text-[#7e8ba3]">Мой профиль</div>
+      <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[10px]">
+        <button
+          onClick={onOpenProfile}
+          className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
+            alt="avatar"
+            className="h-12 w-12 rounded-full object-cover ring-2 ring-white"
+          />
+          <div className="min-w-0">
+            <div className="flex items-center gap-1">
+              <div className="truncate text-[18px] font-semibold text-[#1f3b67]">Сергей</div>
+              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9bb0d0] opacity-0 transition group-hover:opacity-100" />
             </div>
-          </button>
-
-          <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
-            <div className="flex items-center gap-1 px-3 py-1.5 text-[14px] font-semibold">
-              <BalanceDigits value={balance} />
-              <Sparkles className="h-3.5 w-3.5" strokeWidth={2.1} />
-            </div>
-            <button
-              onClick={onOpenBalance}
-              className="flex h-10 w-10 items-center justify-center bg-[#2b7de9] text-white"
-            >
-              <Plus className="h-4.5 w-4.5" />
-            </button>
+            <div className="text-[13px] text-[#7e8ba3]">Мой профиль</div>
           </div>
+        </button>
+
+        <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
+          <div className="flex items-center gap-1 px-3 py-1.5 text-[14px] font-semibold">
+            <BalanceDigits value={balance} />
+            <Sparkles className="h-3.5 w-3.5" strokeWidth={2.1} />
+          </div>
+          <button
+            onClick={onOpenBalance}
+            className="flex h-10 w-10 items-center justify-center bg-[#2b7de9] text-white"
+          >
+            <Plus className="h-4.5 w-4.5" />
+          </button>
         </div>
       </div>
     </div>
