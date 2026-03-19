@@ -425,8 +425,8 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-1 pb-0 pt-[80px]">
-      <div className="mx-auto mt-[15px] flex w-full max-w-[516px] items-center justify-between gap-3">
+    <div className="px-1 pb-0 pt-[104px]">
+      <div className="mx-auto mt-[-9px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(232,238,248,0.78)] bg-[rgba(255,255,255,0.72)] px-1 py-1 text-left transition active:scale-[0.98]"
@@ -691,7 +691,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, bal
     );
 
   return (
-    <div className="space-y-3 pb-24">
+    <div className="space-y-3">
       <PinnedSectionHeader className="pb-1 pt-0">
         <Header
           onOpenBalance={onOpenBalance}
@@ -788,7 +788,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, bal
         )}
       </div>
 
-      <div className="sticky bottom-3 z-20">
+      <div>
         <button
           onClick={() =>
             onCreate({
@@ -1036,6 +1036,8 @@ function LoadingScreen({
   balance,
   isBonusCounting,
 }) {
+  const loadingImage = hasUploadedPhoto ? previewImage : card.image;
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onComplete();
@@ -1055,29 +1057,56 @@ function LoadingScreen({
         />
       </PinnedSectionHeader>
 
-      <div className="rounded-[28px] bg-white p-3.5 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="overflow-hidden rounded-[22px] bg-[#f4f9ff]">
-            <img
-              src={hasUploadedPhoto ? previewImage : card.image}
-              alt="preview"
-              className="aspect-[0.9] w-full object-cover"
-            />
+      <div className="rounded-[22px] bg-[#f8fbff] px-4 pb-4 pt-4 ring-1 ring-[#e3ebf7]">
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
+            <Sparkles className="h-5 w-5 text-[#2b7de9]" strokeWidth={2.2} />
+            <span>Создание фото</span>
           </div>
-          <div className="overflow-hidden rounded-[22px] bg-[#f4f9ff]">
-            <img src={card.image} alt={card.title} className="aspect-[0.9] w-full object-cover" />
+
+          <div className="mt-3 rounded-[18px] bg-white/80 px-4 py-3 shadow-[0_8px_20px_rgba(43,125,233,0.08)]">
+            <div className="flex items-center justify-between">
+              <div className="text-[12px] font-semibold text-[#234677]">87%</div>
+            </div>
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#edf4ff]">
+              <motion.div
+                initial={{ width: "12%" }}
+                animate={{ width: ["12%", "48%", "72%", "87%"] }}
+                transition={{ duration: 2.4, ease: "easeInOut" }}
+                className="h-full rounded-full bg-[linear-gradient(90deg,#5bc2ff_0%,#2b7de9_100%)]"
+              />
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="mt-4 rounded-[24px] bg-[linear-gradient(135deg,#eef5ff_0%,#f9fbff_100%)] px-4 py-5 text-center ring-1 ring-[#e3ebf7]">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#2b7de9] text-white shadow-[0_12px_24px_rgba(43,125,233,0.22)]">
-            <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
-              <Wand2 className="h-7 w-7" strokeWidth={2.2} />
-            </motion.div>
+      <div className="overflow-hidden rounded-[28px] bg-white p-3.5 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+        <div className="relative overflow-hidden rounded-[24px]">
+          <img
+            src={loadingImage}
+            alt={card.title}
+            className={`aspect-[1.08] w-full object-cover transition ${
+              hasUploadedPhoto ? "scale-[0.96] opacity-60 blur-[1px]" : ""
+            }`}
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(30,64,175,0.10)_0%,rgba(43,125,233,0.24)_100%)]" />
+
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-[#2b7de9] shadow-[0_12px_28px_rgba(43,125,233,0.16)] backdrop-blur-sm">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                className="flex h-5 w-5 items-center justify-center"
+              >
+                <Wand2 className="h-4.5 w-4.5" strokeWidth={2.2} />
+              </motion.div>
+            </div>
           </div>
-          <div className="mt-3 text-[20px] font-semibold tracking-[-0.02em] text-[#234677]">Генерируем фото</div>
-          <div className="mt-1 text-[13px] leading-5 text-[#7d8ca5]">
-            Нейросеть собирает композицию, свет и стилизацию под выбранный образ.
+
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent px-5 pb-5 pt-10 text-white">
+            <div className="text-[13px] leading-5 text-white/85">
+              Подготавливаем финальное изображение
+            </div>
           </div>
         </div>
       </div>
@@ -1236,7 +1265,7 @@ function FeedScreen({
         <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </PinnedSectionHeader>
 
-      <div className="space-y-[0px] bg-white pb-3 pt-0">
+      <div className="-mr-3 space-y-[0px] bg-white pb-3 pt-0">
         {feedSections.map((section) => (
           <section key={section.id} className="space-y-1.5">
             <div className="flex items-center justify-between gap-3 px-2">
@@ -1251,7 +1280,7 @@ function FeedScreen({
               </button>
             </div>
 
-            <div className="flex gap-3 overflow-x-auto px-2 pb-1 pr-3">
+            <div className="flex gap-3 overflow-x-auto px-2 pb-1 pr-0">
               {section.cards.map((card) => (
                 <div key={card.id} className="w-[168px] shrink-0">
                   <FeedCard card={card} onClick={onSelectCard} />
