@@ -951,7 +951,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         />
 
         <div className="px-0 pt-0">
-          <div className="overflow-x-auto rounded-[20px] bg-[rgba(245,247,251,0.72)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(248,250,253,0.82)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-2 pr-2">
               {[
                 { id: "tasks", label: "Задания", icon: ClipboardList },
@@ -1159,12 +1159,6 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
             <Check className="h-5 w-5 text-[#3cc95a]" strokeWidth={2.6} />
             <span>Фото готово</span>
           </div>
-
-          <div className="mt-3 rounded-[18px] bg-white/80 px-4 py-3 shadow-[0_8px_20px_rgba(43,125,233,0.08)]">
-            <div className="text-[13px] leading-5 text-[#6e7d96]">
-              Генерация завершена, изображение готово к просмотру и отправке.
-            </div>
-          </div>
         </div>
       </div>
 
@@ -1172,26 +1166,21 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
         <div className="relative overflow-hidden rounded-[24px]">
           <img src={card.image} alt={card.title} className="aspect-[1.08] w-full object-cover" />
 
-          <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-white/92 px-4 py-2.5 text-[#2b7de9] shadow-[0_10px_22px_rgba(43,125,233,0.14)] backdrop-blur-sm">
-            <Check className="h-4.5 w-4.5" strokeWidth={2.8} />
-            <span className="text-[13px] font-semibold">Готово</span>
-          </div>
-
           <button className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#2b7de9] px-4 py-3 text-white shadow-[0_12px_24px_rgba(43,125,233,0.24)]">
             <Download className="h-5 w-5" strokeWidth={2.2} />
             <span className="text-[13px] font-semibold">Скачать</span>
           </button>
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-3 rounded-[18px] bg-[#f7fbff] px-4 py-3">
-          <div className="flex min-w-0 items-center gap-3">
+        <div className="mt-3 flex items-center justify-between gap-2 rounded-[18px] bg-[#f7fbff] px-4 py-3">
+          <div className="flex min-w-0 flex-1 items-center gap-2">
             <span className="shrink-0 text-[13px] font-semibold text-[#7d8ca5]">Поставь оценку</span>
-            <div className="flex items-center gap-1.5">
+            <div className="flex min-w-0 items-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   onClick={() => setRating(star)}
-                  className="text-[24px] leading-none transition active:scale-[0.92]"
+                  className="shrink-0 text-[22px] leading-none transition active:scale-[0.92]"
                 >
                   <span className={star <= rating ? "text-[#ffbf1f]" : "text-[#cfd9ea]"}>
                     {star <= rating ? "★" : "☆"}
@@ -1201,7 +1190,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
             </div>
           </div>
 
-          <button className="shrink-0 rounded-full bg-[#dfe9f9] px-3.5 py-1.5 text-[12px] font-semibold text-[#5a6e90] shadow-[0_6px_14px_rgba(133,155,191,0.16)]">
+          <button className="ml-2 shrink-0 rounded-full bg-[#dfe9f9] px-3 py-1.5 text-[11px] font-semibold text-[#5a6e90] shadow-[0_6px_14px_rgba(133,155,191,0.16)]">
             Отправить
           </button>
         </div>
