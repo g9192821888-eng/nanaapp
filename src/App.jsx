@@ -88,27 +88,27 @@ const products = [
   },
   {
     id: 3,
-    subtitle: "🙈 Стандарт",
+    subtitle: "✨ Стандарт",
     amount: 100,
     price: "899 ₽",
-    badge: "Рекомендуем",
+    badge: "Популярный",
     badgeColor: "bg-[#53d11f] text-white",
     featured: true,
   },
   {
     id: 4,
-    subtitle: "🔥 Продвинутый",
+    subtitle: "🚀 Продвинутый",
     amount: 250,
     price: "1 499 ₽",
-    badge: "Удобно",
+    badge: "Выгодно",
     badgeColor: "bg-[#2fb8ff] text-white",
   },
   {
     id: 5,
-    subtitle: "💎 Генератор",
+    subtitle: "⭐ Генератор",
     amount: 500,
     price: "2 499 ₽",
-    badge: "VIP",
+    badge: "Лучший",
     badgeColor: "bg-[#ffbf1f] text-white",
   },
 ];
@@ -916,10 +916,10 @@ function ProductCard({ product, isSelected, onSelect }) {
           : "border-[rgba(225,232,242,0.9)] bg-[rgba(248,250,253,0.96)]"
       } ${isSelected ? "ring-2 ring-[#2b7de9] ring-offset-2 ring-offset-transparent" : ""}`}
     >
-      <div className={`relative px-5 py-3 ${isFeatured ? "text-[#183b6d]" : "text-[#1d2333]"}`}>
+      <div className={`relative px-5 py-[10px] ${isFeatured ? "text-[#183b6d]" : "text-[#1d2333]"}`}>
         {product.badge ? (
           <div
-            className={`absolute right-4 top-3 rounded-[12px] px-3 py-1.5 text-[11px] font-semibold leading-none shadow-[0_8px_18px_rgba(15,23,42,0.08)] ${product.badgeColor}`}
+            className={`absolute right-3 top-2 rounded-[12px] px-3 py-1.5 text-[11px] font-semibold leading-none shadow-[0_8px_18px_rgba(15,23,42,0.08)] ${product.badgeColor}`}
           >
             {product.badge}
           </div>
@@ -954,9 +954,8 @@ function ShopScreen({
 }) {
   const shopBenefits = [
     "Создавай виральный контент за минуты",
-    "Забудь про обработку: идеальный свет и кожа на каждом кадре",
-    "Выгляди на миллион: премиальные образы без затрат на стилистов",
-    "Разовая оплата, без подписок и автоматических списаний",
+    "Забудь про фотошоп обработку",
+    "Разовая оплата без подписок",
   ];
 
   return (
@@ -973,10 +972,7 @@ function ShopScreen({
       <div className="space-y-5 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="space-y-3 px-1">
           <div className="max-w-[320px] text-[34px] font-semibold leading-[0.95] tracking-[-0.055em] text-[#161c2c]">
-            Твоя идеальная съемка за 1 минуту
-          </div>
-          <div className="text-[17px] leading-6 text-[#707b90]">
-            Фотографии, которыми хочется делиться
+            Идеальные фото и видео за 1 минуту
           </div>
         </div>
 
