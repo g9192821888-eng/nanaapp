@@ -880,13 +880,13 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                   <button
                     key={item.id}
                     onClick={() => setProfileTab(item.id)}
-                    className={`flex shrink-0 items-center gap-1.5 rounded-[20px] border px-4 py-2.5 text-[14px] font-medium transition ${
+                    className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
                       profileTab === item.id
-                        ? "border-[#2b7de9] bg-[#2b7de9] text-white shadow-[0_8px_16px_rgba(43,125,233,0.22)]"
-                        : "border-[#e1e7f1] bg-[#f2f5fa] text-[#607394]"
+                        ? "bg-[rgba(43,125,233,0.92)] text-white"
+                        : "bg-[rgba(245,247,251,0.82)] text-[#5a6e90]"
                     }`}
                   >
-                    <Icon className="h-4 w-4" strokeWidth={2.1} />
+                    <Icon className="h-4 w-4" strokeWidth={2.2} />
                     <span>{item.label}</span>
                   </button>
                 );
@@ -1080,7 +1080,40 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
   );
 }
 
-function SectionScreen({ section, onSelectCard, onOpenBalance, onOpenProfile, balance, isBonusCounting }) {
+function SectionScreen({
+  section,
+  sections,
+  onChangeSection,
+  onSelectCard,
+  onOpenBalance,
+  onOpenProfile,
+  balance,
+  isBonusCounting,
+}) {
+  const touchStartXRef = useRef(0);
+
+  const handleTouchStart = (event) => {
+    touchStartXRef.current = event.touches[0]?.clientX ?? 0;
+  };
+
+  const handleTouchEnd = (event) => {
+    const touchEndX = event.changedTouches[0]?.clientX ?? 0;
+    const deltaX = touchEndX - touchStartXRef.current;
+    const swipeThreshold = 45;
+    const currentSectionIndex = sections.findIndex((item) => item.id === section.id);
+
+    if (currentSectionIndex === -1) return;
+
+    if (deltaX <= -swipeThreshold && currentSectionIndex < sections.length - 1) {
+      onChangeSection(sections[currentSectionIndex + 1]);
+      return;
+    }
+
+    if (deltaX >= swipeThreshold && currentSectionIndex > 0) {
+      onChangeSection(sections[currentSectionIndex - 1]);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <PinnedSectionHeader className="pt-0">
@@ -1092,7 +1125,12 @@ function SectionScreen({ section, onSelectCard, onOpenBalance, onOpenProfile, ba
         />
       </PinnedSectionHeader>
 
-      <div className="space-y-3 bg-white pb-6" style={{ paddingTop: 0 }}>
+      <div
+        className="space-y-3 bg-white pb-6"
+        style={{ paddingTop: 0 }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="px-2">
           <div className="text-[24px] font-semibold tracking-[-0.04em] text-[#1c2b45]">{section.label}</div>
           <div className="mt-1 text-[13px] text-[#8a97ad]">Все стили раздела в одной ленте</div>
@@ -1215,6 +1253,18 @@ export default function App() {
     return filteredCards;
   }, [activeFilter]);
 
+  const availableSections = useMemo(
+    () =>
+      styleSections
+        .filter((section) => section.id !== "all")
+        .map((section) => ({
+          ...section,
+          cards: visibleCards.filter((card) => card.section === section.id),
+        }))
+        .filter((section) => section.cards.length > 0),
+    [visibleCards],
+  );
+
   const handleSelectCard = (card) => {
     setSelectedCard(card);
     setResultImage(card.image);
@@ -1222,10 +1272,7 @@ export default function App() {
   };
 
   const handleOpenSection = (section) => {
-    setSelectedSection({
-      ...section,
-      cards: visibleCards.filter((card) => card.section === section.id),
-    });
+    setSelectedSection(section);
     setScreen("section");
   };
 
@@ -1320,6 +1367,8 @@ export default function App() {
         ) : screen === "section" ? (
           <SectionScreen
             section={selectedSection}
+            sections={availableSections}
+            onChangeSection={setSelectedSection}
             onSelectCard={handleSelectCard}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
