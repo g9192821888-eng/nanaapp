@@ -333,15 +333,15 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           </button>
 
           <div className="flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
-            <div className="flex items-center gap-2 px-4 py-2.5 text-[18px] font-semibold">
+            <div className="flex items-center gap-1.5 px-3.5 py-2 text-[16px] font-semibold">
               <span>{isBonusCounting ? "..." : balance}</span>
-              <Sparkles className="h-4.5 w-4.5" strokeWidth={2.1} />
+              <Sparkles className="h-4 w-4" strokeWidth={2.1} />
             </div>
             <button
               onClick={onOpenBalance}
-              className="flex h-12 w-12 items-center justify-center bg-[#2b7de9] text-white"
+              className="flex h-11 w-11 items-center justify-center bg-[#2b7de9] text-white"
             >
-              <Plus className="h-6 w-6" />
+              <Plus className="h-5 w-5" />
             </button>
           </div>
         </div>
