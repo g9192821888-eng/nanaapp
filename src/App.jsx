@@ -357,12 +357,12 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="-mx-3 px-3 pb-2 pt-4">
+    <div className="px-3 pb-2 pt-4">
       <div className="overflow-hidden rounded-b-[18px] border-b border-[#dce4f2] bg-white px-5 pb-3 pt-3 shadow-[0_8px_32px_rgba(70,89,122,0.08)]">
         <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[10px]">
           <button
             onClick={onOpenProfile}
-            className="-ml-[15px] group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
+            className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
           >
             <img
               src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
@@ -378,7 +378,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
             </div>
           </button>
 
-          <div className="ml-[60px] translate-x-[20px] flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
+          <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
             <div className="flex items-center gap-1 px-3 py-1.5 text-[14px] font-semibold">
               <BalanceDigits value={balance} />
               <Sparkles className="h-3.5 w-3.5" strokeWidth={2.1} />
@@ -1217,7 +1217,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-[100dvh] bg-[radial-gradient(circle_at_top,_#f7faff_0%,_#eef2f8_42%,_#e9edf4_100%)] text-[#1b1d22]">
+    <div className="relative min-h-[100dvh] overflow-x-hidden bg-[radial-gradient(circle_at_top,_#f7faff_0%,_#eef2f8_42%,_#e9edf4_100%)] text-[#1b1d22]">
       {!isTelegram ? (
         <div className="sticky top-0 z-[70] px-3 pt-3">
           <div className="mx-auto max-w-[516px] rounded-[18px] bg-[#1f6feb] px-4 py-3 text-[13px] font-medium text-white shadow-[0_14px_28px_rgba(31,111,235,0.22)]">
