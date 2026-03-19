@@ -393,6 +393,10 @@ function CardBadge({ type }) {
 }
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
+  const isTelegramClient = typeof window !== "undefined" && !!window.Telegram?.WebApp;
+  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[96px]";
+  const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-[-8px]";
+
   const BalanceDigits = ({ value }) => {
     const safeValue = Math.max(0, Math.min(99, value));
     const [tens, ones] = String(safeValue).padStart(2, "0").split("").map(Number);
@@ -427,8 +431,8 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-1 pb-0 pt-[180px]">
-      <div className="mx-auto mt-[-75px] flex w-full max-w-[516px] items-center justify-between gap-3">
+    <div className={`px-1 pb-0 ${headerTopSpacing}`}>
+      <div className={`mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 ${headerRowOffset}`}>
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(232,238,248,0.78)] bg-[rgba(255,255,255,0.72)] px-1 py-1 text-left transition active:scale-[0.98]"
