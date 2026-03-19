@@ -1128,24 +1128,23 @@ function FeedScreen({
 
   return (
     <>
-      <Header
-        onOpenBalance={onOpenBalance}
-        onOpenProfile={onOpenProfile}
-        balance={balance}
-        isBonusCounting={isBonusCounting}
-      />
-      <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+      <div className="sticky top-0 z-30 -mx-1 bg-[linear-gradient(180deg,rgba(239,244,250,0.98)_0%,rgba(239,244,250,0.94)_78%,rgba(239,244,250,0)_100%)] px-1 pb-3 backdrop-blur-[10px]">
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
+        <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+      </div>
 
-      <div className="mt-3 space-y-5">
+      <div className="space-y-2.5">
         {feedSections.map((section) => (
-          <section key={section.id} className="space-y-3">
+          <section key={section.id} className="space-y-2">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-[20px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
-                {section.label}
+              <h2 className="text-[16px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
+                {section.label} &gt;
               </h2>
-              <button className="shrink-0 rounded-full bg-white px-3 py-1.5 text-[12px] font-semibold text-[#5a6e90] ring-1 ring-[#dce4f2]">
-                Все
-              </button>
             </div>
 
             <div className="flex gap-3 overflow-x-auto pb-1">
