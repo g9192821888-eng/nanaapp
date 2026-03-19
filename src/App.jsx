@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
+  ChevronRight,
   Check,
   ClipboardList,
   Heart,
@@ -611,20 +612,11 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
       <Header onOpenBalance={onOpenBalance} onOpenProfile={onOpenProfile} />
 
       <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
-        <div className="flex items-center justify-between gap-3">
-          <button
-            onClick={onBack}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#dde6f4] bg-white text-[#5a6e90]"
-          >
-            <ArrowLeft className="h-5.5 w-5.5" strokeWidth={2.2} />
-          </button>
-
-          <div className="flex-1 text-center">
+        <div className="flex items-center justify-center gap-3">
+          <div className="text-center">
             <div className="text-[14px] font-semibold text-[#234677]">Выбранный стиль</div>
             <div className="text-[11px] text-[#7d8ca5]">Загрузи свое фото и нажми Создать</div>
           </div>
-
-          <div className="h-9 w-9" />
         </div>
       </div>
 
@@ -647,7 +639,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
                   key={`${card.id}-${index}`}
                   src={image}
                   alt={`${card.title} ${index + 1}`}
-                  className="aspect-[1.2] shrink-0 object-cover"
+                  className="aspect-[1.08] shrink-0 object-cover"
                   style={{ width: `${100 / styleGallery.length}%` }}
                 />
               ))}
@@ -1118,6 +1110,8 @@ function FeedScreen({
   balance,
   isBonusCounting,
 }) {
+  const pinnedTopRef = useRef(null);
+  const [pinnedTopHeight, setPinnedTopHeight] = useState(0);
   const feedSections = styleSections
     .filter((section) => section.id !== "all")
     .map((section) => ({
@@ -1126,25 +1120,50 @@ function FeedScreen({
     }))
     .filter((section) => section.cards.length > 0);
 
+  useLayoutEffect(() => {
+    const updatePinnedHeight = () => {
+      if (!pinnedTopRef.current) return;
+      setPinnedTopHeight(pinnedTopRef.current.offsetHeight);
+    };
+
+    updatePinnedHeight();
+    window.addEventListener("resize", updatePinnedHeight);
+
+    return () => {
+      window.removeEventListener("resize", updatePinnedHeight);
+    };
+  }, []);
+
   return (
     <>
-      <div className="sticky top-0 z-30 -mx-1 bg-[linear-gradient(180deg,rgba(239,244,250,0.98)_0%,rgba(239,244,250,0.94)_78%,rgba(239,244,250,0)_100%)] px-1 pb-3 backdrop-blur-[10px]">
-        <Header
-          onOpenBalance={onOpenBalance}
-          onOpenProfile={onOpenProfile}
-          balance={balance}
-          isBonusCounting={isBonusCounting}
-        />
-        <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+      <div className="fixed inset-x-0 top-0 z-30">
+        <div
+          ref={pinnedTopRef}
+          className="mx-auto w-full max-w-[540px] rounded-b-[20px] bg-[rgba(244,247,252,0.92)] px-3 pb-3 shadow-[0_12px_24px_rgba(116,134,168,0.12)] backdrop-blur-[10px]"
+        >
+          <Header
+            onOpenBalance={onOpenBalance}
+            onOpenProfile={onOpenProfile}
+            balance={balance}
+            isBonusCounting={isBonusCounting}
+          />
+          <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+        </div>
       </div>
 
-      <div className="space-y-2.5">
+      <div
+        className="space-y-[0px] rounded-[28px] bg-white px-2 pb-3 pt-2 shadow-[0_8px_24px_rgba(82,103,138,0.06)]"
+        style={{ paddingTop: pinnedTopHeight }}
+      >
         {feedSections.map((section) => (
-          <section key={section.id} className="space-y-2">
+          <section key={section.id} className="space-y-1.5">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-[16px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
-                {section.label} &gt;
-              </h2>
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#eef4fb] px-3 py-1.5 text-[#6f87ab] shadow-[0_6px_14px_rgba(153,173,203,0.12)]">
+                <h2 className="text-[15px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
+                  {section.label}
+                </h2>
+                <ChevronRight className="h-4 w-4 text-[#9eb2ce]" strokeWidth={2.4} />
+              </div>
             </div>
 
             <div className="flex gap-3 overflow-x-auto pb-1">
