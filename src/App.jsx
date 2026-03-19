@@ -13,6 +13,7 @@ import {
   Film,
   History,
   Image,
+  User,
   Snowflake,
   Sparkles,
   Upload,
@@ -427,7 +428,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
   return (
     <div className="px-1 pb-0 pt-[180px]">
-      <div className="mx-auto mt-[-85px] flex w-full max-w-[516px] items-center justify-between gap-3">
+      <div className="mx-auto mt-[-75px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(232,238,248,0.78)] bg-[rgba(255,255,255,0.72)] px-1 py-1 text-left transition active:scale-[0.98]"
@@ -769,6 +770,16 @@ function StyleScreen({
           </motion.button>
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/45 to-transparent px-5 pb-5 pt-10 text-white">
             <div className="text-[22px] font-semibold tracking-tight">{card.title}</div>
+            <div className="mt-2 flex items-center gap-2 text-[12px] font-medium text-white/90">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm">
+                <User className="h-3.5 w-3.5" strokeWidth={2.2} />
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span>1.2K</span>
+                <User className="h-3.5 w-3.5" strokeWidth={2.2} />
+                <span>выбрали</span>
+              </span>
+            </div>
             <div className="mt-1 max-w-[85%] text-[13px] leading-5 text-white/85">{card.description}</div>
           </div>
           {styleGallery.length > 1 ? (
