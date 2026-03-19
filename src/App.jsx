@@ -314,6 +314,38 @@ function CardBadge({ type }) {
 }
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
+  const BalanceDigits = ({ value }) => {
+    const safeValue = Math.max(0, Math.min(99, value));
+    const [tens, ones] = String(safeValue).padStart(2, "0").split("").map(Number);
+    const digitTrack = Array.from({ length: 10 }, (_, digit) => digit);
+
+    const DigitWheel = ({ digit }) => (
+      <span className="relative h-[20px] w-[10px] overflow-hidden">
+        <motion.span
+          animate={{ y: `-${digit * 20}px` }}
+          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute left-0 top-0 flex flex-col items-center"
+        >
+          {digitTrack.map((trackDigit) => (
+            <span
+              key={trackDigit}
+              className="flex h-[20px] w-[10px] items-center justify-center leading-none"
+            >
+              {trackDigit}
+            </span>
+          ))}
+        </motion.span>
+      </span>
+    );
+
+    return (
+      <span className="flex items-center">
+        <DigitWheel digit={tens} />
+        <DigitWheel digit={ones} />
+      </span>
+    );
+  };
+
   return (
     <div className="sticky top-0 z-40 -mx-3 px-3 pb-2 pt-[calc(max(8px,env(safe-area-inset-top))+20px)]">
       <div className="overflow-hidden rounded-b-[28px] border-b border-[#dce4f2] bg-white px-5 pb-4 pt-[calc(env(safe-area-inset-top)+56px)] shadow-[0_8px_32px_rgba(70,89,122,0.08)] -mt-[calc(env(safe-area-inset-top)+52px)]">
@@ -338,7 +370,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
           <div className="flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
             <div className="flex items-center gap-1.5 px-3.5 py-2 text-[16px] font-semibold">
-              <span>{isBonusCounting ? "..." : balance}</span>
+              <BalanceDigits value={balance} />
               <Sparkles className="h-4 w-4" strokeWidth={2.1} />
             </div>
             <button
@@ -1049,7 +1081,6 @@ export default function App() {
   const [showWelcomeBonus, setShowWelcomeBonus] = useState(true);
   const [balance, setBalance] = useState(0);
   const [isBonusCounting, setIsBonusCounting] = useState(false);
-  const [isBonusFlying, setIsBonusFlying] = useState(false);
   const [isBonusClaimClosing, setIsBonusClaimClosing] = useState(false);
 
   const visibleCards = useMemo(() => {
@@ -1075,42 +1106,34 @@ export default function App() {
   };
 
   const claimWelcomeBonus = () => {
-    if (isBonusFlying || isBonusCounting || isBonusClaimClosing) return;
+    if (isBonusCounting || isBonusClaimClosing) return;
     setIsBonusClaimClosing(true);
 
     const duration = 900;
     const total = 20;
     const closeDelay = 280;
-    const takeoffDelay = 320;
-    const flightDuration = 11500;
-    const counterDelayAfterFlight = 180;
 
     setTimeout(() => {
       setShowWelcomeBonus(false);
-      setTimeout(() => {
-        setIsBonusFlying(true);
-        setTimeout(() => {
-          setIsBonusFlying(false);
-          setIsBonusCounting(true);
+      setBalance(0);
+      setIsBonusCounting(true);
 
-          const start = performance.now();
+      const start = performance.now();
 
-          const tick = (now) => {
-            const progress = Math.min((now - start) / duration, 1);
-            setBalance(Math.round(total * progress));
-            if (progress < 1) {
-              requestAnimationFrame(tick);
-            } else {
-              setTimeout(() => {
-                setIsBonusCounting(false);
-                setIsBonusClaimClosing(false);
-              }, 180);
-            }
-          };
-
+      const tick = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        setBalance(Math.round(total * progress));
+        if (progress < 1) {
           requestAnimationFrame(tick);
-        }, flightDuration + counterDelayAfterFlight);
-      }, takeoffDelay);
+        } else {
+          setTimeout(() => {
+            setIsBonusCounting(false);
+            setIsBonusClaimClosing(false);
+          }, 180);
+        }
+      };
+
+      requestAnimationFrame(tick);
     }, closeDelay);
   };
 
@@ -1189,38 +1212,6 @@ export default function App() {
           />
         )}
 
-        {isBonusFlying ? (
-          <>
-            <motion.div
-              initial={{ x: 0, y: 0, scale: 1, opacity: 1, rotate: 0 }}
-              animate={{
-                x: [0, 0, 138],
-                y: [0, 0, -520],
-                scale: [1, 1.08, 0.72],
-                opacity: [1, 1, 0],
-                rotate: [0, 80, 220],
-              }}
-              transition={{ duration: 11.5, times: [0, 0.28, 1], ease: [0.22, 1, 0.36, 1] }}
-              className="pointer-events-none absolute left-1/2 top-[430px] z-[60]"
-            >
-              <Sparkles className="h-7 w-7 text-[#2b7de9] drop-shadow-[0_8px_18px_rgba(43,125,233,0.28)]" strokeWidth={2.2} />
-            </motion.div>
-            <motion.div
-              initial={{ x: 0, y: 0, scale: 0.92, opacity: 0.95, rotate: 0 }}
-              animate={{
-                x: [0, 0, 166],
-                y: [0, 0, -548],
-                scale: [0.92, 1.02, 0.58],
-                opacity: [0.95, 0.95, 0],
-                rotate: [0, -70, -210],
-              }}
-              transition={{ duration: 12, times: [0, 0.28, 1], ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
-              className="pointer-events-none absolute left-1/2 top-[446px] z-[60]"
-            >
-              <Sparkles className="h-5 w-5 text-[#67c3ff] drop-shadow-[0_8px_18px_rgba(43,125,233,0.24)]" strokeWidth={2.2} />
-            </motion.div>
-          </>
-        ) : null}
       </div>
 
       {showWelcomeBonus ? (
