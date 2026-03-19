@@ -35,7 +35,9 @@ const filters = [
   { id: "all", label: "Все", icon: Check },
   { id: "popular", label: "Тренд", icon: Zap },
   { id: "new", label: "Новый", icon: Star },
-  { id: "free", label: "Бесплатно", icon: Ticket },
+  { id: "family", label: "Семье", icon: User },
+  { id: "pair", label: "Пара", icon: Heart },
+  { id: "video", label: "Видео", icon: Film },
 ];
 
 const styleSections = [
@@ -118,6 +120,7 @@ const cards = [
     likes: 14,
     badge: null,
     section: "business",
+    categories: ["family"],
     image:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -133,6 +136,7 @@ const cards = [
     likes: 6,
     badge: "new",
     section: "street",
+    categories: ["video"],
     image:
       "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -148,6 +152,7 @@ const cards = [
     likes: 141,
     badge: null,
     section: "street",
+    categories: ["pair", "video"],
     image:
       "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -163,6 +168,7 @@ const cards = [
     likes: 14,
     badge: "popular",
     section: "spring",
+    categories: ["family"],
     image:
       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -178,6 +184,7 @@ const cards = [
     likes: 6,
     badge: null,
     section: "street",
+    categories: ["video"],
     image:
       "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -193,6 +200,7 @@ const cards = [
     likes: 141,
     badge: "free",
     section: "march8",
+    categories: ["pair", "family"],
     image:
       "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -208,6 +216,7 @@ const cards = [
     likes: 14,
     badge: null,
     section: "spring",
+    categories: ["family"],
     image:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -223,6 +232,7 @@ const cards = [
     likes: 6,
     badge: "new",
     section: "march8",
+    categories: ["pair"],
     image:
       "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -238,6 +248,7 @@ const cards = [
     likes: 141,
     badge: "popular",
     section: "street",
+    categories: ["video"],
     image:
       "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -253,6 +264,7 @@ const cards = [
     likes: 23,
     badge: null,
     section: "business",
+    categories: ["family"],
     image:
       "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -268,6 +280,7 @@ const cards = [
     likes: 58,
     badge: null,
     section: "business",
+    categories: ["video"],
     image:
       "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -283,6 +296,7 @@ const cards = [
     likes: 91,
     badge: null,
     section: "spring",
+    categories: ["family", "video"],
     image:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -453,7 +467,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
               <div className="truncate text-[18px] font-semibold text-[#1f3b67]">Сергей</div>
               <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9bb0d0] opacity-0 transition group-hover:opacity-100" />
             </div>
-            <div className="text-[13px] text-[#7e8ba3]">Мой профиль</div>
+            <div className="text-[11px] text-[#7e8ba3]">Мой профиль</div>
           </div>
         </button>
 
@@ -1462,7 +1476,9 @@ export default function App() {
     if (activeFilter === "liked") filteredCards = cards.filter((card) => card.likes >= 50);
     else if (activeFilter === "popular") filteredCards = cards.filter((card) => card.badge === "popular");
     else if (activeFilter === "new") filteredCards = cards.filter((card) => card.badge === "new");
-    else if (activeFilter === "free") filteredCards = cards.filter((card) => card.badge === "free");
+    else if (activeFilter === "family") filteredCards = cards.filter((card) => card.categories?.includes("family"));
+    else if (activeFilter === "pair") filteredCards = cards.filter((card) => card.categories?.includes("pair"));
+    else if (activeFilter === "video") filteredCards = cards.filter((card) => card.categories?.includes("video"));
 
     return filteredCards;
   }, [activeFilter]);
@@ -1485,13 +1501,18 @@ export default function App() {
   );
 
   const currentStyleSection = useMemo(
-    () => styleSections.find((section) => section.id === selectedCard.section) ?? selectedSection,
-    [selectedCard, selectedSection],
+    () =>
+      availableSections.find((section) => section.id === selectedCard.section) ??
+      styleSections.find((section) => section.id === selectedCard.section) ??
+      selectedSection,
+    [availableSections, selectedCard, selectedSection],
   );
 
   const handleSelectCard = (card) => {
     setSelectedCard(card);
-    const nextSection = styleSections.find((section) => section.id === card.section);
+    const nextSection =
+      availableSections.find((section) => section.id === card.section) ??
+      styleSections.find((section) => section.id === card.section);
     if (nextSection) setSelectedSection(nextSection);
     setResultImage(card.image);
     setScreen("style");
@@ -1631,7 +1652,9 @@ export default function App() {
             sectionLabel={currentStyleSection?.label ?? ""}
             onSelectStyle={(card) => {
               setSelectedCard(card);
-              const nextSection = styleSections.find((section) => section.id === card.section);
+              const nextSection =
+                availableSections.find((section) => section.id === card.section) ??
+                styleSections.find((section) => section.id === card.section);
               if (nextSection) setSelectedSection(nextSection);
             }}
             onOpenSection={() => {
