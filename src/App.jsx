@@ -374,8 +374,8 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-1 pb-2 pt-[80px]">
-      <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3">
+    <div className="px-1 pb-0 pt-[80px]">
+      <div className="mx-auto mt-[10px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] px-1 py-1 text-left transition active:scale-[0.98]"
@@ -413,7 +413,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-[7px] flex gap-2 overflow-x-auto pb-1">
+    <div className="mt-0 flex gap-2 overflow-x-auto pb-1">
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -608,7 +608,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
     );
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 pb-24">
       <Header onOpenBalance={onOpenBalance} onOpenProfile={onOpenProfile} />
 
       <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
@@ -714,18 +714,20 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
         )}
       </div>
 
-      <button
-        onClick={() =>
-          onCreate({
-            previewImage: uploadedPreview,
-            hasUploadedPhoto: isPairStyle ? hasPhoto || hasSecondPhoto : hasPhoto,
-          })
-        }
-        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.28)] transition hover:bg-[#246fd1]"
-      >
-        <span>Создать за 1</span>
-        <Sparkles className="h-5 w-5" strokeWidth={2.1} />
-      </button>
+      <div className="sticky bottom-3 z-20">
+        <button
+          onClick={() =>
+            onCreate({
+              previewImage: uploadedPreview,
+              hasUploadedPhoto: isPairStyle ? hasPhoto || hasSecondPhoto : hasPhoto,
+            })
+          }
+          className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.28)] transition hover:bg-[#246fd1]"
+        >
+          <span>Создать за 1</span>
+          <Sparkles className="h-5 w-5" strokeWidth={2.1} />
+        </button>
+      </div>
     </div>
   );
 }
