@@ -526,22 +526,52 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, bal
   const [isUploadingSecond, setIsUploadingSecond] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const styleGalleryRef = useRef(null);
+  const touchStartXRef = useRef(0);
   const uploadedPreview =
     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80";
   const styleGallery = card.gallery?.length ? card.gallery : [card.image];
   const canSlideGallery = styleGallery.length > 1;
 
+  const goToStyleSlide = (index, behavior = "smooth") => {
+    if (!styleGalleryRef.current) return;
+    const nextIndex = Math.max(0, Math.min(index, styleGallery.length - 1));
+    styleGalleryRef.current.scrollTo({
+      left: styleGalleryRef.current.clientWidth * nextIndex,
+      behavior,
+    });
+    setActiveSlide(nextIndex);
+  };
+
   useEffect(() => {
     setActiveSlide(0);
-    if (styleGalleryRef.current) {
-      styleGalleryRef.current.scrollTo({ left: 0, behavior: "auto" });
-    }
+    goToStyleSlide(0, "auto");
   }, [card.id]);
 
   const handleGalleryScroll = (event) => {
     const { scrollLeft, clientWidth } = event.currentTarget;
     if (!clientWidth) return;
     setActiveSlide(Math.round(scrollLeft / clientWidth));
+  };
+
+  const handleGalleryTouchStart = (event) => {
+    touchStartXRef.current = event.touches[0]?.clientX ?? 0;
+  };
+
+  const handleGalleryTouchEnd = (event) => {
+    if (!canSlideGallery) return;
+
+    const touchEndX = event.changedTouches[0]?.clientX ?? 0;
+    const deltaX = touchEndX - touchStartXRef.current;
+    const swipeThreshold = 45;
+
+    if (deltaX <= -swipeThreshold && activeSlide === styleGallery.length - 1) {
+      goToStyleSlide(0);
+      return;
+    }
+
+    if (deltaX >= swipeThreshold && activeSlide === 0) {
+      goToStyleSlide(styleGallery.length - 1);
+    }
   };
 
   const handleUpload = () => {
@@ -611,7 +641,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, bal
 
   return (
     <div className="space-y-3 pb-24">
-      <PinnedSectionHeader className="pt-0">
+      <PinnedSectionHeader className="pb-1 pt-0">
         <Header
           onOpenBalance={onOpenBalance}
           onOpenProfile={onOpenProfile}
@@ -625,6 +655,8 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, bal
           <div
             ref={styleGalleryRef}
             onScroll={handleGalleryScroll}
+            onTouchStart={handleGalleryTouchStart}
+            onTouchEnd={handleGalleryTouchEnd}
             className={`flex overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${canSlideGallery ? "snap-x snap-mandatory" : ""}`}
           >
               {styleGallery.map((image, index) => (
@@ -867,8 +899,8 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
           isBonusCounting={isBonusCounting}
         />
 
-        <div className="px-0 py-0">
-          <div className="overflow-x-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="px-0 pt-[5px]">
+          <div className="overflow-x-auto rounded-[20px] bg-[rgba(245,247,251,0.72)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-2 pr-2">
               {[
                 { id: "tasks", label: "Задания", icon: ClipboardList },
@@ -1080,6 +1112,24 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
   );
 }
 
+function SectionPanel({ section, onSelectCard, dimmed = false }) {
+  if (!section) {
+    return <div className="w-full shrink-0" />;
+  }
+
+  return (
+    <div className={`w-full shrink-0 space-y-3 bg-white px-2 pb-6 ${dimmed ? "opacity-85" : ""}`}>
+      <div className="text-[24px] font-semibold tracking-[-0.04em] text-[#1c2b45]">{section.label}</div>
+      <div className="mt-1 text-[13px] text-[#8a97ad]">Все стили раздела в одной ленте</div>
+      <div className="grid grid-cols-2 gap-2">
+        {section.cards.map((card) => (
+          <FeedCard key={card.id} card={card} onClick={onSelectCard} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function SectionScreen({
   section,
   sections,
@@ -1090,29 +1140,73 @@ function SectionScreen({
   balance,
   isBonusCounting,
 }) {
+  const viewportRef = useRef(null);
   const touchStartXRef = useRef(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const currentSectionIndex = sections.findIndex((item) => item.id === section.id);
+  const previousSection = currentSectionIndex > 0 ? sections[currentSectionIndex - 1] : null;
+  const nextSection = currentSectionIndex >= 0 && currentSectionIndex < sections.length - 1 ? sections[currentSectionIndex + 1] : null;
+
+  useLayoutEffect(() => {
+    const updateViewportWidth = () => {
+      if (!viewportRef.current) return;
+      setViewportWidth(viewportRef.current.clientWidth);
+    };
+
+    updateViewportWidth();
+    window.addEventListener("resize", updateViewportWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateViewportWidth);
+    };
+  }, []);
 
   const handleTouchStart = (event) => {
     touchStartXRef.current = event.touches[0]?.clientX ?? 0;
+    setIsDragging(true);
   };
 
-  const handleTouchEnd = (event) => {
-    const touchEndX = event.changedTouches[0]?.clientX ?? 0;
-    const deltaX = touchEndX - touchStartXRef.current;
-    const swipeThreshold = 45;
-    const currentSectionIndex = sections.findIndex((item) => item.id === section.id);
+  const handleTouchMove = (event) => {
+    const currentX = event.touches[0]?.clientX ?? 0;
+    let nextOffset = currentX - touchStartXRef.current;
 
-    if (currentSectionIndex === -1) return;
+    if (!previousSection && nextOffset > 0) nextOffset *= 0.35;
+    if (!nextSection && nextOffset < 0) nextOffset *= 0.35;
 
-    if (deltaX <= -swipeThreshold && currentSectionIndex < sections.length - 1) {
-      onChangeSection(sections[currentSectionIndex + 1]);
+    setDragOffset(nextOffset);
+  };
+
+  const handleTouchEnd = () => {
+    const swipeThreshold = 70;
+
+    if (dragOffset <= -swipeThreshold && nextSection) {
+      setDragOffset(-viewportWidth);
+      setTimeout(() => {
+        onChangeSection(nextSection);
+        setDragOffset(0);
+        setIsDragging(false);
+      }, 180);
       return;
     }
 
-    if (deltaX >= swipeThreshold && currentSectionIndex > 0) {
-      onChangeSection(sections[currentSectionIndex - 1]);
+    if (dragOffset >= swipeThreshold && previousSection) {
+      setDragOffset(viewportWidth);
+      setTimeout(() => {
+        onChangeSection(previousSection);
+        setDragOffset(0);
+        setIsDragging(false);
+      }, 180);
+      return;
     }
+
+    setDragOffset(0);
+    setIsDragging(false);
   };
+
+  const baseOffset = viewportWidth ? -viewportWidth : 0;
 
   return (
     <div className="space-y-4">
@@ -1126,20 +1220,24 @@ function SectionScreen({
       </PinnedSectionHeader>
 
       <div
-        className="space-y-3 bg-white pb-6"
-        style={{ paddingTop: 0 }}
+        ref={viewportRef}
+        className="overflow-hidden bg-white"
         onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        style={{ touchAction: "pan-y" }}
       >
-        <div className="px-2">
-          <div className="text-[24px] font-semibold tracking-[-0.04em] text-[#1c2b45]">{section.label}</div>
-          <div className="mt-1 text-[13px] text-[#8a97ad]">Все стили раздела в одной ленте</div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2 px-2">
-          {section.cards.map((card) => (
-            <FeedCard key={card.id} card={card} onClick={onSelectCard} />
-          ))}
+        <div
+          className="flex"
+          style={{
+            width: "300%",
+            transform: `translateX(${baseOffset + dragOffset}px)`,
+            transition: isDragging ? "none" : "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
+        >
+          <SectionPanel section={previousSection} onSelectCard={onSelectCard} dimmed />
+          <SectionPanel section={section} onSelectCard={onSelectCard} />
+          <SectionPanel section={nextSection} onSelectCard={onSelectCard} dimmed />
         </div>
       </div>
     </div>
@@ -1196,7 +1294,7 @@ function FeedScreen({
       </PinnedSectionHeader>
 
       <div
-        className="space-y-[0px] bg-white pb-3 pt-2"
+        className="space-y-[0px] bg-white pb-3 pt-0"
         style={{ paddingTop: pinnedTopHeight }}
       >
         {feedSections.map((section) => (
