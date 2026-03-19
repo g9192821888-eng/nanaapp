@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
+  AlertTriangle,
   ArrowLeft,
   ChevronRight,
   Check,
@@ -1266,6 +1267,43 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
   );
 }
 
+function ErrorScreen({ onRetry, onOpenBalance, onOpenProfile, balance, isBonusCounting }) {
+  return (
+    <div className="space-y-3">
+      <PinnedSectionHeader className="pt-0">
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
+      </PinnedSectionHeader>
+
+      <div className="rounded-[24px] bg-[#fff7f7] px-4 pb-5 pt-5 ring-1 ring-[#f3d7d7]">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#ffefe9] text-[#ef5b47] shadow-[0_12px_24px_rgba(239,91,71,0.14)]">
+          <AlertTriangle className="h-7 w-7" strokeWidth={2.2} />
+        </div>
+
+        <div className="mt-4 text-center">
+          <div className="text-[24px] font-semibold tracking-[-0.03em] text-[#243247]">Ошибка</div>
+          <div className="mt-2 text-[16px] font-medium text-[#4f617e]">Что-то пошло не так</div>
+          <div className="mt-3 text-[14px] leading-6 text-[#7b889f]">
+            Мы вернули токены на ваш баланс
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={onRetry}
+        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]"
+      >
+        <Wand2 className="h-5 w-5" strokeWidth={2.2} />
+        Попробовать еще раз
+      </button>
+    </div>
+  );
+}
+
 function SectionPanel({ section, onSelectCard }) {
   if (!section) {
     return <div className="w-full shrink-0" />;
@@ -1397,6 +1435,7 @@ export default function App() {
   const [loadingPreviewImage, setLoadingPreviewImage] = useState(cards[0].image);
   const [hasUploadedPhotoForLoading, setHasUploadedPhotoForLoading] = useState(false);
   const [resultImage, setResultImage] = useState(cards[0].image);
+  const [generationOutcome, setGenerationOutcome] = useState("result");
   const [showWelcomeBonus, setShowWelcomeBonus] = useState(true);
   const [balance, setBalance] = useState(0);
   const [isBonusCounting, setIsBonusCounting] = useState(false);
@@ -1585,6 +1624,7 @@ export default function App() {
               setLoadingPreviewImage(previewImage);
               setHasUploadedPhotoForLoading(hasUploadedPhoto);
               setResultImage(selectedCard.image);
+              setGenerationOutcome("result");
               setScreen("loading");
             }}
           />
@@ -1595,7 +1635,7 @@ export default function App() {
             hasUploadedPhoto={hasUploadedPhotoForLoading}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
-            onComplete={() => setScreen("result")}
+            onComplete={() => setScreen(generationOutcome === "error" ? "error" : "result")}
             balance={balance}
             isBonusCounting={isBonusCounting}
           />
@@ -1603,6 +1643,14 @@ export default function App() {
           <ResultScreen
             card={{ ...selectedCard, image: resultImage }}
             onBack={() => setScreen("feed")}
+            onOpenBalance={handleOpenBalance}
+            onOpenProfile={handleOpenProfile}
+            balance={balance}
+            isBonusCounting={isBonusCounting}
+          />
+        ) : screen === "error" ? (
+          <ErrorScreen
+            onRetry={() => setScreen("loading")}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
             balance={balance}
