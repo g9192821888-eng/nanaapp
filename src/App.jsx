@@ -1004,17 +1004,19 @@ function ShopScreen({
             <span className="text-[17px] font-bold uppercase tracking-[-0.03em]">
               Скидка активирована -5%
             </span>
-            <span className="shrink-0 rounded-full bg-white/18 px-3 py-1 text-[14px] font-semibold tabular-nums">
+            <span className="shrink-0 rounded-full bg-white/18 px-3 py-1 text-[17px] font-bold tabular-nums">
               {discountTimeLeft}
             </span>
           </div>
         ) : null}
 
-        <div className="space-y-3 px-1">
-          <div className="text-[27px] font-semibold leading-[1.02] tracking-[-0.045em] text-[#161c2c]">
-            Идеальные фото за 1 минуту
+        {!discountActive ? (
+          <div className="space-y-3 px-1 pt-[5px]">
+            <div className="text-[22px] font-semibold leading-[1.02] tracking-[-0.04em] text-[#161c2c]">
+              Твои идеальны фото за 1 минуту
+            </div>
           </div>
-        </div>
+        ) : null}
 
         <div className="space-y-2.5">
           {discountedProducts.map((product) => (
@@ -1053,7 +1055,7 @@ function ShopScreen({
               Так быстро уходите?
             </div>
             <div className="mt-4 text-[17px] leading-8 text-[#6f7d95]">
-              Мы для вас подготовили персональную скидку ❤️
+              Мы для вас подготовили персональную скидку. Она сгорит через 10 минут 🙈
             </div>
             <button
               onClick={onActivateDiscount}
