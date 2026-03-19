@@ -815,8 +815,8 @@ function ShopScreen({
       />
       <div className="h-[146px]" aria-hidden="true" />
 
-      <div className="rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-        <div className="mb-3 flex justify-start">
+      <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
+        <div className="flex items-center justify-between gap-3">
           <button
             onClick={onBack}
             className="flex h-10 min-w-[108px] items-center justify-center gap-2 rounded-full border border-[#dde6f4] bg-white px-4 text-[#5a6e90]"
@@ -824,8 +824,16 @@ function ShopScreen({
             <ArrowLeft className="h-4.5 w-4.5" strokeWidth={2.2} />
             <span className="text-[14px] font-semibold">Главная</span>
           </button>
-        </div>
 
+          <div className="flex-1 text-center">
+            <div className="text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">Магазин</div>
+          </div>
+
+          <div className="h-10 w-10" />
+        </div>
+      </div>
+
+      <div className="rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="space-y-3">
           {products.map((product) => (
             <ProductCard
