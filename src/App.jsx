@@ -1229,9 +1229,9 @@ export default function App() {
               scale: isBonusClaimClosing ? 0.94 : 1,
             }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full max-w-[388px] rounded-[30px] bg-white p-4.5 shadow-[0_30px_80px_rgba(15,23,42,0.24)] ring-1 ring-[#dce4f2]"
+            className="w-full max-w-[388px] rounded-[30px] bg-white px-4 py-4 shadow-[0_30px_80px_rgba(15,23,42,0.24)] ring-1 ring-[#dce4f2]"
           >
-            <div className="mt-2 text-center">
+            <div className="mt-1 text-center">
               <div className="flex items-center justify-center gap-2 text-[24px] font-semibold tracking-[-0.03em] text-[#234677]">
                 <Gift className="h-6 w-6 text-[#2b7de9]" strokeWidth={2.1} />
                 <span>Подарок</span>
