@@ -353,7 +353,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-1 pb-2 pt-2">
+    <div className="px-1 pb-2 pt-[50px]">
       <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
@@ -741,46 +741,35 @@ function TaskCard({ task }) {
 
 function ProductCard({ product, isSelected, onSelect }) {
   const isFeatured = !!product.featured;
-  const isPlain = product.id === 1 || product.id === 2;
 
   return (
     <button
       onClick={() => onSelect(product.id)}
-      className={`relative w-full overflow-hidden text-left transition ${
-        isSelected ? "scale-[0.995]" : ""
-      } ${
-        isPlain
-          ? "rounded-[16px] bg-[#fbfcfe]"
-          : isFeatured
-            ? "rounded-[20px] bg-[linear-gradient(90deg,#2d3347_0%,#252a3d_45%,#2c3350_100%)] p-1"
-            : "rounded-[20px] bg-[#f3f6fb] p-1"
+      className={`relative w-full overflow-hidden rounded-[24px] text-left transition ${
+        isFeatured
+          ? "bg-[linear-gradient(180deg,#2a2d3b_0%,#212432_100%)]"
+          : "bg-[#f3f5fb]"
       } ${isSelected ? "ring-2 ring-[#2b7de9] ring-offset-2 ring-offset-transparent" : ""}`}
     >
-      <div
-        className={`relative ${
-          isPlain
-            ? "px-4 py-2.5 text-[#1d2333]"
-            : isFeatured
-              ? "rounded-[16px] bg-white/0 px-4 py-2.5 text-white"
-              : "rounded-[16px] bg-white px-4 py-2.5 text-[#1d2333]"
-        }`}
-      >
+      <div className={`relative px-5 py-5 ${isFeatured ? "text-white" : "text-[#1d2333]"}`}>
         {product.badge ? (
           <div
-            className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold ${product.badgeColor}`}
+            className={`absolute right-5 top-5 rounded-[12px] px-3 py-1.5 text-[11px] font-semibold leading-none ${product.badgeColor}`}
           >
             {product.badge}
           </div>
         ) : null}
 
         <div className="flex items-center justify-between gap-4">
-          <div>
-            <div className="text-[15px] font-semibold">{product.subtitle}</div>
-            <div className={`mt-1 text-[26px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-white" : "text-[#234677]"}`}>
-              {product.amount}
+          <div className="min-w-0 pr-3">
+            <div className={`text-[18px] font-medium ${isFeatured ? "text-white/78" : "text-[#767f93]"}`}>
+              {product.subtitle}
+            </div>
+            <div className={`mt-2 text-[32px] font-semibold tracking-[-0.045em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
+              {product.amount} фотографий
             </div>
           </div>
-          <div className={`rounded-full px-4 py-2 text-[14px] font-semibold ${isFeatured ? "bg-white/12 text-white" : "bg-[#eef5ff] text-[#2b7de9]"}`}>
+          <div className={`shrink-0 text-right text-[34px] font-semibold tracking-[-0.045em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
             {product.price}
           </div>
         </div>
@@ -798,6 +787,13 @@ function ShopScreen({
   balance,
   isBonusCounting,
 }) {
+  const shopBenefits = [
+    "Создавай виральный контент за минуты",
+    "Забудь про обработку: идеальный свет и кожа на каждом кадре",
+    "Выгляди на миллион: премиальные образы без затрат на стилистов",
+    "Разовая оплата, без подписок и автоматических списаний",
+  ];
+
   return (
     <div className="space-y-3">
       <Header
@@ -807,15 +803,14 @@ function ShopScreen({
         isBonusCounting={isBonusCounting}
       />
 
-      <div className="rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-        <div className="mb-3 flex justify-start">
-          <button
-            onClick={onBack}
-            className="flex h-10 min-w-[108px] items-center justify-center gap-2 rounded-full border border-[#dde6f4] bg-white px-4 text-[#5a6e90]"
-          >
-            <ArrowLeft className="h-4.5 w-4.5" strokeWidth={2.2} />
-            <span className="text-[14px] font-semibold">Главная</span>
-          </button>
+      <div className="space-y-6 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+        <div className="space-y-3 px-1">
+          <div className="max-w-[320px] text-[34px] font-semibold leading-[0.95] tracking-[-0.055em] text-[#161c2c]">
+            Твоя идеальная съемка за 1 минуту
+          </div>
+          <div className="text-[17px] leading-6 text-[#707b90]">
+            Фотографии, которыми хочется делиться
+          </div>
         </div>
 
         <div className="space-y-3">
@@ -829,9 +824,19 @@ function ShopScreen({
           ))}
         </div>
 
-        <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]">
-          <Coins className="h-5 w-5" strokeWidth={2.2} />
-          Оплатить
+        <div className="space-y-3 px-2 pt-1">
+          {shopBenefits.map((benefit) => (
+            <div key={benefit} className="flex items-start gap-3 text-[16px] font-medium leading-6 text-[#667389]">
+              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#25b4ff] text-white shadow-[0_8px_18px_rgba(37,180,255,0.2)]">
+                <Check className="h-4 w-4" strokeWidth={3} />
+              </div>
+              <div>{benefit}</div>
+            </div>
+          ))}
+        </div>
+
+        <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#2fb7ff_0%,#1d9fff_45%,#0b7cff_100%)] px-5 py-5 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(27,145,255,0.28)]">
+          Перейти к оплате
         </button>
       </div>
     </div>
