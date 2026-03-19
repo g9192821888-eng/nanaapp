@@ -426,8 +426,8 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-1 pb-0 pt-[160px]">
-      <div className="mx-auto mt-[-75px] flex w-full max-w-[516px] items-center justify-between gap-3">
+    <div className="px-1 pb-0 pt-[180px]">
+      <div className="mx-auto mt-[-95px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(232,238,248,0.78)] bg-[rgba(255,255,255,0.72)] px-1 py-1 text-left transition active:scale-[0.98]"
@@ -1479,7 +1479,7 @@ export default function App() {
       ) : null}
 
       <div
-        className="mx-auto w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-0"
+        className="mx-auto w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-5"
         style={{ height: "var(--app-height, 100dvh)" }}
       >
         {screen === "feed" ? (
