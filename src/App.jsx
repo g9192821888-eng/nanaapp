@@ -212,6 +212,9 @@ function useTelegramWebApp() {
     setIsTelegram(true);
     tg.ready();
     tg.expand();
+    if (typeof tg.requestFullscreen === "function") {
+      tg.requestFullscreen();
+    }
 
     if (tg.setHeaderColor) {
       tg.setHeaderColor("#eef2f8");
@@ -940,7 +943,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[radial-gradient(circle_at_top,_#f7faff_0%,_#eef2f8_42%,_#e9edf4_100%)] text-[#1b1d22]">
+    <div className="relative min-h-[100dvh] bg-[radial-gradient(circle_at_top,_#f7faff_0%,_#eef2f8_42%,_#e9edf4_100%)] text-[#1b1d22]">
       {!isTelegram ? (
         <div className="sticky top-0 z-[70] px-3 pt-3">
           <div className="mx-auto max-w-[516px] rounded-[18px] bg-[#1f6feb] px-4 py-3 text-[13px] font-medium text-white shadow-[0_14px_28px_rgba(31,111,235,0.22)]">
@@ -949,7 +952,7 @@ export default function App() {
         </div>
       ) : null}
 
-      <div className="mx-auto min-h-screen w-full max-w-[516px] px-3 pb-10 pt-5">
+      <div className="mx-auto min-h-[100dvh] w-full max-w-[516px] px-3 pb-10 pt-5">
         {screen === "feed" ? (
           <FeedScreen
             activeFilter={activeFilter}
