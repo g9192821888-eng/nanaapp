@@ -355,7 +355,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="sticky top-0 z-40 -mx-3 px-3 pb-2 pt-[calc(max(8px,env(safe-area-inset-top))+20px)]">
+    <div className="fixed left-1/2 top-0 z-40 w-full max-w-[516px] -translate-x-1/2 px-3 pb-2 pt-[calc(max(8px,env(safe-area-inset-top))+20px)]">
       <div className="overflow-hidden rounded-b-[28px] border-b border-[#dce4f2] bg-white px-5 pb-4 pt-[calc(env(safe-area-inset-top)+56px)] shadow-[0_8px_32px_rgba(70,89,122,0.08)] -mt-[calc(env(safe-area-inset-top)+52px)]">
         <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[5px]">
           <button
@@ -589,6 +589,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
   return (
     <div className="space-y-3">
       <Header onOpenBalance={onOpenBalance} onOpenProfile={onOpenProfile} />
+      <div className="h-[146px]" aria-hidden="true" />
 
       <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
         <div className="flex items-center justify-between gap-3">
@@ -804,6 +805,7 @@ function ShopScreen({
         balance={balance}
         isBonusCounting={isBonusCounting}
       />
+      <div className="h-[146px]" aria-hidden="true" />
 
       <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
         <div className="flex items-center justify-between gap-3">
@@ -867,6 +869,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         balance={balance}
         isBonusCounting={isBonusCounting}
       />
+      <div className="h-[146px]" aria-hidden="true" />
 
       <div className="px-0 py-0">
         <div className="flex items-center justify-between gap-3">
@@ -980,6 +983,7 @@ function LoadingScreen({
         balance={balance}
         isBonusCounting={isBonusCounting}
       />
+      <div className="h-[146px]" aria-hidden="true" />
 
       <div className="rounded-[28px] bg-white p-3.5 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="grid grid-cols-2 gap-3">
@@ -1022,6 +1026,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
         balance={balance}
         isBonusCounting={isBonusCounting}
       />
+      <div className="h-[146px]" aria-hidden="true" />
 
       <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
         <div className="flex items-center justify-between gap-3">
@@ -1111,6 +1116,7 @@ function FeedScreen({
         balance={balance}
         isBonusCounting={isBonusCounting}
       />
+      <div className="h-[146px]" aria-hidden="true" />
       <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
 
       <div className="mt-2 grid grid-cols-2 gap-2">
