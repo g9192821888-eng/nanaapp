@@ -446,8 +446,22 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
   const [hasSecondPhoto, setHasSecondPhoto] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadingSecond, setIsUploadingSecond] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
   const uploadedPreview =
     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80";
+  const styleGallery = card.gallery?.length ? card.gallery : [card.image];
+
+  useEffect(() => {
+    setActiveSlide(0);
+
+    if (styleGallery.length < 2) return undefined;
+
+    const intervalId = window.setInterval(() => {
+      setActiveSlide((currentSlide) => (currentSlide + 1) % styleGallery.length);
+    }, 3200);
+
+    return () => window.clearInterval(intervalId);
+  }, [styleGallery]);
 
   const handleUpload = () => {
     setIsUploading(true);
@@ -538,7 +552,22 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
 
       <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="relative">
-          <img src={card.image} alt={card.title} className="aspect-[1.2] w-full object-cover" />
+          <div className="overflow-hidden">
+            <motion.div
+              animate={{ x: `-${activeSlide * 100}%` }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              className="flex"
+            >
+              {styleGallery.map((image, index) => (
+                <img
+                  key={`${card.id}-${index}`}
+                  src={image}
+                  alt={`${card.title} ${index + 1}`}
+                  className="aspect-[1.2] w-full shrink-0 object-cover"
+                />
+              ))}
+            </motion.div>
+          </div>
           {card.badge ? <CardBadge type={card.badge} /> : null}
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -560,6 +589,18 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
             <div className="text-[22px] font-semibold tracking-tight">{card.title}</div>
             <div className="mt-1 max-w-[85%] text-[13px] leading-5 text-white/85">{card.description}</div>
           </div>
+          {styleGallery.length > 1 ? (
+            <div className="absolute bottom-4 left-5 flex items-center gap-1.5">
+              {styleGallery.map((_, index) => (
+                <span
+                  key={`${card.id}-dot-${index}`}
+                  className={`h-1.5 rounded-full transition-all ${
+                    index === activeSlide ? "w-5 bg-white" : "w-1.5 bg-white/55"
+                  }`}
+                />
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
 
