@@ -361,7 +361,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
         <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[25px]">
           <button
             onClick={onOpenProfile}
-            className="-ml-[10px] group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
+            className="-ml-[15px] group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
           >
             <img
               src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
