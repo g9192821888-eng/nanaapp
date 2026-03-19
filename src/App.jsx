@@ -375,7 +375,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
   return (
     <div className="px-1 pb-0 pt-[80px]">
-      <div className="mx-auto mt-[10px] flex w-full max-w-[516px] items-center justify-between gap-3">
+      <div className="mx-auto mt-[15px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] px-1 py-1 text-left transition active:scale-[0.98]"
@@ -413,7 +413,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-[5px] flex gap-2 overflow-x-auto pb-1">
+    <div className="mt-[10px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(245,247,251,0.72)] px-2 py-2">
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -1154,13 +1154,13 @@ function FeedScreen({
       </div>
 
       <div
-        className="space-y-[0px] bg-white px-2 pb-3 pt-2"
+        className="space-y-[0px] bg-white pb-3 pt-2"
         style={{ paddingTop: pinnedTopHeight }}
       >
         {feedSections.map((section) => (
           <section key={section.id} className="space-y-1.5">
-            <div className="flex items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#eef4fb] px-3 py-1.5 text-[#6f87ab]">
+            <div className="flex items-center justify-between gap-3 px-2">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(238,244,251,0.8)] px-3 py-1.5 text-[#6f87ab]">
                 <h2 className="text-[15px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
                   {section.label}
                 </h2>
@@ -1168,7 +1168,7 @@ function FeedScreen({
               </div>
             </div>
 
-            <div className="flex gap-3 overflow-x-auto pb-1 pr-2">
+            <div className="flex gap-3 overflow-x-auto px-2 pb-1 pr-3">
               {section.cards.map((card) => (
                 <div key={card.id} className="w-[168px] shrink-0">
                   <FeedCard card={card} onClick={onSelectCard} />
