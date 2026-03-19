@@ -963,6 +963,7 @@ function ShopScreen({
   onActivateDiscount,
   onDismissExitOffer,
   discountActive,
+  discountTimeLeft,
 }) {
   const shopBenefits = [
     "Создавай виральный контент за минуты",
@@ -976,7 +977,7 @@ function ShopScreen({
         if (!discountActive) return product;
 
         const originalPrice = Number(product.price.replace(/[^\d]/g, ""));
-        const discountedPrice = Math.round(originalPrice * 0.9);
+        const discountedPrice = Math.round(originalPrice * 0.95);
 
         return {
           ...product,
@@ -999,14 +1000,19 @@ function ShopScreen({
 
       <div className="space-y-5 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         {discountActive ? (
-          <div className="overflow-hidden rounded-[18px] bg-[linear-gradient(90deg,#ff8b2c_0%,#ff5630_45%,#ff2a2a_100%)] px-4 py-2 text-center text-[18px] font-bold uppercase tracking-[-0.03em] text-white shadow-[0_10px_24px_rgba(255,102,56,0.18)]">
-            Ваша скидка 10%
+          <div className="flex items-center justify-between gap-3 overflow-hidden rounded-[18px] bg-[linear-gradient(90deg,#ff8b2c_0%,#ff5630_45%,#ff2a2a_100%)] px-4 py-2 text-white shadow-[0_10px_24px_rgba(255,102,56,0.18)]">
+            <span className="text-[17px] font-bold uppercase tracking-[-0.03em]">
+              Скидка активирована -5%
+            </span>
+            <span className="shrink-0 rounded-full bg-white/18 px-3 py-1 text-[14px] font-semibold tabular-nums">
+              {discountTimeLeft}
+            </span>
           </div>
         ) : null}
 
         <div className="space-y-3 px-1">
-          <div className="max-w-[320px] text-[31px] font-semibold leading-[0.95] tracking-[-0.055em] text-[#161c2c]">
-            Идеальные фото и видео за 1 минуту
+          <div className="text-[27px] font-semibold leading-[1.02] tracking-[-0.045em] text-[#161c2c]">
+            Идеальные фото за 1 минуту
           </div>
         </div>
 
@@ -1044,10 +1050,10 @@ function ShopScreen({
           <div className="w-full max-w-[420px] rounded-[28px] bg-white px-6 pb-5 pt-7 text-center shadow-[0_24px_70px_rgba(15,23,42,0.26)]">
             <div className="text-[70px] leading-none">💔</div>
             <div className="mt-4 text-[22px] font-semibold tracking-[-0.04em] text-[#1d2333]">
-              Вы хотите уйти?
+              Так быстро уходите?
             </div>
             <div className="mt-4 text-[17px] leading-8 text-[#6f7d95]">
-              Давайте мы дадим вам скидку.
+              Мы для вас подготовили персональную скидку ❤️
             </div>
             <button
               onClick={onActivateDiscount}
@@ -1527,6 +1533,8 @@ export default function App() {
   const [shopDiscountActive, setShopDiscountActive] = useState(false);
   const [showShopExitOffer, setShowShopExitOffer] = useState(false);
   const [pendingScreenAfterShop, setPendingScreenAfterShop] = useState("feed");
+  const [shopDiscountEndsAt, setShopDiscountEndsAt] = useState(null);
+  const [discountTimeLeft, setDiscountTimeLeft] = useState("10:00");
 
   const visibleCards = useMemo(() => {
     let filteredCards = cards;
@@ -1598,6 +1606,29 @@ export default function App() {
     setPendingScreenAfterShop(nextScreen);
     setShowShopExitOffer(true);
   };
+
+  useEffect(() => {
+    if (!shopDiscountActive || !shopDiscountEndsAt) return undefined;
+
+    const tick = () => {
+      const remainingMs = Math.max(0, shopDiscountEndsAt - Date.now());
+      const totalSeconds = Math.ceil(remainingMs / 1000);
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+      setDiscountTimeLeft(`${minutes}:${seconds}`);
+
+      if (remainingMs <= 0) {
+        setShopDiscountActive(false);
+        setShopDiscountEndsAt(null);
+        setDiscountTimeLeft("10:00");
+      }
+    };
+
+    tick();
+    const intervalId = window.setInterval(tick, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [shopDiscountActive, shopDiscountEndsAt]);
 
   useEffect(() => {
     const backButton = window.Telegram?.WebApp?.BackButton;
@@ -1790,6 +1821,8 @@ export default function App() {
             showExitOffer={showShopExitOffer}
             onActivateDiscount={() => {
               setShopDiscountActive(true);
+              setShopDiscountEndsAt(Date.now() + 10 * 60 * 1000);
+              setDiscountTimeLeft("10:00");
               setShowShopExitOffer(false);
             }}
             onDismissExitOffer={() => {
@@ -1797,6 +1830,7 @@ export default function App() {
               setScreen(pendingScreenAfterShop);
             }}
             discountActive={shopDiscountActive}
+            discountTimeLeft={discountTimeLeft}
           />
         ) : (
           <ProfileScreen
