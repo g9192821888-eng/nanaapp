@@ -809,20 +809,22 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, bal
 function TaskCard({ task }) {
   return (
     <div className="rounded-[22px] border border-[#dce4f2] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
-      <div className="grid grid-cols-[1fr_auto] items-start gap-x-4 gap-y-2">
-        <div className="col-span-2 flex items-center justify-between rounded-[14px] bg-[#f4f9ff] px-3 py-2">
-          <div className="text-[16px] font-semibold text-[#234677]">{task.title}</div>
-          <div className="flex items-center gap-1 rounded-full bg-[#eef5ff] px-3 py-1.5 text-[13px] font-semibold text-[#2b7de9]">
+      <div className="space-y-3">
+        <div className="flex items-center justify-between gap-3 rounded-[14px] bg-[#f4f9ff] px-3 py-2">
+          <div className="min-w-0 text-[16px] font-semibold text-[#234677]">{task.title}</div>
+          <div className="flex shrink-0 items-center gap-1 rounded-full bg-[#eef5ff] px-3 py-1.5 text-[13px] font-semibold text-[#2b7de9]">
             <span>+{task.reward}</span>
             <Sparkles className="h-4 w-4" strokeWidth={2.1} />
           </div>
         </div>
 
-        <div className="max-w-[70%] text-[13px] leading-5 text-[#7d8ca5]">{task.description}</div>
-        <button className="justify-self-end self-start flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#246fd1]">
-          <Play className="h-4 w-4" strokeWidth={2.2} />
-          Начать
-        </button>
+        <div className="flex items-end justify-between gap-3">
+          <div className="max-w-[72%] text-[13px] leading-5 text-[#7d8ca5]">{task.description}</div>
+          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#246fd1]">
+            <Play className="h-4 w-4" strokeWidth={2.2} />
+            Начать
+          </button>
+        </div>
       </div>
     </div>
   );
