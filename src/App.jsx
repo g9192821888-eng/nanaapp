@@ -12,6 +12,8 @@ import {
   Upload,
   Zap,
   Play,
+  Star,
+  Ticket,
   ShoppingBag,
   Coins,
   Download,
@@ -306,7 +308,9 @@ function CardBadge({ type }) {
       className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[12px] font-semibold shadow-[0_8px_16px_rgba(15,23,42,0.12)] ${styles[type] ?? "bg-white text-[#234677]"}`}
     >
       <span className="flex items-center gap-1">
+        {type === "new" ? <Star className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
         {type === "popular" ? <Zap className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
+        {type === "free" ? <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
         <span>{labels[type] ?? "Стиль"}</span>
       </span>
     </div>
