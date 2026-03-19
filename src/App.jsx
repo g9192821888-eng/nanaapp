@@ -425,8 +425,8 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-1 pb-0 pt-[138px]">
-      <div className="mx-auto mt-[-33px] flex w-full max-w-[516px] items-center justify-between gap-3">
+    <div className="px-1 pb-0 pt-[160px]">
+      <div className="mx-auto mt-[-75px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[rgba(232,238,248,0.78)] bg-[rgba(255,255,255,0.72)] px-1 py-1 text-left transition active:scale-[0.98]"
@@ -472,7 +472,7 @@ function PinnedSectionHeader({ children, className = "" }) {
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-[5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(245,247,251,0.72)] px-2 py-2">
+    <div className="mt-[5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(248,250,253,0.82)] px-2 py-2">
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -1265,7 +1265,7 @@ function FeedScreen({
         <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </PinnedSectionHeader>
 
-      <div className="-mr-3 space-y-[0px] bg-white pb-3 pt-0">
+      <div className="-mr-3 space-y-[0px] bg-white pb-3 pt-[18px]">
         {feedSections.map((section) => (
           <section key={section.id} className="space-y-1.5">
             <div className="flex items-center justify-between gap-3 px-2">
