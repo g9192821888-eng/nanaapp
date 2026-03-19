@@ -494,7 +494,6 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadingSecond, setIsUploadingSecond] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
-  const [isManualGalleryControl, setIsManualGalleryControl] = useState(false);
   const uploadedPreview =
     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80";
   const styleGallery = card.gallery?.length ? card.gallery : [card.image];
@@ -502,18 +501,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
 
   useEffect(() => {
     setActiveSlide(0);
-    setIsManualGalleryControl(false);
   }, [card.id]);
-
-  useEffect(() => {
-    if (!canSlideGallery || isManualGalleryControl) return undefined;
-
-    const intervalId = window.setInterval(() => {
-      setActiveSlide((currentSlide) => (currentSlide + 1) % styleGallery.length);
-    }, 3200);
-
-    return () => window.clearInterval(intervalId);
-  }, [canSlideGallery, isManualGalleryControl, styleGallery]);
 
   const handleGalleryDragEnd = (_, info) => {
     if (!canSlideGallery) return;
@@ -521,13 +509,11 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
     const swipeThreshold = 45;
 
     if (info.offset.x <= -swipeThreshold) {
-      setIsManualGalleryControl(true);
       setActiveSlide((currentSlide) => (currentSlide + 1) % styleGallery.length);
       return;
     }
 
     if (info.offset.x >= swipeThreshold) {
-      setIsManualGalleryControl(true);
       setActiveSlide((currentSlide) => (currentSlide - 1 + styleGallery.length) % styleGallery.length);
     }
   };
