@@ -99,6 +99,11 @@ const cards = [
     badge: null,
     image:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Мягкий студийный свет, аккуратная ретушь и спокойный премиальный стиль.",
   },
   {
@@ -108,6 +113,11 @@ const cards = [
     badge: "new",
     image:
       "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Глянцевый fashion-кадр с ярким светом и чистой композицией.",
   },
   {
@@ -117,6 +127,11 @@ const cards = [
     badge: null,
     image:
       "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Кинематографичный кадр для двух человек, городской фон и мягкая глубина.",
   },
   {
@@ -126,6 +141,11 @@ const cards = [
     badge: "popular",
     image:
       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Лёгкий lifestyle-образ с естественным освещением и чистым фоном.",
   },
   {
@@ -135,6 +155,11 @@ const cards = [
     badge: null,
     image:
       "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Уличный стиль, контрастный свет и современная подача для соцсетей.",
   },
   {
@@ -144,6 +169,11 @@ const cards = [
     badge: "free",
     image:
       "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Два человека обнимаются на дне рождения в большом праздничном зале.",
   },
   {
@@ -153,6 +183,11 @@ const cards = [
     badge: null,
     image:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Живой эмоциональный кадр с мягкой обработкой и тёплой палитрой.",
   },
   {
@@ -162,6 +197,11 @@ const cards = [
     badge: "new",
     image:
       "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Светлый романтичный образ с мягким контрастом и воздушным фоном.",
   },
   {
@@ -171,6 +211,11 @@ const cards = [
     badge: "popular",
     image:
       "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Выразительный кадр с акцентом на стиль, цвет и эмоцию.",
   },
   {
@@ -180,6 +225,11 @@ const cards = [
     badge: null,
     image:
       "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Студийный сетап с чистым фоном и аккуратной бьюти-обработкой.",
   },
   {
@@ -189,6 +239,11 @@ const cards = [
     badge: null,
     image:
       "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Немного ретро, мягкое зерно и стильная цветокоррекция.",
   },
   {
@@ -198,6 +253,11 @@ const cards = [
     badge: null,
     image:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
+    ],
     description: "Повседневный эстетичный кадр, который выглядит натурально и дорого.",
   },
 ];
@@ -316,6 +376,33 @@ function FilterBar({ activeFilter, setActiveFilter }) {
 }
 
 function FeedCard({ card, onClick }) {
+  const gallery = card.gallery?.length ? card.gallery : [card.image];
+  const [currentImage, setCurrentImage] = useState(gallery[0]);
+
+  useEffect(() => {
+    setCurrentImage(gallery[0]);
+
+    if (gallery.length < 2) return undefined;
+
+    let timeoutId;
+
+    const scheduleNextFrame = () => {
+      const nextDelay = 5000 + Math.floor(Math.random() * 5001);
+      timeoutId = window.setTimeout(() => {
+        setCurrentImage((previousImage) => {
+          const nextImages = gallery.filter((image) => image !== previousImage);
+          const imagePool = nextImages.length ? nextImages : gallery;
+          return imagePool[Math.floor(Math.random() * imagePool.length)];
+        });
+        scheduleNextFrame();
+      }, nextDelay);
+    };
+
+    scheduleNextFrame();
+
+    return () => window.clearTimeout(timeoutId);
+  }, [gallery]);
+
   return (
     <motion.button
       whileTap={{ scale: 0.98 }}
@@ -326,7 +413,15 @@ function FeedCard({ card, onClick }) {
       className="relative overflow-hidden rounded-[18px] border border-[#dbe4f2] bg-[#edf2f8] text-left shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
     >
       <div className="relative overflow-hidden rounded-[18px]">
-        <img src={card.image} alt={card.title} className="aspect-[0.78] w-full object-cover" />
+        <motion.img
+          key={currentImage}
+          src={currentImage}
+          alt={card.title}
+          initial={{ scale: 1.04, opacity: 0.7 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="aspect-[0.78] w-full object-cover"
+        />
         {card.badge ? <CardBadge type={card.badge} /> : null}
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent px-3 pb-2 pt-10">
