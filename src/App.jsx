@@ -357,16 +357,16 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-3 pb-2 pt-4">
-      <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[10px]">
+    <div className="px-1 pb-2 pt-2">
+      <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
-          className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
+          className="group flex min-w-0 items-center gap-3 rounded-[16px] px-1 py-1 text-left transition active:scale-[0.98]"
         >
           <img
             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
             alt="avatar"
-            className="h-12 w-12 rounded-full object-cover ring-2 ring-white"
+            className="h-12 w-12 rounded-full object-cover"
           />
           <div className="min-w-0">
             <div className="flex items-center gap-1">
