@@ -251,13 +251,8 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   return (
-    <div className="rounded-[28px] bg-white px-5 pb-4 pt-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-      <div className="flex items-center justify-between text-[#7e8ba3]">
-        <div className="text-[14px] font-medium">9:41</div>
-        <Search className="h-6 w-6 text-[#2d2f33]" strokeWidth={2.1} />
-      </div>
-
-      <div className="mt-3 flex items-center justify-between gap-3">
+    <div className="rounded-[28px] bg-white px-5 pb-4 pt-[max(16px,env(safe-area-inset-top))] shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+      <div className="flex items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
           className="group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
