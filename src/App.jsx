@@ -322,7 +322,7 @@ function CardBadge({ type }) {
   );
 }
 
-function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false, isTelegram = false }) {
+function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   const BalanceDigits = ({ value }) => {
     const safeValue = Math.max(0, Math.min(99, value));
     const [tens, ones] = String(safeValue).padStart(2, "0").split("").map(Number);
@@ -357,20 +357,8 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div
-      className={
-        isTelegram
-          ? "fixed left-1/2 top-0 z-40 w-full max-w-[516px] -translate-x-1/2 px-3 pb-2 pt-[calc(max(8px,env(safe-area-inset-top))+20px)]"
-          : "sticky top-0 z-40 -mx-3 px-3 pb-2 pt-4"
-      }
-    >
-      <div
-        className={
-          isTelegram
-            ? "overflow-hidden rounded-b-[18px] border-b border-[#dce4f2] bg-white px-5 pb-[4px] pt-[calc(env(safe-area-inset-top)+56px)] shadow-[0_8px_32px_rgba(70,89,122,0.08)] -mt-[calc(env(safe-area-inset-top)+52px)]"
-            : "overflow-hidden rounded-b-[18px] border-b border-[#dce4f2] bg-white px-5 pb-3 pt-3 shadow-[0_8px_32px_rgba(70,89,122,0.08)]"
-        }
-      >
+    <div className="-mx-3 px-3 pb-2 pt-4">
+      <div className="overflow-hidden rounded-b-[18px] border-b border-[#dce4f2] bg-white px-5 pb-3 pt-3 shadow-[0_8px_32px_rgba(70,89,122,0.08)]">
         <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[10px]">
           <button
             onClick={onOpenProfile}
@@ -506,7 +494,7 @@ function FeedCard({ card, onClick }) {
   );
 }
 
-function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, isTelegram = false }) {
+function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
   const [isLiked, setIsLiked] = useState(false);
   const isPairStyle = card.title === "Пара в городе";
   const [hasPhoto, setHasPhoto] = useState(false);
@@ -606,8 +594,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, isT
 
   return (
     <div className="space-y-3">
-      <Header onOpenBalance={onOpenBalance} onOpenProfile={onOpenProfile} isTelegram={isTelegram} />
-      {isTelegram ? <div className="h-[146px]" aria-hidden="true" /> : null}
+      <Header onOpenBalance={onOpenBalance} onOpenProfile={onOpenProfile} />
 
       <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
         <div className="flex items-center justify-between gap-3">
@@ -816,7 +803,6 @@ function ShopScreen({
   setSelectedProductId,
   balance,
   isBonusCounting,
-  isTelegram = false,
 }) {
   return (
     <div className="space-y-3">
@@ -825,9 +811,7 @@ function ShopScreen({
         onOpenProfile={onOpenProfile}
         balance={balance}
         isBonusCounting={isBonusCounting}
-        isTelegram={isTelegram}
       />
-      {isTelegram ? <div className="h-[146px]" aria-hidden="true" /> : null}
 
       <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
         <div className="flex items-center justify-between gap-3">
@@ -868,7 +852,7 @@ function ShopScreen({
   );
 }
 
-function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusCounting, isTelegram = false }) {
+function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusCounting }) {
   const [profileTab, setProfileTab] = useState("tasks");
 
   return (
@@ -878,9 +862,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         onOpenProfile={onOpenProfile}
         balance={balance}
         isBonusCounting={isBonusCounting}
-        isTelegram={isTelegram}
       />
-      {isTelegram ? <div className="h-[146px]" aria-hidden="true" /> : null}
 
       <div className="px-0 py-0">
         <div className="flex items-center justify-between gap-3">
@@ -977,7 +959,6 @@ function LoadingScreen({
   onComplete,
   balance,
   isBonusCounting,
-  isTelegram = false,
 }) {
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -994,9 +975,7 @@ function LoadingScreen({
         onOpenProfile={onOpenProfile}
         balance={balance}
         isBonusCounting={isBonusCounting}
-        isTelegram={isTelegram}
       />
-      {isTelegram ? <div className="h-[146px]" aria-hidden="true" /> : null}
 
       <div className="rounded-[28px] bg-white p-3.5 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="grid grid-cols-2 gap-3">
@@ -1028,7 +1007,7 @@ function LoadingScreen({
   );
 }
 
-function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isBonusCounting, isTelegram = false }) {
+function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isBonusCounting }) {
   const [rating, setRating] = useState(5);
 
   return (
@@ -1038,9 +1017,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
         onOpenProfile={onOpenProfile}
         balance={balance}
         isBonusCounting={isBonusCounting}
-        isTelegram={isTelegram}
       />
-      {isTelegram ? <div className="h-[146px]" aria-hidden="true" /> : null}
 
       <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
         <div className="flex items-center justify-between gap-3">
@@ -1125,7 +1102,6 @@ function FeedScreen({
   onOpenProfile,
   balance,
   isBonusCounting,
-  isTelegram = false,
 }) {
   return (
     <>
@@ -1134,9 +1110,7 @@ function FeedScreen({
         onOpenProfile={onOpenProfile}
         balance={balance}
         isBonusCounting={isBonusCounting}
-        isTelegram={isTelegram}
       />
-      {isTelegram ? <div className="h-[146px]" aria-hidden="true" /> : null}
       <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
 
       <div className="mt-2 grid grid-cols-2 gap-2">
@@ -1263,7 +1237,6 @@ export default function App() {
             onOpenProfile={handleOpenProfile}
             balance={balance}
             isBonusCounting={isBonusCounting}
-            isTelegram={isTelegram}
           />
         ) : screen === "style" ? (
           <StyleScreen
@@ -1271,7 +1244,6 @@ export default function App() {
             onBack={() => setScreen("feed")}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
-            isTelegram={isTelegram}
             onCreate={({ previewImage, hasUploadedPhoto }) => {
               setLoadingPreviewImage(previewImage);
               setHasUploadedPhotoForLoading(hasUploadedPhoto);
@@ -1289,7 +1261,6 @@ export default function App() {
             onComplete={() => setScreen("result")}
             balance={balance}
             isBonusCounting={isBonusCounting}
-            isTelegram={isTelegram}
           />
         ) : screen === "result" ? (
           <ResultScreen
@@ -1299,7 +1270,6 @@ export default function App() {
             onOpenProfile={handleOpenProfile}
             balance={balance}
             isBonusCounting={isBonusCounting}
-            isTelegram={isTelegram}
           />
         ) : screen === "shop" ? (
           <ShopScreen
@@ -1310,7 +1280,6 @@ export default function App() {
             setSelectedProductId={setSelectedProductId}
             balance={balance}
             isBonusCounting={isBonusCounting}
-            isTelegram={isTelegram}
           />
         ) : (
           <ProfileScreen
@@ -1319,7 +1288,6 @@ export default function App() {
             onOpenProfile={handleOpenProfile}
             balance={balance}
             isBonusCounting={isBonusCounting}
-            isTelegram={isTelegram}
           />
         )}
 
