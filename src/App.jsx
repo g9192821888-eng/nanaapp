@@ -1479,7 +1479,7 @@ export default function App() {
       ) : null}
 
       <div
-        className="mx-auto w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-5"
+        className="mx-auto w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-0"
         style={{ height: "var(--app-height, 100dvh)" }}
       >
         {screen === "feed" ? (
