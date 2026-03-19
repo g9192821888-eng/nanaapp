@@ -23,6 +23,7 @@ import {
   Download,
   Wand2,
   Gift,
+  Send,
 } from "lucide-react";
 
 const filters = [
@@ -1091,7 +1092,11 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
       <div className="space-y-2">
         <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#3cc95a] px-5 py-4 text-[15px] font-semibold text-white shadow-[0_14px_28px_rgba(60,201,90,0.24)]">
           <Plus className="h-5 w-5" strokeWidth={2.2} />
-          Опубликовать в Историю
+          Опубликовать в Сторис
+        </button>
+        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[15px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]">
+          <Send className="h-5 w-5" strokeWidth={2.2} />
+          Отправить в чат
         </button>
       </div>
     </div>
