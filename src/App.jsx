@@ -29,10 +29,9 @@ import {
 
 const filters = [
   { id: "liked", label: "", icon: Heart },
-  { id: "all", label: "Все", icon: Check },
-  { id: "new", label: "Тренд", icon: Zap },
-  { id: "winter", label: "8 марта", icon: Flower2 },
-  { id: "style", label: "Видео", icon: Film },
+  { id: "popular", label: "Тренд", icon: Zap },
+  { id: "new", label: "Новый", icon: Star },
+  { id: "free", label: "Бесплатно", icon: Ticket },
 ];
 
 const styleSections = [
@@ -320,9 +319,9 @@ function CardBadge({ type }) {
   };
 
   const labels = {
-    new: "New",
+    new: "Новый",
     popular: "Тренд",
-    free: "Free",
+    free: "Бесплатно",
   };
 
   return (
@@ -411,9 +410,9 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   );
 }
 
-function PinnedSectionHeader({ children }) {
+function PinnedSectionHeader({ children, className = "" }) {
   return (
-    <div className="sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-3 backdrop-blur-[10px]">
+    <div className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-3 backdrop-blur-[10px] ${className}`}>
       {children}
     </div>
   );
@@ -517,7 +516,7 @@ function FeedCard({ card, onClick }) {
   );
 }
 
-function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
+function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate, balance, isBonusCounting }) {
   const [isLiked, setIsLiked] = useState(false);
   const isPairStyle = card.title === "Пара в городе";
   const [hasPhoto, setHasPhoto] = useState(false);
@@ -525,29 +524,23 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadingSecond, setIsUploadingSecond] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
+  const styleGalleryRef = useRef(null);
   const uploadedPreview =
     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80";
   const styleGallery = card.gallery?.length ? card.gallery : [card.image];
   const canSlideGallery = styleGallery.length > 1;
-  const styleSlideOffset = styleGallery.length > 0 ? 100 / styleGallery.length : 100;
 
   useEffect(() => {
     setActiveSlide(0);
+    if (styleGalleryRef.current) {
+      styleGalleryRef.current.scrollTo({ left: 0, behavior: "auto" });
+    }
   }, [card.id]);
 
-  const handleGalleryDragEnd = (_, info) => {
-    if (!canSlideGallery) return;
-
-    const swipeThreshold = 45;
-
-    if (info.offset.x <= -swipeThreshold) {
-      setActiveSlide((currentSlide) => Math.min(currentSlide + 1, styleGallery.length - 1));
-      return;
-    }
-
-    if (info.offset.x >= swipeThreshold) {
-      setActiveSlide((currentSlide) => Math.max(currentSlide - 1, 0));
-    }
+  const handleGalleryScroll = (event) => {
+    const { scrollLeft, clientWidth } = event.currentTarget;
+    if (!clientWidth) return;
+    setActiveSlide(Math.round(scrollLeft / clientWidth));
   };
 
   const handleUpload = () => {
@@ -617,43 +610,30 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
 
   return (
     <div className="space-y-3 pb-24">
-      <PinnedSectionHeader>
-        <Header onOpenBalance={onOpenBalance} onOpenProfile={onOpenProfile} />
-
-        <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
-          <div className="flex items-center justify-center gap-3">
-            <div className="text-center">
-              <div className="text-[14px] font-semibold text-[#234677]">Выбранный стиль</div>
-              <div className="text-[11px] text-[#7d8ca5]">Загрузи свое фото и нажми Создать</div>
-            </div>
-          </div>
-        </div>
+      <PinnedSectionHeader className="pt-0">
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
       </PinnedSectionHeader>
 
       <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="relative">
-          <div className="overflow-hidden">
-            <motion.div
-              drag={canSlideGallery ? "x" : false}
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.08}
-              dragMomentum={false}
-              onDragEnd={handleGalleryDragEnd}
-              animate={{ x: `-${activeSlide * styleSlideOffset}%` }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className={`flex ${canSlideGallery ? "cursor-grab active:cursor-grabbing" : ""}`}
-              style={{ width: `${styleGallery.length * 100}%` }}
-            >
+          <div
+            ref={styleGalleryRef}
+            onScroll={handleGalleryScroll}
+            className={`flex overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${canSlideGallery ? "snap-x snap-mandatory" : ""}`}
+          >
               {styleGallery.map((image, index) => (
                 <img
                   key={`${card.id}-${index}`}
                   src={image}
                   alt={`${card.title} ${index + 1}`}
-                  className="aspect-[1.08] shrink-0 object-cover"
-                  style={{ width: `${100 / styleGallery.length}%` }}
+                  className={`aspect-[1.08] w-full shrink-0 object-cover ${canSlideGallery ? "snap-start" : ""}`}
                 />
               ))}
-            </motion.div>
           </div>
           {card.badge ? <CardBadge type={card.badge} /> : null}
           <motion.button
@@ -821,7 +801,7 @@ function ShopScreen({
 
   return (
     <div className="space-y-3">
-      <PinnedSectionHeader>
+      <PinnedSectionHeader className="pt-0">
         <Header
           onOpenBalance={onOpenBalance}
           onOpenProfile={onOpenProfile}
@@ -878,7 +858,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
 
   return (
     <div className="space-y-3">
-      <PinnedSectionHeader>
+      <PinnedSectionHeader className="pt-0">
         <Header
           onOpenBalance={onOpenBalance}
           onOpenProfile={onOpenProfile}
@@ -887,38 +867,29 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         />
 
         <div className="px-0 py-0">
-          <div className="flex items-center justify-between gap-3">
-            <button
-              onClick={onBack}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e2e9f5] bg-white text-[#5a6e90]"
-            >
-              <ArrowLeft className="h-5 w-5" strokeWidth={2.2} />
-            </button>
-
-            <div className="flex-1 overflow-x-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <div className="flex items-center gap-2 pr-2">
-                {[
-                  { id: "tasks", label: "Задания", icon: ClipboardList },
-                  { id: "photos", label: "Фотографии", icon: Image },
-                  { id: "history", label: "История", icon: History },
-                ].map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setProfileTab(item.id)}
-                      className={`flex shrink-0 items-center gap-1.5 rounded-[20px] border px-4 py-2.5 text-[14px] font-medium transition ${
-                        profileTab === item.id
-                          ? "border-[#2b7de9] bg-[#2b7de9] text-white shadow-[0_8px_16px_rgba(43,125,233,0.22)]"
-                          : "border-[#e1e7f1] bg-[#f2f5fa] text-[#607394]"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4" strokeWidth={2.1} />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+          <div className="overflow-x-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex items-center gap-2 pr-2">
+              {[
+                { id: "tasks", label: "Задания", icon: ClipboardList },
+                { id: "photos", label: "Фотографии", icon: Image },
+                { id: "history", label: "История", icon: History },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setProfileTab(item.id)}
+                    className={`flex shrink-0 items-center gap-1.5 rounded-[20px] border px-4 py-2.5 text-[14px] font-medium transition ${
+                      profileTab === item.id
+                        ? "border-[#2b7de9] bg-[#2b7de9] text-white shadow-[0_8px_16px_rgba(43,125,233,0.22)]"
+                        : "border-[#e1e7f1] bg-[#f2f5fa] text-[#607394]"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" strokeWidth={2.1} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -991,7 +962,7 @@ function LoadingScreen({
 
   return (
     <div className="space-y-3">
-      <PinnedSectionHeader>
+      <PinnedSectionHeader className="pt-0">
         <Header
           onOpenBalance={onOpenBalance}
           onOpenProfile={onOpenProfile}
@@ -1035,7 +1006,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
 
   return (
     <div className="space-y-3">
-      <PinnedSectionHeader>
+      <PinnedSectionHeader className="pt-0">
         <Header
           onOpenBalance={onOpenBalance}
           onOpenProfile={onOpenProfile}
@@ -1118,10 +1089,39 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
   );
 }
 
+function SectionScreen({ section, onSelectCard, onOpenBalance, onOpenProfile, balance, isBonusCounting }) {
+  return (
+    <div className="space-y-4">
+      <PinnedSectionHeader className="pt-0">
+        <Header
+          onOpenBalance={onOpenBalance}
+          onOpenProfile={onOpenProfile}
+          balance={balance}
+          isBonusCounting={isBonusCounting}
+        />
+      </PinnedSectionHeader>
+
+      <div className="space-y-3 bg-white pb-6" style={{ paddingTop: 0 }}>
+        <div className="px-2">
+          <div className="text-[24px] font-semibold tracking-[-0.04em] text-[#1c2b45]">{section.label}</div>
+          <div className="mt-1 text-[13px] text-[#8a97ad]">Все стили раздела в одной ленте</div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 px-2">
+          {section.cards.map((card) => (
+            <FeedCard key={card.id} card={card} onClick={onSelectCard} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function FeedScreen({
   activeFilter,
   setActiveFilter,
   visibleCards,
+  onOpenSection,
   onSelectCard,
   onOpenBalance,
   onOpenProfile,
@@ -1176,12 +1176,15 @@ function FeedScreen({
         {feedSections.map((section) => (
           <section key={section.id} className="space-y-1.5">
             <div className="flex items-center justify-between gap-3 px-2">
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(238,244,251,0.8)] px-3 py-1.5 text-[#6f87ab]">
+              <button
+                onClick={() => onOpenSection(section)}
+                className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(238,244,251,0.8)] px-3 py-1.5 text-[#6f87ab]"
+              >
                 <h2 className="text-[15px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
                   {section.label}
                 </h2>
                 <ChevronRight className="h-4 w-4 text-[#9eb2ce]" strokeWidth={2.4} />
-              </div>
+              </button>
             </div>
 
             <div className="flex gap-3 overflow-x-auto px-2 pb-1 pr-3">
@@ -1203,6 +1206,7 @@ export default function App() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [screen, setScreen] = useState("feed");
   const [selectedCard, setSelectedCard] = useState(cards[0]);
+  const [selectedSection, setSelectedSection] = useState(styleSections[1]);
   const [selectedProductId, setSelectedProductId] = useState(3);
   const [loadingPreviewImage, setLoadingPreviewImage] = useState(cards[0].image);
   const [hasUploadedPhotoForLoading, setHasUploadedPhotoForLoading] = useState(false);
@@ -1216,9 +1220,9 @@ export default function App() {
     let filteredCards = cards;
 
     if (activeFilter === "liked") filteredCards = cards.filter((card) => card.likes >= 50);
-    else if (activeFilter === "new") filteredCards = cards.slice(0, 6);
-    else if (activeFilter === "winter") filteredCards = cards.filter((card) => card.badge === "free");
-    else if (activeFilter === "style") filteredCards = [...cards].reverse();
+    else if (activeFilter === "popular") filteredCards = cards.filter((card) => card.badge === "popular");
+    else if (activeFilter === "new") filteredCards = cards.filter((card) => card.badge === "new");
+    else if (activeFilter === "free") filteredCards = cards.filter((card) => card.badge === "free");
 
     return filteredCards;
   }, [activeFilter]);
@@ -1227,6 +1231,14 @@ export default function App() {
     setSelectedCard(card);
     setResultImage(card.image);
     setScreen("style");
+  };
+
+  const handleOpenSection = (section) => {
+    setSelectedSection({
+      ...section,
+      cards: visibleCards.filter((card) => card.section === section.id),
+    });
+    setScreen("section");
   };
 
   const handleOpenBalance = () => {
@@ -1310,6 +1322,16 @@ export default function App() {
             activeFilter={activeFilter}
             setActiveFilter={setActiveFilter}
             visibleCards={visibleCards}
+            onOpenSection={handleOpenSection}
+            onSelectCard={handleSelectCard}
+            onOpenBalance={handleOpenBalance}
+            onOpenProfile={handleOpenProfile}
+            balance={balance}
+            isBonusCounting={isBonusCounting}
+          />
+        ) : screen === "section" ? (
+          <SectionScreen
+            section={selectedSection}
             onSelectCard={handleSelectCard}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
@@ -1322,6 +1344,8 @@ export default function App() {
             onBack={() => setScreen("feed")}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
+            balance={balance}
+            isBonusCounting={isBonusCounting}
             onCreate={({ previewImage, hasUploadedPhoto }) => {
               setLoadingPreviewImage(previewImage);
               setHasUploadedPhotoForLoading(hasUploadedPhoto);
