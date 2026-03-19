@@ -834,19 +834,7 @@ function ShopScreen({
       </div>
 
       <div className="rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-        <div className="flex items-center gap-3 rounded-[22px] bg-[linear-gradient(135deg,#eef5ff_0%,#f9fbff_100%)] px-4 py-4 ring-1 ring-[#e4ecf8]">
-          <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-[#2b7de9] text-white shadow-[0_12px_24px_rgba(43,125,233,0.2)]">
-            <ShoppingBag className="h-6 w-6" strokeWidth={2.1} />
-          </div>
-          <div>
-            <div className="text-[14px] font-medium text-[#7d8ca5]">Покупка кредитов</div>
-            <div className="text-[22px] font-semibold tracking-[-0.03em] text-[#234677]">
-              Выбери пакет
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-4 space-y-3">
+        <div className="space-y-3">
           {products.map((product) => (
             <ProductCard
               key={product.id}
