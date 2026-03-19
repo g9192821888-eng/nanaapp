@@ -769,18 +769,16 @@ function StyleScreen({
             </motion.div>
           </motion.button>
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/45 to-transparent px-5 pb-5 pt-10 text-white">
-            <div className="text-[22px] font-semibold tracking-tight">{card.title}</div>
             <div className="mt-2 flex items-center gap-2 text-[12px] font-medium text-white/90">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm">
                 <User className="h-3.5 w-3.5" strokeWidth={2.2} />
               </span>
               <span className="flex items-center gap-1.5">
                 <span>1.2K</span>
-                <User className="h-3.5 w-3.5" strokeWidth={2.2} />
                 <span>выбрали</span>
               </span>
             </div>
-            <div className="mt-1 max-w-[85%] text-[13px] leading-5 text-white/85">{card.description}</div>
+            <div className="mt-2 max-w-[85%] text-[15px] leading-6 text-white/85">{card.description}</div>
           </div>
           {styleGallery.length > 1 ? (
             <div className="absolute bottom-3 left-5 flex items-center gap-1.5">
