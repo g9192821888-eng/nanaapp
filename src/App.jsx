@@ -377,10 +377,10 @@ function FilterBar({ activeFilter, setActiveFilter }) {
 
 function FeedCard({ card, onClick }) {
   const gallery = card.gallery?.length ? card.gallery : [card.image];
-  const [currentImage, setCurrentImage] = useState(gallery[0]);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
-    setCurrentImage(gallery[0]);
+    setActiveSlide(0);
 
     if (gallery.length < 2) return undefined;
 
@@ -389,10 +389,9 @@ function FeedCard({ card, onClick }) {
     const scheduleNextFrame = () => {
       const nextDelay = 5000 + Math.floor(Math.random() * 5001);
       timeoutId = window.setTimeout(() => {
-        setCurrentImage((previousImage) => {
-          const nextImages = gallery.filter((image) => image !== previousImage);
-          const imagePool = nextImages.length ? nextImages : gallery;
-          return imagePool[Math.floor(Math.random() * imagePool.length)];
+        setActiveSlide((previousSlide) => {
+          const step = 1 + Math.floor(Math.random() * Math.max(gallery.length - 1, 1));
+          return (previousSlide + step) % gallery.length;
         });
         scheduleNextFrame();
       }, nextDelay);
@@ -413,15 +412,22 @@ function FeedCard({ card, onClick }) {
       className="relative overflow-hidden rounded-[18px] border border-[#dbe4f2] bg-[#edf2f8] text-left shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
     >
       <div className="relative overflow-hidden rounded-[18px]">
-        <motion.img
-          key={currentImage}
-          src={currentImage}
-          alt={card.title}
-          initial={{ scale: 1.04, opacity: 0.7 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.45, ease: "easeOut" }}
-          className="aspect-[0.78] w-full object-cover"
-        />
+        <div className="overflow-hidden">
+          <motion.div
+            animate={{ x: `-${activeSlide * 100}%` }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="flex"
+          >
+            {gallery.map((image, index) => (
+              <img
+                key={`${card.id}-feed-${index}`}
+                src={image}
+                alt={`${card.title} ${index + 1}`}
+                className="aspect-[0.78] w-full shrink-0 object-cover"
+              />
+            ))}
+          </motion.div>
+        </div>
         {card.badge ? <CardBadge type={card.badge} /> : null}
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent px-3 pb-2 pt-10">
@@ -429,6 +435,19 @@ function FeedCard({ card, onClick }) {
             {card.title}
           </div>
         </div>
+
+        {gallery.length > 1 ? (
+          <div className="pointer-events-none absolute left-3 top-3 flex items-center gap-1.5">
+            {gallery.map((_, index) => (
+              <span
+                key={`${card.id}-feed-dot-${index}`}
+                className={`h-1 rounded-full transition-all ${
+                  index === activeSlide ? "w-4 bg-white" : "w-1 bg-white/55"
+                }`}
+              />
+            ))}
+          </div>
+        ) : null}
 
         <div className="pointer-events-none absolute bottom-2 right-2 flex items-center gap-1 text-white">
           <Heart className="h-5 w-5 fill-current" />
