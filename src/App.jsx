@@ -910,16 +910,16 @@ function ProductCard({ product, isSelected, onSelect }) {
   return (
     <button
       onClick={() => onSelect(product.id)}
-      className={`relative w-full overflow-hidden rounded-[24px] text-left transition ${
+      className={`relative w-full overflow-hidden rounded-[24px] border text-left shadow-[0_8px_24px_rgba(70,89,122,0.05)] transition ${
         isFeatured
-          ? "bg-[linear-gradient(180deg,#2a2d3b_0%,#212432_100%)]"
-          : "bg-[#f3f5fb]"
+          ? "border-[rgba(184,212,247,0.9)] bg-[linear-gradient(180deg,#f0f7ff_0%,#e4f0ff_100%)]"
+          : "border-[rgba(225,232,242,0.9)] bg-[rgba(248,250,253,0.96)]"
       } ${isSelected ? "ring-2 ring-[#2b7de9] ring-offset-2 ring-offset-transparent" : ""}`}
     >
-      <div className={`relative px-5 py-4 ${isFeatured ? "text-white" : "text-[#1d2333]"}`}>
+      <div className={`relative px-5 py-3 ${isFeatured ? "text-[#183b6d]" : "text-[#1d2333]"}`}>
         {product.badge ? (
           <div
-            className={`absolute right-5 top-4 rounded-[12px] px-3 py-1.5 text-[11px] font-semibold leading-none ${product.badgeColor}`}
+            className={`absolute right-4 top-3 rounded-[12px] px-3 py-1.5 text-[11px] font-semibold leading-none shadow-[0_8px_18px_rgba(15,23,42,0.08)] ${product.badgeColor}`}
           >
             {product.badge}
           </div>
@@ -927,14 +927,14 @@ function ProductCard({ product, isSelected, onSelect }) {
 
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0 pr-3">
-            <div className={`text-[18px] font-medium ${isFeatured ? "text-white/78" : "text-[#767f93]"}`}>
+            <div className={`text-[18px] font-medium ${isFeatured ? "text-[#5b6f92]" : "text-[#767f93]"}`}>
               {product.subtitle}
             </div>
-            <div className={`mt-1.5 text-[16px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
+            <div className={`mt-1 text-[16px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
               {product.amount} фотографий
             </div>
           </div>
-          <div className={`shrink-0 text-right text-[17px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-white" : "text-[#161c2c]"}`}>
+          <div className={`shrink-0 text-right text-[17px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
             {product.price}
           </div>
         </div>
@@ -970,7 +970,7 @@ function ShopScreen({
         />
       </PinnedSectionHeader>
 
-      <div className="space-y-6 rounded-[30px] bg-white px-4 pb-28 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+      <div className="space-y-5 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
         <div className="space-y-3 px-1">
           <div className="max-w-[320px] text-[34px] font-semibold leading-[0.95] tracking-[-0.055em] text-[#161c2c]">
             Твоя идеальная съемка за 1 минуту
@@ -980,7 +980,7 @@ function ShopScreen({
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {products.map((product) => (
             <ProductCard
               key={product.id}
@@ -1002,12 +1002,11 @@ function ShopScreen({
           ))}
         </div>
 
-      </div>
-
-      <div className="sticky bottom-3 z-20 px-1">
-        <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#2fb7ff_0%,#1d9fff_45%,#0b7cff_100%)] px-5 py-5 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(27,145,255,0.28)]">
-          Перейти к оплате
-        </button>
+        <div className="pt-2">
+          <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#2fb7ff_0%,#1d9fff_45%,#0b7cff_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(27,145,255,0.22)]">
+            Перейти к оплате
+          </button>
+        </div>
       </div>
     </div>
   );
