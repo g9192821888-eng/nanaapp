@@ -6,6 +6,7 @@ import {
   Heart,
   Plus,
   Search,
+  Flower2,
   Snowflake,
   Sparkles,
   Upload,
@@ -22,7 +23,7 @@ const filters = [
   { id: "liked", label: "", icon: Heart },
   { id: "all", label: "Все", icon: Check },
   { id: "new", label: "Тренд", icon: Zap },
-  { id: "winter", label: "8 марта", icon: Snowflake },
+  { id: "winter", label: "8 марта", icon: Flower2 },
   { id: "style", label: "Стильные", icon: Sparkles },
 ];
 
