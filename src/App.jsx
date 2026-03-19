@@ -29,6 +29,7 @@ import {
 
 const filters = [
   { id: "liked", label: "", icon: Heart },
+  { id: "all", label: "Все", icon: Check },
   { id: "popular", label: "Тренд", icon: Zap },
   { id: "new", label: "Новый", icon: Star },
   { id: "free", label: "Бесплатно", icon: Ticket },
@@ -1015,23 +1016,13 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
         />
 
         <div className="rounded-[22px] bg-[#f8fbff] px-3.5 pb-3 pt-3 ring-1 ring-[#e3ebf7]">
-          <div className="flex items-center justify-between gap-3">
-            <button
-              onClick={onBack}
-              className="flex h-10 min-w-[108px] items-center justify-center gap-2 rounded-full border border-[#dde6f4] bg-white px-4 text-[#5a6e90]"
-            >
-              <ArrowLeft className="h-4.5 w-4.5" strokeWidth={2.2} />
-              <span className="text-[14px] font-semibold">Главная</span>
-            </button>
-
-            <div className="flex-1 text-center">
+          <div className="flex items-center justify-center gap-3">
+            <div className="text-center">
               <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
                 <Check className="h-5 w-5 text-[#3cc95a]" strokeWidth={2.6} />
                 <span>Фото готово</span>
               </div>
             </div>
-
-            <div className="h-10 w-10" />
           </div>
         </div>
       </PinnedSectionHeader>
