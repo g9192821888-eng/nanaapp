@@ -1145,11 +1145,8 @@ function FeedScreen({
 
   return (
     <>
-      <div className="fixed inset-x-0 top-0 z-30">
-        <div
-          ref={pinnedTopRef}
-          className="mx-auto w-full max-w-[540px] rounded-b-[20px] bg-[rgba(244,247,252,0.92)] px-3 pb-3 shadow-[0_12px_24px_rgba(116,134,168,0.12)] backdrop-blur-[10px]"
-        >
+      <PinnedSectionHeader className="pt-0">
+        <div ref={pinnedTopRef}>
           <Header
             onOpenBalance={onOpenBalance}
             onOpenProfile={onOpenProfile}
@@ -1158,7 +1155,7 @@ function FeedScreen({
           />
           <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
         </div>
-      </div>
+      </PinnedSectionHeader>
 
       <div
         className="space-y-[0px] bg-white pb-3 pt-2"
