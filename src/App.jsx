@@ -424,6 +424,7 @@ function FilterBar({ activeFilter, setActiveFilter }) {
 function FeedCard({ card, onClick }) {
   const gallery = card.gallery?.length ? card.gallery : [card.image];
   const [activeSlide, setActiveSlide] = useState(0);
+  const slideOffset = gallery.length > 0 ? 100 / gallery.length : 100;
 
   useEffect(() => {
     setActiveSlide(0);
@@ -460,16 +461,18 @@ function FeedCard({ card, onClick }) {
       <div className="relative overflow-hidden rounded-[18px]">
         <div className="overflow-hidden">
           <motion.div
-            animate={{ x: `-${activeSlide * 100}%` }}
+            animate={{ x: `-${activeSlide * slideOffset}%` }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="flex"
+            style={{ width: `${gallery.length * 100}%` }}
           >
             {gallery.map((image, index) => (
               <img
                 key={`${card.id}-feed-${index}`}
                 src={image}
                 alt={`${card.title} ${index + 1}`}
-                className="aspect-[0.78] w-full shrink-0 object-cover"
+                className="aspect-[0.78] shrink-0 object-cover"
+                style={{ width: `${100 / gallery.length}%` }}
               />
             ))}
           </motion.div>
@@ -503,6 +506,7 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80";
   const styleGallery = card.gallery?.length ? card.gallery : [card.image];
   const canSlideGallery = styleGallery.length > 1;
+  const styleSlideOffset = styleGallery.length > 0 ? 100 / styleGallery.length : 100;
 
   useEffect(() => {
     setActiveSlide(0);
@@ -619,16 +623,18 @@ function StyleScreen({ card, onBack, onOpenBalance, onOpenProfile, onCreate }) {
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.08}
               onDragEnd={handleGalleryDragEnd}
-              animate={{ x: `-${activeSlide * 100}%` }}
+              animate={{ x: `-${activeSlide * styleSlideOffset}%` }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               className={`flex ${canSlideGallery ? "cursor-grab active:cursor-grabbing" : ""}`}
+              style={{ width: `${styleGallery.length * 100}%` }}
             >
               {styleGallery.map((image, index) => (
                 <img
                   key={`${card.id}-${index}`}
                   src={image}
                   alt={`${card.title} ${index + 1}`}
-                  className="aspect-[1.2] w-full shrink-0 object-cover"
+                  className="aspect-[1.2] shrink-0 object-cover"
+                  style={{ width: `${100 / styleGallery.length}%` }}
                 />
               ))}
             </motion.div>
