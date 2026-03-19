@@ -1152,7 +1152,7 @@ function FeedScreen({
       </div>
 
       <div
-        className="space-y-[0px] rounded-[28px] bg-white px-2 pb-3 pt-2 shadow-[0_8px_24px_rgba(82,103,138,0.06)]"
+        className="space-y-[0px] bg-white px-2 pb-3 pt-2"
         style={{ paddingTop: pinnedTopHeight }}
       >
         {feedSections.map((section) => (
@@ -1277,7 +1277,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-[100dvh] overflow-x-hidden bg-[radial-gradient(circle_at_top,_#f7faff_0%,_#eef2f8_42%,_#e9edf4_100%)] text-[#1b1d22]">
+    <div className="relative h-[100dvh] overflow-hidden bg-[radial-gradient(circle_at_top,_#f7faff_0%,_#eef2f8_42%,_#e9edf4_100%)] text-[#1b1d22]">
       {!isTelegram ? (
         <div className="sticky top-0 z-[70] px-3 pt-3">
           <div className="mx-auto max-w-[516px] rounded-[18px] bg-[#1f6feb] px-4 py-3 text-[13px] font-medium text-white shadow-[0_14px_28px_rgba(31,111,235,0.22)]">
@@ -1286,7 +1286,7 @@ export default function App() {
         </div>
       ) : null}
 
-      <div className="mx-auto min-h-[100dvh] w-full max-w-[516px] px-3 pb-10 pt-5">
+      <div className="mx-auto h-[100dvh] w-full max-w-[516px] overflow-y-auto overscroll-y-contain px-3 pb-10 pt-5">
         {screen === "feed" ? (
           <FeedScreen
             activeFilter={activeFilter}
