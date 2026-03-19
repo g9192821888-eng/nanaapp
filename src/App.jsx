@@ -425,7 +425,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   };
 
   return (
-    <div className="px-1 pb-0 pt-[104px]">
+    <div className="px-1 pb-0 pt-[156px]">
       <div className="mx-auto mt-[-9px] flex w-full max-w-[516px] items-center justify-between gap-3">
         <button
           onClick={onOpenProfile}
@@ -464,7 +464,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
 function PinnedSectionHeader({ children, className = "" }) {
   return (
-    <div className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-[32px] backdrop-blur-[10px] ${className}`}>
+    <div className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-[20px] backdrop-blur-[10px] ${className}`}>
       {children}
     </div>
   );
