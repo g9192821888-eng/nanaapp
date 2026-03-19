@@ -358,8 +358,8 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
   return (
     <div className="fixed left-1/2 top-0 z-40 w-full max-w-[516px] -translate-x-1/2 px-3 pb-2 pt-[calc(max(8px,env(safe-area-inset-top))+20px)]">
-      <div className="overflow-hidden rounded-b-[18px] border-b border-[#dce4f2] bg-white px-5 pb-3.5 pt-[calc(env(safe-area-inset-top)+56px)] shadow-[0_8px_32px_rgba(70,89,122,0.08)] -mt-[calc(env(safe-area-inset-top)+52px)]">
-        <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[20px]">
+      <div className="overflow-hidden rounded-b-[18px] border-b border-[#dce4f2] bg-white px-5 pb-[4px] pt-[calc(env(safe-area-inset-top)+56px)] shadow-[0_8px_32px_rgba(70,89,122,0.08)] -mt-[calc(env(safe-area-inset-top)+52px)]">
+        <div className="mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 pt-[30px]">
           <button
             onClick={onOpenProfile}
             className="-ml-[15px] group flex min-w-0 items-center gap-3 rounded-[16px] border border-[#e8eef8] bg-white/70 px-2 py-1.5 text-left transition hover:bg-[#f2f6fd] active:scale-[0.98]"
