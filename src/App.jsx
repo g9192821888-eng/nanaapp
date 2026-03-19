@@ -784,7 +784,7 @@ function ProductCard({ product, isSelected, onSelect }) {
           <div>
             <div className="text-[15px] font-semibold">{product.subtitle}</div>
             <div className={`mt-1 text-[26px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-white" : "text-[#234677]"}`}>
-              {product.amount}
+              {product.amount} фотографий
             </div>
           </div>
           <div className={`rounded-full px-4 py-2 text-[14px] font-semibold ${isFeatured ? "bg-white/12 text-white" : "bg-[#eef5ff] text-[#2b7de9]"}`}>
