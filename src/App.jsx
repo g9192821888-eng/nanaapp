@@ -1052,6 +1052,7 @@ export default function App() {
   const [balance, setBalance] = useState(0);
   const [isBonusCounting, setIsBonusCounting] = useState(false);
   const [isBonusFlying, setIsBonusFlying] = useState(false);
+  const [isBonusClaimClosing, setIsBonusClaimClosing] = useState(false);
 
   const visibleCards = useMemo(() => {
     if (activeFilter === "liked") return cards.filter((card) => card.likes >= 50);
@@ -1076,29 +1077,39 @@ export default function App() {
   };
 
   const claimWelcomeBonus = () => {
-    if (isBonusFlying || isBonusCounting) return;
-    setIsBonusFlying(true);
+    if (isBonusFlying || isBonusCounting || isBonusClaimClosing) return;
+    setIsBonusClaimClosing(true);
     setIsBonusCounting(true);
 
-    const duration = 700;
+    const duration = 900;
     const total = 20;
-    const start = performance.now();
+    const closeDelay = 280;
+    const takeoffDelay = 320;
 
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      setBalance(Math.round(total * progress));
-      if (progress < 1) {
+    setTimeout(() => {
+      setShowWelcomeBonus(false);
+      setTimeout(() => {
+        setIsBonusFlying(true);
+
+        const start = performance.now();
+
+        const tick = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          setBalance(Math.round(total * progress));
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            setTimeout(() => {
+              setIsBonusFlying(false);
+              setIsBonusCounting(false);
+              setIsBonusClaimClosing(false);
+            }, 180);
+          }
+        };
+
         requestAnimationFrame(tick);
-      } else {
-        setTimeout(() => {
-          setIsBonusFlying(false);
-          setIsBonusCounting(false);
-          setShowWelcomeBonus(false);
-        }, 180);
-      }
-    };
-
-    requestAnimationFrame(tick);
+      }, takeoffDelay);
+    }, closeDelay);
   };
 
   return (
@@ -1179,17 +1190,29 @@ export default function App() {
         {isBonusFlying ? (
           <>
             <motion.div
-              initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
-              animate={{ x: 138, y: -520, scale: 0.72, opacity: 0 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ x: 0, y: 0, scale: 1, opacity: 1, rotate: 0 }}
+              animate={{
+                x: [0, 0, 138],
+                y: [0, 0, -520],
+                scale: [1, 1.08, 0.72],
+                opacity: [1, 1, 0],
+                rotate: [0, 80, 220],
+              }}
+              transition={{ duration: 1.15, times: [0, 0.28, 1], ease: [0.22, 1, 0.36, 1] }}
               className="pointer-events-none absolute left-1/2 top-[430px] z-[60]"
             >
               <Sparkles className="h-7 w-7 text-[#2b7de9] drop-shadow-[0_8px_18px_rgba(43,125,233,0.28)]" strokeWidth={2.2} />
             </motion.div>
             <motion.div
-              initial={{ x: 0, y: 0, scale: 0.92, opacity: 0.95 }}
-              animate={{ x: 166, y: -548, scale: 0.58, opacity: 0 }}
-              transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
+              initial={{ x: 0, y: 0, scale: 0.92, opacity: 0.95, rotate: 0 }}
+              animate={{
+                x: [0, 0, 166],
+                y: [0, 0, -548],
+                scale: [0.92, 1.02, 0.58],
+                opacity: [0.95, 0.95, 0],
+                rotate: [0, -70, -210],
+              }}
+              transition={{ duration: 1.2, times: [0, 0.28, 1], ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
               className="pointer-events-none absolute left-1/2 top-[446px] z-[60]"
             >
               <Sparkles className="h-5 w-5 text-[#67c3ff] drop-shadow-[0_8px_18px_rgba(43,125,233,0.24)]" strokeWidth={2.2} />
@@ -1200,7 +1223,16 @@ export default function App() {
 
       {showWelcomeBonus ? (
         <div className="absolute inset-0 z-50 flex items-start justify-center bg-[#0f172a]/35 px-4 pt-[300px] backdrop-blur-[3px]">
-          <div className="w-full max-w-[388px] rounded-[30px] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.18)] ring-1 ring-[#dce4f2]">
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: isBonusClaimClosing ? 0 : 1,
+              y: isBonusClaimClosing ? 24 : 0,
+              scale: isBonusClaimClosing ? 0.94 : 1,
+            }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full max-w-[388px] rounded-[30px] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.18)] ring-1 ring-[#dce4f2]"
+          >
             <div className="mt-2 text-center">
               <div className="flex items-center justify-center gap-2 text-[24px] font-semibold tracking-[-0.03em] text-[#234677]">
                 <Gift className="h-6 w-6 text-[#2b7de9]" strokeWidth={2.1} />
@@ -1223,12 +1255,13 @@ export default function App() {
 
             <button
               onClick={claimWelcomeBonus}
+              disabled={isBonusClaimClosing || isBonusCounting}
               className="mt-5 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]"
             >
               <span>Забрать 20</span>
               <Sparkles className="h-5 w-5" strokeWidth={2.1} />
             </button>
-          </div>
+          </motion.div>
         </div>
       ) : null}
     </div>
