@@ -413,7 +413,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-0 flex gap-2 overflow-x-auto pb-1">
+    <div className="mt-[5px] flex gap-2 overflow-x-auto pb-1">
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -423,8 +423,8 @@ function FilterBar({ activeFilter, setActiveFilter }) {
             onClick={() => setActiveFilter(filter.id)}
             className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
               isActive
-                ? "bg-[#2b7de9] text-white shadow-[0_10px_20px_rgba(43,125,233,0.22)]"
-                : "bg-white text-[#5a6e90] ring-1 ring-[#dce4f2]"
+                ? "bg-[#2b7de9] text-white"
+                : "bg-[#f5f7fb] text-[#5a6e90]"
             }`}
           >
             <Icon className="h-4 w-4" strokeWidth={2.2} fill={filter.id === "liked" ? "currentColor" : "none"} />
@@ -471,7 +471,7 @@ function FeedCard({ card, onClick }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
       onClick={() => onClick(card)}
-      className="relative overflow-hidden rounded-[18px] border border-[#dbe4f2] bg-[#edf2f8] text-left shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
+      className="relative overflow-hidden rounded-[18px] bg-[#edf2f8] text-left shadow-[0_6px_18px_rgba(82,103,138,0.05)]"
     >
       <div className="relative overflow-hidden rounded-[18px]">
         <div className="overflow-hidden">
@@ -1160,7 +1160,7 @@ function FeedScreen({
         {feedSections.map((section) => (
           <section key={section.id} className="space-y-1.5">
             <div className="flex items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#eef4fb] px-3 py-1.5 text-[#6f87ab] shadow-[0_6px_14px_rgba(153,173,203,0.12)]">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#eef4fb] px-3 py-1.5 text-[#6f87ab]">
                 <h2 className="text-[15px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
                   {section.label}
                 </h2>
@@ -1168,7 +1168,7 @@ function FeedScreen({
               </div>
             </div>
 
-            <div className="flex gap-3 overflow-x-auto pb-1">
+            <div className="flex gap-3 overflow-x-auto pb-1 pr-2">
               {section.cards.map((card) => (
                 <div key={card.id} className="w-[168px] shrink-0">
                   <FeedCard card={card} onClick={onSelectCard} />
@@ -1279,7 +1279,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative h-[100dvh] overflow-hidden bg-[radial-gradient(circle_at_top,_#f7faff_0%,_#eef2f8_42%,_#e9edf4_100%)] text-[#1b1d22]">
+    <div className="relative h-[100dvh] overflow-hidden bg-white text-[#1b1d22]">
       {!isTelegram ? (
         <div className="sticky top-0 z-[70] px-3 pt-3">
           <div className="mx-auto max-w-[516px] rounded-[18px] bg-[#1f6feb] px-4 py-3 text-[13px] font-medium text-white shadow-[0_14px_28px_rgba(31,111,235,0.22)]">
