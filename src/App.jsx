@@ -1,10 +1,12 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { animate, motion, useMotionValue } from "framer-motion";
 import {
   AlertTriangle,
   ArrowLeft,
   ArrowUpRight,
   AudioLines,
+  Bookmark,
+  CornerUpRight,
   ChevronRight,
   Check,
   ClipboardList,
@@ -13,6 +15,7 @@ import {
   Plus,
   Search,
   Settings,
+  Share,
   Flower2,
   Film,
   History,
@@ -35,6 +38,8 @@ import {
 } from "lucide-react";
 
 const filters = [
+  { id: "search", label: "", icon: Search },
+  { id: "liked", label: "", icon: Bookmark },
   { id: "all", label: "Все", icon: Check },
   { id: "new", label: "Новинки", icon: Star },
   { id: "popular", label: "Популярное", icon: Zap },
@@ -397,11 +402,11 @@ function useTelegramWebApp() {
 
 function CardBadge({ type }) {
   const styles = {
-    new: "bg-[#23201a] text-[#f4c430]",
-    popular: "bg-[#23201a] text-[#f4c430]",
-    free: "bg-[#f3f0e8] text-[#2a2418]",
-    choice: "bg-[#23201a] text-[#f4c430]",
-    track: "bg-[#23201a] text-[#f4c430]",
+    new: "bg-[#3c8dff] text-white",
+    popular: "bg-[#ffbf1f] text-[#463100]",
+    free: "bg-[#49b8ff] text-white",
+    choice: "bg-[#f4c430] text-[#3b2a00]",
+    track: "bg-[#1f2430] text-white",
   };
 
   const labels = {
@@ -430,7 +435,7 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-0";
+  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[30px]";
   const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-0";
 
   const BalanceDigits = ({ value }) => {
@@ -487,14 +492,14 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           </div>
         </button>
 
-        <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[#1f1d18] bg-[#1f1d18] text-[#f4c430] shadow-sm">
+        <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[rgba(36,31,24,0.18)] bg-white text-[#1f1b15] shadow-[0_6px_16px_rgba(25,20,12,0.08)]">
           <div className="flex items-center gap-1 px-3 py-1.5 text-[14px] font-semibold">
             <BalanceDigits value={balance} />
             <Sparkles className="h-3.5 w-3.5" strokeWidth={2.1} />
           </div>
           <button
             onClick={onOpenBalance}
-            className="flex h-10 w-10 items-center justify-center bg-[#2b7de9] text-white"
+            className="flex h-10 w-10 items-center justify-center bg-[#1f1d18] text-[#f4c430]"
           >
             <Plus className="h-4.5 w-4.5" />
           </button>
@@ -505,11 +510,9 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 }
 
 function PinnedSectionHeader({ children, className = "" }) {
-  const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-
   return (
     <div
-      className={`sticky top-0 z-20 -mx-3 bg-[rgba(246,246,242,0.96)] px-3 pb-0 backdrop-blur-[10px] ${!isTelegramClient ? "-mt-[62px] pt-[18px]" : ""} ${className}`}
+      className={`sticky top-0 z-20 -mx-3 bg-[rgba(246,246,242,0.96)] px-3 pb-0 backdrop-blur-[10px] ${className}`}
     >
       {children}
     </div>
@@ -519,18 +522,6 @@ function PinnedSectionHeader({ children, className = "" }) {
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
     <div className="mt-[-5px] flex items-end gap-4 overflow-x-auto px-2 pb-1 pt-2">
-      <button
-        type="button"
-        className="flex h-[28px] w-[28px] shrink-0 items-center justify-center text-[#1f1b15] transition-opacity hover:opacity-75"
-      >
-        <Search className="h-4 w-4" strokeWidth={2.2} />
-      </button>
-      <button
-        type="button"
-        className="flex h-[28px] w-[28px] shrink-0 items-center justify-center text-[#1f1b15] transition-opacity hover:opacity-75"
-      >
-        <Heart className="h-4 w-4" strokeWidth={2.2} />
-      </button>
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -654,13 +645,25 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const styleGalleryRef = useRef(null);
   const galleryTouchStartRef = useRef({ x: 0, y: 0 });
-  const screenTouchStartRef = useRef({ x: 0, y: 0 });
+  const screenFrameRef = useRef(null);
   const styleGallery = card.gallery?.length ? card.gallery : [card.image];
   const canSlideGallery = styleGallery.length > 1;
+  const [screenHeight, setScreenHeight] = useState(0);
+  const stackY = useMotionValue(0);
   const currentStyleIndex = Math.max(
     0,
     sectionStyles.findIndex((styleCard) => styleCard.id === card.id),
   );
+
+  const previousTrend = sectionStyles[(currentStyleIndex - 1 + sectionStyles.length) % sectionStyles.length] ?? card;
+  const nextTrend = sectionStyles[(currentStyleIndex + 1) % sectionStyles.length] ?? card;
+
+  const syncScreenHeight = () => {
+    const nextHeight = screenFrameRef.current?.clientHeight ?? 0;
+    if (!nextHeight) return;
+    setScreenHeight(nextHeight);
+    stackY.set(-nextHeight);
+  };
 
   const goToStyleSlide = (index, behavior = "smooth") => {
     if (!styleGalleryRef.current) return;
@@ -682,6 +685,12 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
   useEffect(() => {
     setActiveSlide(0);
     requestAnimationFrame(() => goToStyleSlide(0, "auto"));
+  }, [card.id]);
+
+  useLayoutEffect(() => {
+    syncScreenHeight();
+    window.addEventListener("resize", syncScreenHeight);
+    return () => window.removeEventListener("resize", syncScreenHeight);
   }, [card.id]);
 
   const handleGalleryScroll = (event) => {
@@ -714,116 +723,173 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
     }
   };
 
-  const handleScreenTouchStart = (event) => {
-    screenTouchStartRef.current = {
-      x: event.touches[0]?.clientX ?? 0,
-      y: event.touches[0]?.clientY ?? 0,
-    };
+  const handleTrendDragEnd = async (_, info) => {
+    if (!screenHeight) return;
+
+    const threshold = Math.max(90, screenHeight * 0.12);
+
+    if (info.offset.y <= -threshold) {
+      await animate(stackY, -screenHeight * 2, {
+        type: "spring",
+        stiffness: 260,
+        damping: 30,
+      });
+      goToAdjacentTrend(1);
+      return;
+    }
+
+    if (info.offset.y >= threshold) {
+      await animate(stackY, 0, {
+        type: "spring",
+        stiffness: 260,
+        damping: 30,
+      });
+      goToAdjacentTrend(-1);
+      return;
+    }
+
+    animate(stackY, -screenHeight, {
+      type: "spring",
+      stiffness: 320,
+      damping: 34,
+    });
   };
 
-  const handleScreenTouchEnd = (event) => {
-    const touchEnd = event.changedTouches[0];
-    if (!touchEnd) return;
+  const renderTrendPanel = (trend, panelType) => {
+    const trendGallery = trend.gallery?.length ? trend.gallery : [trend.image];
+    const isCurrent = panelType === "current";
+    const usage = getTrendUsage(trend);
 
-    const deltaX = touchEnd.clientX - screenTouchStartRef.current.x;
-    const deltaY = touchEnd.clientY - screenTouchStartRef.current.y;
+    return (
+      <div className="relative h-full w-full overflow-hidden">
+        {isCurrent ? (
+          <div
+            ref={styleGalleryRef}
+            onScroll={handleGalleryScroll}
+            onTouchStart={handleGalleryTouchStart}
+            onTouchEnd={handleGalleryTouchEnd}
+            className={`flex h-full overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${canSlideGallery ? "snap-x snap-mandatory" : ""}`}
+          >
+            {styleGallery.map((image, index) => (
+              <img
+                key={`${trend.id}-${index}`}
+                src={image}
+                alt={`${trend.title} ${index + 1}`}
+                className={`h-full w-full shrink-0 object-cover ${canSlideGallery ? "snap-start" : ""}`}
+              />
+            ))}
+          </div>
+        ) : (
+          <img src={trendGallery[0]} alt={trend.title} className="h-full w-full object-cover" />
+        )}
 
-    if (Math.abs(deltaY) < 60 || Math.abs(deltaY) <= Math.abs(deltaX)) return;
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/82 via-black/18 to-transparent" />
 
-    if (deltaY < 0) {
-      goToAdjacentTrend(1);
-    } else {
-      goToAdjacentTrend(-1);
-    }
+        {trend.badge ? (
+          <div className="absolute left-4 top-5">
+            <CardBadge type={trend.badge} />
+          </div>
+        ) : null}
+
+        <div className="pointer-events-none absolute inset-x-0 top-5 px-5">
+          <div className="text-center text-[23px] font-semibold tracking-[-0.03em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.28)]">
+            {trend.title}
+          </div>
+        </div>
+
+        {isCurrent ? (
+          <>
+            <div className="absolute inset-x-0 bottom-0 px-4 pb-5">
+              <div className="max-w-[78%]">
+                <div className="mt-3 flex items-center gap-2 text-[13px] font-medium text-white/90">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/14 backdrop-blur-sm">
+                    <User className="h-4 w-4" strokeWidth={2.1} />
+                  </span>
+                  <span>{usage} выбрали</span>
+                </div>
+              </div>
+
+              <button
+                onClick={onRepeatTrend}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_18px_34px_rgba(82,183,255,0.24)]"
+              >
+                Повторить тренд
+              </button>
+
+              {styleGallery.length > 1 ? (
+                <div className="mt-4 flex items-center justify-center gap-1.5">
+                  {styleGallery.map((_, index) => (
+                    <span
+                      key={`${trend.id}-dot-${index}`}
+                      className={`h-1.5 rounded-full transition-all ${
+                        index === activeSlide ? "w-5 bg-white" : "w-1.5 bg-white/55"
+                      }`}
+                    />
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
+            <div className="absolute right-4 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-6 text-white">
+              <button
+                onClick={() => setIsLiked((prev) => !prev)}
+                className="flex flex-col items-center gap-2"
+              >
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
+                  <Heart className="h-9 w-9" strokeWidth={2.1} fill={isLiked ? "currentColor" : "none"} />
+                </span>
+                <span className="text-[14px] font-semibold leading-none">{trend.likes}</span>
+              </button>
+              <button className="flex flex-col items-center gap-2">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
+                  <Send className="h-9 w-9" strokeWidth={2.1} />
+                </span>
+                <span className="text-[14px] font-semibold leading-none">
+                  {Math.max(12, Math.round(trend.likes / 3))}
+                </span>
+              </button>
+              <button className="flex flex-col items-center gap-2">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
+                  <Bookmark className="h-9 w-9" strokeWidth={2.1} />
+                </span>
+                <span className="text-[14px] font-semibold leading-none">
+                  {Math.max(5, Math.round(trend.likes / 5))}
+                </span>
+              </button>
+            </div>
+          </>
+        ) : null}
+      </div>
+    );
   };
 
   return (
     <div
+      ref={screenFrameRef}
       className="-mx-3 overflow-hidden bg-black"
       style={{ height: "var(--app-height, 100dvh)" }}
-      onTouchStart={handleScreenTouchStart}
-      onTouchEnd={handleScreenTouchEnd}
     >
       <div className="relative h-full w-full">
-        <div
-          ref={styleGalleryRef}
-          onScroll={handleGalleryScroll}
-          onTouchStart={handleGalleryTouchStart}
-          onTouchEnd={handleGalleryTouchEnd}
-          className={`flex h-full overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${canSlideGallery ? "snap-x snap-mandatory" : ""}`}
+        <motion.div
+          drag="y"
+          dragDirectionLock
+          dragElastic={0.12}
+          dragMomentum={false}
+          dragConstraints={{ top: -screenHeight * 2, bottom: 0 }}
+          onDragEnd={handleTrendDragEnd}
+          style={{ y: stackY }}
+          className="absolute inset-0"
         >
-          {styleGallery.map((image, index) => (
-            <img
-              key={`${card.id}-${index}`}
-              src={image}
-              alt={`${card.title} ${index + 1}`}
-              className={`h-full w-full shrink-0 object-cover ${canSlideGallery ? "snap-start" : ""}`}
-            />
+          {[previousTrend, card, nextTrend].map((trend, index) => (
+            <div
+              key={`${trend.id}-${index}`}
+              className="relative w-full"
+              style={{ height: screenHeight || undefined }}
+            >
+              {renderTrendPanel(trend, index === 1 ? "current" : "preview")}
+            </div>
           ))}
-        </div>
-
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/82 via-black/18 to-transparent" />
-
-        {card.badge ? (
-          <div className="absolute left-4 top-5">
-            <CardBadge type={card.badge} />
-          </div>
-        ) : null}
-
-        <div className="absolute inset-x-0 bottom-0 px-4 pb-5">
-          <div className="max-w-[78%]">
-            <div className="text-[22px] font-semibold tracking-[-0.03em] text-white">
-              {card.title}
-            </div>
-            <div className="mt-2 text-[14px] leading-6 text-white/86">{card.description}</div>
-            <div className="mt-3 flex items-center gap-2 text-[13px] font-medium text-white/90">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/14 backdrop-blur-sm">
-                <User className="h-4 w-4" strokeWidth={2.1} />
-              </span>
-              <span>{getTrendUsage(card)} выбрали</span>
-            </div>
-          </div>
-
-          {styleGallery.length > 1 ? (
-            <div className="mt-5 flex items-center justify-center gap-1.5">
-              {styleGallery.map((_, index) => (
-                <span
-                  key={`${card.id}-dot-${index}`}
-                  className={`h-1.5 rounded-full transition-all ${
-                    index === activeSlide ? "w-5 bg-white" : "w-1.5 bg-white/55"
-                  }`}
-                />
-              ))}
-            </div>
-          ) : null}
-
-          <button
-            onClick={onRepeatTrend}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_18px_34px_rgba(43,125,233,0.24)]"
-          >
-            Повторить тренд
-          </button>
-        </div>
-
-        <div className="absolute right-4 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-4 text-white">
-          <button
-            onClick={() => setIsLiked((prev) => !prev)}
-            className="flex flex-col items-center gap-1.5"
-          >
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
-              <Heart className="h-5 w-5" strokeWidth={2.2} fill={isLiked ? "currentColor" : "none"} />
-            </span>
-            <span className="text-[12px] font-semibold leading-none">{card.likes}</span>
-          </button>
-          <button className="flex flex-col items-center gap-1.5">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
-              <Share2 className="h-5 w-5" strokeWidth={2.2} />
-            </span>
-            <span className="text-[12px] font-semibold leading-none">
-              {Math.max(12, Math.round(card.likes / 3))}
-            </span>
-          </button>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -872,9 +938,6 @@ function CreateTrendScreen({
           <div className="text-[24px] font-semibold tracking-[-0.03em] text-[#1e1b16]">
             {card.title}
           </div>
-          <div className="mt-2 text-[14px] leading-6 text-[#6f6a61]">
-            Подготовь кадр для генерации и запусти повтор тренда в пару касаний.
-          </div>
         </div>
 
         <div>
@@ -901,9 +964,9 @@ function CreateTrendScreen({
                 initial={{ scaleX: 0, opacity: 0 }}
                 animate={{ scaleX: isUploading ? 1 : 0, opacity: isUploading ? 1 : 0 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
-                className="absolute inset-0 z-0 origin-left bg-[#2b7de9]/12"
+                className="absolute inset-0 z-0 origin-left bg-[#52b7ff]/12"
               />
-              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#2b7de9] text-white shadow-[0_10px_20px_rgba(43,125,233,0.18)]">
+              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#52b7ff] text-white shadow-[0_10px_20px_rgba(82,183,255,0.18)]">
                 {isUploading ? (
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -936,7 +999,7 @@ function CreateTrendScreen({
                   onClick={() => setAspectRatio(value)}
                   className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                     aspectRatio === value
-                      ? "bg-[#2b7de9] text-white"
+                      ? "bg-[#52b7ff] text-white"
                       : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                   }`}
                 >
@@ -952,15 +1015,15 @@ function CreateTrendScreen({
             </div>
             <div className="mt-3 flex gap-2">
               {[
-                { id: "excellent", label: "Отлично" },
-                { id: "super", label: "Супер" },
+                { id: "excellent", label: "Обычное" },
+                { id: "super", label: "Супер x2" },
               ].map((option) => (
                 <button
                   key={option.id}
                   onClick={() => setQuality(option.id)}
                   className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                     quality === option.id
-                      ? "bg-[#2b7de9] text-white"
+                      ? "bg-[#52b7ff] text-white"
                       : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                   }`}
                 >
@@ -982,7 +1045,7 @@ function CreateTrendScreen({
                     onClick={() => setDuration(value)}
                     className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                       duration === value
-                        ? "bg-[#2b7de9] text-white"
+                        ? "bg-[#52b7ff] text-white"
                         : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                     }`}
                   >
@@ -1001,9 +1064,9 @@ function CreateTrendScreen({
               hasUploadedPhoto: hasPhoto,
             })
           }
-          className="flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_16px_32px_rgba(43,125,233,0.24)]"
+          className="flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_16px_32px_rgba(82,183,255,0.24)]"
         >
-          <span>Создать за 1</span>
+          <span>Создать за 10</span>
           <Sparkles className="h-5 w-5" strokeWidth={2.1} />
         </button>
       </div>
@@ -1025,7 +1088,7 @@ function TaskCard({ task }) {
 
         <div className="flex items-end justify-between gap-3">
           <div className="max-w-[72%] text-[13px] leading-5 text-[#6f6a61]">{task.description}</div>
-          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#226bca]">
+          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#52b7ff] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#3ea7f2]">
             <Play className="h-4 w-4" strokeWidth={2.2} />
             Начать
           </button>
@@ -1172,7 +1235,7 @@ function ShopScreen({
         </div>
 
         <div className="pt-2">
-          <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#5bc2ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(43,125,233,0.22)]">
+          <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(82,183,255,0.22)]">
             Перейти к оплате
           </button>
         </div>
@@ -1190,7 +1253,7 @@ function ShopScreen({
             </div>
             <button
               onClick={onActivateDiscount}
-              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_16px_34px_rgba(43,125,233,0.22)]"
+              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_16px_34px_rgba(82,183,255,0.22)]"
             >
               Активировать скидку
             </button>
@@ -1235,7 +1298,10 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                         : "font-normal text-[#7a7366]"
                     }`}
                   >
-                    <Icon className="h-4 w-4" strokeWidth={2.2} />
+                    <Icon
+                      className={`stroke-current ${item.id === "settings" ? "h-[18px] w-[18px] translate-y-[1px]" : "h-4 w-4"}`}
+                      strokeWidth={2.2}
+                    />
                     {item.label ? <span>{item.label}</span> : null}
                     {profileTab === item.id ? (
                       <motion.span
@@ -1299,7 +1365,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
               За каждого нового друга можно получать бонусные фотографии и ускорять генерацию.
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#226bca]">
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#52b7ff] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#3ea7f2]">
                 <Send className="h-4 w-4" strokeWidth={2.2} />
                 Отправить
               </button>
@@ -1398,7 +1464,7 @@ function LoadingScreen({
                 initial={{ width: "12%" }}
                 animate={{ width: ["12%", "48%", "72%", "87%"] }}
                 transition={{ duration: 2.4, ease: "easeInOut" }}
-                className="h-full rounded-full bg-[linear-gradient(90deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)]"
+                className="h-full rounded-full bg-[linear-gradient(90deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)]"
               />
             </div>
           </div>
@@ -1497,7 +1563,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
       </div>
 
       <div className="space-y-2">
-        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[15px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.22)]">
+        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[15px] font-semibold text-white shadow-[0_14px_28px_rgba(82,183,255,0.22)]">
           <Plus className="h-5 w-5" strokeWidth={2.2} />
           Опубликовать в Сторис
         </button>
@@ -1538,7 +1604,7 @@ function ErrorScreen({ onRetry, onOpenBalance, onOpenProfile, balance, isBonusCo
 
       <button
         onClick={onRetry}
-        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.22)]"
+        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(82,183,255,0.22)]"
       >
         <Wand2 className="h-5 w-5" strokeWidth={2.2} />
         Попробовать еще раз
@@ -1645,7 +1711,7 @@ function FeedScreen({
         <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </PinnedSectionHeader>
 
-      <div className="-mr-3 space-y-[0px] bg-white pb-3 pt-[18px]">
+      <div className="-mr-3 space-y-[0px] bg-white pb-3 pt-[9px]">
         {feedSections.map((section) => (
           <section key={section.id} className="space-y-0.5 pt-5">
             <div className="flex items-center justify-between gap-3 px-2">
@@ -1702,7 +1768,8 @@ export default function App() {
   const visibleCards = useMemo(() => {
     let filteredCards = cards;
 
-    if (activeFilter === "popular") filteredCards = cards.filter((card) => card.badge === "popular");
+    if (activeFilter === "liked") filteredCards = cards.filter((card) => card.badge === "choice");
+    else if (activeFilter === "popular") filteredCards = cards.filter((card) => card.badge === "popular");
     else if (activeFilter === "new") filteredCards = cards.filter((card) => card.badge === "new");
     else if (activeFilter === "photo")
       filteredCards = cards.filter((card) => !card.categories?.includes("video"));
@@ -2044,9 +2111,9 @@ export default function App() {
                   <div className="text-[13px] font-medium text-[#7a7267]">Стартовый бонус</div>
                   <div className="mt-1 text-[22px] font-semibold tracking-[-0.03em] text-[#1f1b15]">2 фотографии</div>
                 </div>
-                <div className="flex h-12 min-w-[92px] items-center justify-center gap-2 rounded-full bg-[#1f1d18] px-4 text-[#f4c430]">
+                <div className="flex h-12 min-w-[92px] items-center justify-center gap-2 rounded-full border border-[rgba(219,219,212,0.92)] bg-[rgba(246,246,242,0.96)] px-4 text-[#1f1b15]">
                   <span className="text-[14px] font-semibold">20</span>
-                  <Sparkles className="h-4.5 w-4.5" strokeWidth={2.1} />
+                  <Sparkles className="h-4.5 w-4.5 text-[#dba400]" strokeWidth={2.1} />
                 </div>
               </div>
             </div>
@@ -2054,7 +2121,7 @@ export default function App() {
             <button
               onClick={claimWelcomeBonus}
               disabled={isBonusClaimClosing || isBonusCounting}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-3.5 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.22)]"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-3.5 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(82,183,255,0.22)]"
             >
               <span>Забрать 20</span>
               <Sparkles className="h-5 w-5" strokeWidth={2.1} />
