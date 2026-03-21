@@ -110,7 +110,7 @@ const products = [
     amount: 250,
     price: "1 590 ₽",
     badge: "Выгодно",
-    badgeColor: "bg-[#2fb8ff] text-white",
+    badgeColor: "bg-[#f4c430] text-[#3b2a00]",
   },
   {
     id: 5,
@@ -396,15 +396,15 @@ function useTelegramWebApp() {
 
 function CardBadge({ type }) {
   const styles = {
-    new: "bg-[#48c864] text-white",
+    new: "bg-[#3c8dff] text-white",
     popular: "bg-[#ffbf1f] text-[#463100]",
-    free: "bg-[#3cc95a] text-white",
-    choice: "bg-[#2b7de9] text-white",
+    free: "bg-[#49b8ff] text-white",
+    choice: "bg-[#f4c430] text-[#3b2a00]",
     track: "bg-[#1f2430] text-white",
   };
 
   const labels = {
-    new: "Новое",
+    new: "Новинка",
     popular: "Вирусное",
     free: "Бесплатно",
     choice: "Выбор NANA",
@@ -416,7 +416,7 @@ function CardBadge({ type }) {
       className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[12px] font-semibold shadow-[0_8px_16px_rgba(15,23,42,0.12)] ${styles[type] ?? "bg-white text-[#234677]"}`}
     >
       <span className="flex items-center gap-1">
-        {type === "new" ? <Flower2 className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
+        {type === "new" ? <Star className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
         {type === "popular" ? <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
         {type === "free" ? <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
         {type === "choice" ? <Check className="h-3.5 w-3.5" strokeWidth={2.6} /> : null}
@@ -429,7 +429,7 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[30px]";
+  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-0";
   const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-0";
 
   const BalanceDigits = ({ value }) => {
@@ -486,14 +486,14 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           </div>
         </button>
 
-        <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[#d7e3f8] bg-[#f7faff] text-[#2e5fa7] shadow-sm">
+        <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[#ead9a4] bg-[#fff9e8] text-[#7a5a00] shadow-sm">
           <div className="flex items-center gap-1 px-3 py-1.5 text-[14px] font-semibold">
             <BalanceDigits value={balance} />
             <Sparkles className="h-3.5 w-3.5" strokeWidth={2.1} />
           </div>
           <button
             onClick={onOpenBalance}
-            className="flex h-10 w-10 items-center justify-center bg-[#2b7de9] text-white"
+            className="flex h-10 w-10 items-center justify-center bg-[#f4c430] text-[#3b2a00]"
           >
             <Plus className="h-4.5 w-4.5" />
           </button>
@@ -504,8 +504,12 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 }
 
 function PinnedSectionHeader({ children, className = "" }) {
+  const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
+
   return (
-    <div className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-0 backdrop-blur-[10px] ${className}`}>
+    <div
+      className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-0 backdrop-blur-[10px] ${!isTelegramClient ? "-mt-[30px] pt-[30px]" : ""} ${className}`}
+    >
       {children}
     </div>
   );
@@ -514,6 +518,18 @@ function PinnedSectionHeader({ children, className = "" }) {
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
     <div className="mt-[-5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2">
+      <button
+        type="button"
+        className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
+      >
+        <Search className="h-4 w-4" strokeWidth={2.2} />
+      </button>
+      <button
+        type="button"
+        className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
+      >
+        <Heart className="h-4 w-4" strokeWidth={2.2} />
+      </button>
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -696,15 +712,15 @@ function StyleScreen({
 
   const UploadTile = ({ hasImage, isBusy, onUpload, onReset, label }) =>
     hasImage ? (
-      <div className="relative h-[168px] overflow-hidden rounded-[20px] border border-[#d9e5f5] bg-[#f4f9ff]">
+      <div className="relative h-[168px] overflow-hidden rounded-[20px] border border-[#ead9a4] bg-[#fff9e8]">
         <img src={uploadedPreview} alt="uploaded preview" className="h-full w-full object-cover" />
-        <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-[#2b7de9] px-3 py-1.5 text-white shadow-[0_10px_20px_rgba(43,125,233,0.22)]">
+        <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-[#f4c430] px-3 py-1.5 text-[#3b2a00] shadow-[0_10px_20px_rgba(244,196,48,0.22)]">
           <Check className="h-4 w-4" strokeWidth={2.4} />
           <span className="text-[13px] font-semibold">Загружено</span>
         </div>
         <button
           onClick={onReset}
-          className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[12px] font-semibold text-[#2b7de9] backdrop-blur-sm"
+          className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[12px] font-semibold text-[#7a5a00] backdrop-blur-sm"
         >
           Заменить
         </button>
@@ -715,15 +731,15 @@ function StyleScreen({
     ) : (
       <button
         onClick={isBusy ? undefined : onUpload}
-        className="relative flex h-[168px] w-full flex-col items-center justify-center overflow-hidden rounded-[20px] border-2 border-dashed border-[#d9e5f5] bg-[#f4f9ff] px-4 py-4 text-center transition hover:bg-[#f4f9ff]"
+        className="relative flex h-[168px] w-full flex-col items-center justify-center overflow-hidden rounded-[20px] border-2 border-dashed border-[#ead9a4] bg-[#fff9e8] px-4 py-4 text-center transition hover:bg-[#fff9e8]"
       >
         <motion.div
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: isBusy ? 1 : 0, opacity: isBusy ? 1 : 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="absolute inset-0 z-0 origin-left bg-[#2b7de9]/20"
+          className="absolute inset-0 z-0 origin-left bg-[#f4c430]/20"
         />
-        <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#2b7de9] text-white shadow-[0_10px_20px_rgba(43,125,233,0.18)]">
+        <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#f4c430] text-[#3b2a00] shadow-[0_10px_20px_rgba(244,196,48,0.18)]">
           {isBusy ? (
             <motion.div
               animate={{ rotate: 360 }}
@@ -805,7 +821,7 @@ function StyleScreen({
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsLiked((prev) => !prev)}
             className={`absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-sm transition ${
-              isLiked ? "bg-[#2b7de9]/85 text-white" : "bg-black/15 text-white"
+              isLiked ? "bg-[#f4c430]/90 text-[#3b2a00]" : "bg-black/15 text-white"
             }`}
           >
             <motion.div
@@ -885,7 +901,7 @@ function StyleScreen({
               hasUploadedPhoto: isPairStyle ? hasPhoto || hasSecondPhoto : hasPhoto,
             })
           }
-          className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.28)] transition hover:bg-[#246fd1]"
+          className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#f4c430] px-5 py-4 text-[16px] font-semibold text-[#3b2a00] shadow-[0_14px_28px_rgba(244,196,48,0.28)] transition hover:bg-[#e4b315]"
         >
           <span>Создать за 1</span>
           <Sparkles className="h-5 w-5" strokeWidth={2.1} />
@@ -899,9 +915,9 @@ function TaskCard({ task }) {
   return (
     <div className="rounded-[22px] border border-[#dce4f2] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
       <div className="space-y-3">
-        <div className="flex items-center justify-between gap-3 rounded-[14px] bg-[#f4f9ff] px-3 py-2">
+        <div className="flex items-center justify-between gap-3 rounded-[14px] bg-[#fff9e8] px-3 py-2">
           <div className="min-w-0 text-[16px] font-semibold text-[#234677]">{task.title}</div>
-          <div className="flex shrink-0 items-center gap-1 rounded-full bg-[#eef5ff] px-3 py-1.5 text-[13px] font-semibold text-[#2b7de9]">
+          <div className="flex shrink-0 items-center gap-1 rounded-full bg-[#fff4c9] px-3 py-1.5 text-[13px] font-semibold text-[#7a5a00]">
             <span>+{task.reward}</span>
             <Sparkles className="h-4 w-4" strokeWidth={2.1} />
           </div>
@@ -909,7 +925,7 @@ function TaskCard({ task }) {
 
         <div className="flex items-end justify-between gap-3">
           <div className="max-w-[72%] text-[13px] leading-5 text-[#7d8ca5]">{task.description}</div>
-          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#246fd1]">
+          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#3cc95a] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#31b24d]">
             <Play className="h-4 w-4" strokeWidth={2.2} />
             Начать
           </button>
@@ -930,9 +946,9 @@ function ProductCard({ product, isSelected, onSelect }) {
         isFeatured
           ? "border-[rgba(184,212,247,0.9)] bg-[linear-gradient(180deg,#f0f7ff_0%,#e4f0ff_100%)]"
           : "border-[rgba(225,232,242,0.9)] bg-[rgba(248,250,253,0.96)]"
-      } ${isSelected ? "ring-2 ring-[#2b7de9] ring-offset-2 ring-offset-transparent" : ""}`}
+      } ${isSelected ? "ring-2 ring-[#f4c430] ring-offset-2 ring-offset-transparent" : ""}`}
     >
-      <div className={`relative px-5 py-[10px] ${isFeatured ? "text-[#183b6d]" : "text-[#1d2333]"}`}>
+      <div className={`relative px-5 py-[10px] ${isFeatured ? "text-[#7a5a00]" : "text-[#1d2333]"}`}>
         {product.badge ? (
           <div
             className={`absolute right-3 top-1 rounded-[12px] px-[10px] py-[5px] text-[10px] font-semibold leading-none shadow-[0_8px_18px_rgba(15,23,42,0.08)] ${product.badgeColor}`}
@@ -943,10 +959,10 @@ function ProductCard({ product, isSelected, onSelect }) {
 
         <div className="flex items-end justify-between gap-4">
           <div className="min-w-0 pr-3">
-            <div className={`text-[18px] font-medium ${isFeatured ? "text-[#5b6f92]" : "text-[#767f93]"}`}>
+            <div className={`text-[18px] font-medium ${isFeatured ? "text-[#9b7a16]" : "text-[#767f93]"}`}>
               {product.subtitle}
             </div>
-            <div className={`mt-1 text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
+            <div className={`mt-1 text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#7a5a00]" : "text-[#161c2c]"}`}>
               {product.amount} фотографий
             </div>
           </div>
@@ -956,7 +972,7 @@ function ProductCard({ product, isSelected, onSelect }) {
                 {product.price}
               </div>
             ) : null}
-            <div className={`text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#183b6d]" : "text-[#161c2c]"}`}>
+            <div className={`text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#7a5a00]" : "text-[#161c2c]"}`}>
               {product.discountedPrice ?? product.price}
             </div>
           </div>
@@ -1047,7 +1063,7 @@ function ShopScreen({
         <div className="space-y-3 px-2 pt-1">
           {shopBenefits.map((benefit) => (
             <div key={benefit} className="flex items-start gap-3 text-[16px] font-medium leading-6 text-[#667389]">
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#25b4ff] text-white shadow-[0_8px_18px_rgba(37,180,255,0.2)]">
+              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f4c430] text-[#3b2a00] shadow-[0_8px_18px_rgba(244,196,48,0.2)]">
                 <Check className="h-4 w-4" strokeWidth={3} />
               </div>
               <div>{benefit}</div>
@@ -1056,7 +1072,7 @@ function ShopScreen({
         </div>
 
         <div className="pt-2">
-          <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#2fb7ff_0%,#1d9fff_45%,#0b7cff_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(27,145,255,0.22)]">
+          <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#5bc2ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(43,125,233,0.22)]">
             Перейти к оплате
           </button>
         </div>
@@ -1074,7 +1090,7 @@ function ShopScreen({
             </div>
             <button
               onClick={onActivateDiscount}
-              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#39beff_0%,#199dff_55%,#0c7eff_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_16px_34px_rgba(27,145,255,0.22)]"
+              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#ffe27a_0%,#f4c430_55%,#dba400_100%)] px-5 py-4 text-[17px] font-semibold text-[#3b2a00] shadow-[0_16px_34px_rgba(244,196,48,0.22)]"
             >
               Активировать скидку
             </button>
@@ -1157,14 +1173,14 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
       ) : profileTab === "bonus" ? (
         <div className="space-y-3">
           <div className="rounded-[22px] border border-[#dce4f2] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
-            <div className="flex items-center justify-between gap-3 rounded-[16px] bg-[#f4f9ff] px-4 py-3">
+            <div className="flex items-center justify-between gap-3 rounded-[16px] bg-[#fff9e8] px-4 py-3">
               <div>
                 <div className="text-[15px] font-semibold text-[#234677]">Ежедневный бонус</div>
                 <div className="mt-1 text-[13px] leading-5 text-[#7d8ca5]">
                   Заходи каждый день и получай дополнительные фотографии на баланс.
                 </div>
               </div>
-              <div className="flex h-11 min-w-[88px] items-center justify-center gap-2 rounded-full bg-[#eef5ff] px-4 text-[#2b7de9]">
+              <div className="flex h-11 min-w-[88px] items-center justify-center gap-2 rounded-full bg-[#fff4c9] px-4 text-[#7a5a00]">
                 <span className="text-[14px] font-semibold">+5</span>
                 <Sparkles className="h-4 w-4" strokeWidth={2.1} />
               </div>
@@ -1177,11 +1193,11 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
               За каждого нового друга можно получать бонусные фотографии и ускорять генерацию.
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#246fd1]">
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#3cc95a] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#31b24d]">
                 <Send className="h-4 w-4" strokeWidth={2.2} />
                 Отправить
               </button>
-              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#eef5ff] px-4 py-3 text-[14px] font-semibold text-[#2b7de9] transition hover:bg-[#e1ecff]">
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#fff4c9] px-4 py-3 text-[14px] font-semibold text-[#7a5a00] transition hover:bg-[#ffeaa0]">
                 <Copy className="h-4 w-4" strokeWidth={2.2} />
                 Скопировать
               </button>
@@ -1200,7 +1216,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                 alt={card.title}
                 className="aspect-[0.92] w-full object-cover"
               />
-              <button className="absolute bottom-3 right-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#2b7de9] text-white shadow-[0_10px_22px_rgba(43,125,233,0.28)]">
+              <button className="absolute bottom-3 right-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#f4c430] text-[#3b2a00] shadow-[0_10px_22px_rgba(244,196,48,0.28)]">
                 <Download className="h-6 w-6" strokeWidth={2.2} />
               </button>
             </div>
@@ -1263,7 +1279,7 @@ function LoadingScreen({
       <div className="rounded-[22px] bg-[#f8fbff] px-4 pb-4 pt-4 ring-1 ring-[#e3ebf7]">
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
-            <Sparkles className="h-5 w-5 text-[#2b7de9]" strokeWidth={2.2} />
+            <Sparkles className="h-5 w-5 text-[#dba400]" strokeWidth={2.2} />
             <span>Создание фото</span>
           </div>
 
@@ -1276,7 +1292,7 @@ function LoadingScreen({
                 initial={{ width: "12%" }}
                 animate={{ width: ["12%", "48%", "72%", "87%"] }}
                 transition={{ duration: 2.4, ease: "easeInOut" }}
-                className="h-full rounded-full bg-[linear-gradient(90deg,#5bc2ff_0%,#2b7de9_100%)]"
+                className="h-full rounded-full bg-[linear-gradient(90deg,#ffe27a_0%,#f4c430_55%,#dba400_100%)]"
               />
             </div>
           </div>
@@ -1295,7 +1311,7 @@ function LoadingScreen({
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(30,64,175,0.10)_0%,rgba(43,125,233,0.24)_100%)]" />
 
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-[#2b7de9] shadow-[0_12px_28px_rgba(43,125,233,0.16)] backdrop-blur-sm">
+            <div className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-[#7a5a00] shadow-[0_12px_28px_rgba(244,196,48,0.16)] backdrop-blur-sm">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
@@ -1344,7 +1360,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
         <div className="relative overflow-hidden rounded-[24px]">
           <img src={card.image} alt={card.title} className="aspect-[1.08] w-full object-cover" />
 
-          <button className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#2b7de9] px-4 py-3 text-white shadow-[0_12px_24px_rgba(43,125,233,0.24)]">
+          <button className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#f4c430] px-4 py-3 text-[#3b2a00] shadow-[0_12px_24px_rgba(244,196,48,0.24)]">
             <Download className="h-5 w-5" strokeWidth={2.2} />
             <span className="text-[13px] font-semibold">Скачать</span>
           </button>
@@ -1379,7 +1395,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
           <Plus className="h-5 w-5" strokeWidth={2.2} />
           Опубликовать в Сторис
         </button>
-        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[15px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]">
+        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#f4c430] px-5 py-4 text-[15px] font-semibold text-[#3b2a00] shadow-[0_14px_28px_rgba(244,196,48,0.24)]">
           <Send className="h-5 w-5" strokeWidth={2.2} />
           Отправить в чат
         </button>
@@ -1416,7 +1432,7 @@ function ErrorScreen({ onRetry, onOpenBalance, onOpenProfile, balance, isBonusCo
 
       <button
         onClick={onRetry}
-        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]"
+        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#f4c430] px-5 py-4 text-[16px] font-semibold text-[#3b2a00] shadow-[0_14px_28px_rgba(244,196,48,0.24)]"
       >
         <Wand2 className="h-5 w-5" strokeWidth={2.2} />
         Попробовать еще раз
@@ -1899,7 +1915,7 @@ export default function App() {
           >
             <div className="mt-1 text-center">
               <div className="flex items-center justify-center gap-2 text-[24px] font-semibold tracking-[-0.03em] text-[#234677]">
-                <Gift className="h-6 w-6 text-[#2b7de9]" strokeWidth={2.1} />
+                <Gift className="h-6 w-6 text-[#dba400]" strokeWidth={2.1} />
                 <span>Подарок</span>
               </div>
             </div>
@@ -1910,7 +1926,7 @@ export default function App() {
                   <div className="text-[13px] font-medium text-[#7d8ca5]">Стартовый бонус</div>
                   <div className="mt-1 text-[22px] font-semibold tracking-[-0.03em] text-[#234677]">2 фотографии</div>
                 </div>
-                <div className="flex h-12 min-w-[92px] items-center justify-center gap-2 rounded-full bg-[#eef5ff] px-4 text-[#2b7de9]">
+                <div className="flex h-12 min-w-[92px] items-center justify-center gap-2 rounded-full bg-[#fff4c9] px-4 text-[#7a5a00]">
                   <span className="text-[14px] font-semibold">20</span>
                   <Sparkles className="h-4.5 w-4.5" strokeWidth={2.1} />
                 </div>
@@ -1920,7 +1936,7 @@ export default function App() {
             <button
               onClick={claimWelcomeBonus}
               disabled={isBonusClaimClosing || isBonusCounting}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#2b7de9] px-5 py-3.5 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.24)]"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#f4c430] px-5 py-3.5 text-[16px] font-semibold text-[#3b2a00] shadow-[0_14px_28px_rgba(244,196,48,0.24)]"
             >
               <span>Забрать 20</span>
               <Sparkles className="h-5 w-5" strokeWidth={2.1} />
