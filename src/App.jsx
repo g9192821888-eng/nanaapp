@@ -102,7 +102,7 @@ const products = [
     amount: 100,
     price: "990 ₽",
     badge: "Популярный",
-    badgeColor: "bg-[#53d11f] text-white",
+    badgeColor: "bg-[#1f1d18] text-[#f4c430]",
     featured: true,
   },
   {
@@ -111,7 +111,7 @@ const products = [
     amount: 250,
     price: "1 590 ₽",
     badge: "Выгодно",
-    badgeColor: "bg-[#f4c430] text-[#3b2a00]",
+    badgeColor: "bg-[#1f1d18] text-[#f4c430]",
   },
   {
     id: 5,
@@ -119,7 +119,7 @@ const products = [
     amount: 500,
     price: "2 790 ₽",
     badge: "Лучший",
-    badgeColor: "bg-[#ffbf1f] text-white",
+    badgeColor: "bg-[#1f1d18] text-[#f4c430]",
   },
 ];
 
@@ -397,11 +397,11 @@ function useTelegramWebApp() {
 
 function CardBadge({ type }) {
   const styles = {
-    new: "bg-[#3c8dff] text-white",
-    popular: "bg-[#ffbf1f] text-[#463100]",
-    free: "bg-[#49b8ff] text-white",
-    choice: "bg-[#f4c430] text-[#3b2a00]",
-    track: "bg-[#1f2430] text-white",
+    new: "bg-[#23201a] text-[#f4c430]",
+    popular: "bg-[#23201a] text-[#f4c430]",
+    free: "bg-[#f3f0e8] text-[#2a2418]",
+    choice: "bg-[#23201a] text-[#f4c430]",
+    track: "bg-[#23201a] text-[#f4c430]",
   };
 
   const labels = {
@@ -414,7 +414,7 @@ function CardBadge({ type }) {
 
   return (
     <div
-      className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[12px] font-semibold shadow-[0_8px_16px_rgba(15,23,42,0.12)] ${styles[type] ?? "bg-white text-[#234677]"}`}
+      className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[12px] font-semibold shadow-[0_8px_16px_rgba(15,23,42,0.12)] ${styles[type] ?? "bg-white text-[#1f1b15]"}`}
     >
       <span className="flex items-center gap-1">
         {type === "new" ? <Star className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
@@ -430,7 +430,7 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[30px]";
+  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-0";
   const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-0";
 
   const BalanceDigits = ({ value }) => {
@@ -487,14 +487,14 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           </div>
         </button>
 
-        <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[#ead9a4] bg-[#fff9e8] text-[#7a5a00] shadow-sm">
+        <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[#1f1d18] bg-[#1f1d18] text-[#f4c430] shadow-sm">
           <div className="flex items-center gap-1 px-3 py-1.5 text-[14px] font-semibold">
             <BalanceDigits value={balance} />
             <Sparkles className="h-3.5 w-3.5" strokeWidth={2.1} />
           </div>
           <button
             onClick={onOpenBalance}
-            className="flex h-10 w-10 items-center justify-center bg-[#f4c430] text-[#3b2a00]"
+            className="flex h-10 w-10 items-center justify-center bg-[#2b7de9] text-white"
           >
             <Plus className="h-4.5 w-4.5" />
           </button>
@@ -509,7 +509,7 @@ function PinnedSectionHeader({ children, className = "" }) {
 
   return (
     <div
-      className={`sticky top-0 z-20 -mx-3 bg-[rgba(246,246,242,0.96)] px-3 pb-0 backdrop-blur-[10px] ${!isTelegramClient ? "" : ""} ${className}`}
+      className={`sticky top-0 z-20 -mx-3 bg-[rgba(246,246,242,0.96)] px-3 pb-0 backdrop-blur-[10px] ${!isTelegramClient ? "-mt-[62px] pt-[18px]" : ""} ${className}`}
     >
       {children}
     </div>
@@ -518,16 +518,16 @@ function PinnedSectionHeader({ children, className = "" }) {
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-[-5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(246,246,242,0.96)] px-2 py-2">
+    <div className="mt-[-5px] flex items-end gap-4 overflow-x-auto px-2 pb-1 pt-2">
       <button
         type="button"
-        className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
+        className="flex h-[28px] w-[28px] shrink-0 items-center justify-center text-[#1f1b15] transition-opacity hover:opacity-75"
       >
         <Search className="h-4 w-4" strokeWidth={2.2} />
       </button>
       <button
         type="button"
-        className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
+        className="flex h-[28px] w-[28px] shrink-0 items-center justify-center text-[#1f1b15] transition-opacity hover:opacity-75"
       >
         <Heart className="h-4 w-4" strokeWidth={2.2} />
       </button>
@@ -538,14 +538,18 @@ function FilterBar({ activeFilter, setActiveFilter }) {
           <button
             key={filter.id}
             onClick={() => setActiveFilter(filter.id)}
-            className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
-              isActive
-                ? "border border-[#3b2a00] bg-[#3b2a00] text-[#f4c430]"
-                : "border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
+            className={`relative flex shrink-0 items-center gap-1.5 pb-2 text-[15px] transition ${
+              isActive ? "font-semibold text-[#16130f]" : "font-normal text-[#7a7366]"
             }`}
           >
-            <Icon className="h-4 w-4" strokeWidth={2.2} fill={filter.id === "liked" ? "currentColor" : "none"} />
+            <Icon className="h-4 w-4" strokeWidth={2.2} />
             {filter.label ? <span>{filter.label}</span> : null}
+            {isActive ? (
+              <motion.span
+                layoutId="header-filter-underline"
+                className="absolute bottom-0 left-0 h-[2.5px] w-full rounded-full bg-[#16130f]"
+              />
+            ) : null}
           </button>
         );
       })}
@@ -766,37 +770,6 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
           </div>
         ) : null}
 
-        {styleGallery.length > 1 ? (
-          <div className="absolute left-4 top-16 flex items-center gap-1.5">
-            {styleGallery.map((_, index) => (
-              <span
-                key={`${card.id}-dot-${index}`}
-                className={`h-1.5 rounded-full transition-all ${
-                  index === activeSlide ? "w-5 bg-white" : "w-1.5 bg-white/55"
-                }`}
-              />
-            ))}
-          </div>
-        ) : null}
-
-        <div className="absolute bottom-24 right-4 flex flex-col items-center gap-4 text-white">
-          <button
-            onClick={() => setIsLiked((prev) => !prev)}
-            className="flex flex-col items-center gap-1"
-          >
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
-              <Heart className="h-5 w-5" strokeWidth={2.2} fill={isLiked ? "currentColor" : "none"} />
-            </span>
-            <span className="text-[12px] font-semibold">{card.likes}</span>
-          </button>
-          <button className="flex flex-col items-center gap-1">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
-              <Share2 className="h-5 w-5" strokeWidth={2.2} />
-            </span>
-            <span className="text-[12px] font-semibold">Шер</span>
-          </button>
-        </div>
-
         <div className="absolute inset-x-0 bottom-0 px-4 pb-5">
           <div className="max-w-[78%]">
             <div className="text-[22px] font-semibold tracking-[-0.03em] text-white">
@@ -811,11 +784,44 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
             </div>
           </div>
 
+          {styleGallery.length > 1 ? (
+            <div className="mt-5 flex items-center justify-center gap-1.5">
+              {styleGallery.map((_, index) => (
+                <span
+                  key={`${card.id}-dot-${index}`}
+                  className={`h-1.5 rounded-full transition-all ${
+                    index === activeSlide ? "w-5 bg-white" : "w-1.5 bg-white/55"
+                  }`}
+                />
+              ))}
+            </div>
+          ) : null}
+
           <button
             onClick={onRepeatTrend}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#ffe27a_0%,#f4c430_55%,#dba400_100%)] px-5 py-4 text-[16px] font-semibold text-[#3b2a00] shadow-[0_18px_34px_rgba(244,196,48,0.26)]"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_18px_34px_rgba(43,125,233,0.24)]"
           >
             Повторить тренд
+          </button>
+        </div>
+
+        <div className="absolute right-4 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-4 text-white">
+          <button
+            onClick={() => setIsLiked((prev) => !prev)}
+            className="flex flex-col items-center gap-1.5"
+          >
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
+              <Heart className="h-5 w-5" strokeWidth={2.2} fill={isLiked ? "currentColor" : "none"} />
+            </span>
+            <span className="text-[12px] font-semibold leading-none">{card.likes}</span>
+          </button>
+          <button className="flex flex-col items-center gap-1.5">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
+              <Share2 className="h-5 w-5" strokeWidth={2.2} />
+            </span>
+            <span className="text-[12px] font-semibold leading-none">
+              {Math.max(12, Math.round(card.likes / 3))}
+            </span>
           </button>
         </div>
       </div>
@@ -861,27 +867,27 @@ function CreateTrendScreen({
         />
       </PinnedSectionHeader>
 
-      <div className="space-y-4 rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+      <div className="space-y-4 rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#e3dfd5]">
         <div>
-          <div className="text-[24px] font-semibold tracking-[-0.03em] text-[#1d2333]">
+          <div className="text-[24px] font-semibold tracking-[-0.03em] text-[#1e1b16]">
             {card.title}
           </div>
-          <div className="mt-2 text-[14px] leading-6 text-[#6f7d95]">
+          <div className="mt-2 text-[14px] leading-6 text-[#6f6a61]">
             Подготовь кадр для генерации и запусти повтор тренда в пару касаний.
           </div>
         </div>
 
         <div>
           {hasPhoto ? (
-            <div className="relative h-[188px] overflow-hidden rounded-[22px] border border-[#ead9a4] bg-[#fff9e8]">
+            <div className="relative h-[188px] overflow-hidden rounded-[22px] border border-[#d8d4cb] bg-[#f7f5ef]">
               <img src={uploadedPreview} alt="uploaded preview" className="h-full w-full object-cover" />
-              <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-[#f4c430] px-3 py-1.5 text-[#3b2a00] shadow-[0_10px_20px_rgba(244,196,48,0.22)]">
+              <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-[#1f1d18] px-3 py-1.5 text-[#f4c430] shadow-[0_10px_20px_rgba(31,29,24,0.18)]">
                 <Check className="h-4 w-4" strokeWidth={2.4} />
                 <span className="text-[13px] font-semibold">Фото загружено</span>
               </div>
               <button
                 onClick={() => setHasPhoto(false)}
-                className="absolute right-3 top-3 rounded-full bg-white/92 px-3 py-1.5 text-[12px] font-semibold text-[#7a5a00]"
+                className="absolute right-3 top-3 rounded-full bg-white/92 px-3 py-1.5 text-[12px] font-semibold text-[#3d372d]"
               >
                 Заменить
               </button>
@@ -889,15 +895,15 @@ function CreateTrendScreen({
           ) : (
             <button
               onClick={handleUpload}
-              className="relative flex h-[188px] w-full flex-col items-center justify-center overflow-hidden rounded-[22px] border-2 border-dashed border-[#ead9a4] bg-[#fff9e8] px-4 text-center"
+              className="relative flex h-[188px] w-full flex-col items-center justify-center overflow-hidden rounded-[22px] border-2 border-dashed border-[#d8d4cb] bg-[#f7f5ef] px-4 text-center"
             >
               <motion.div
                 initial={{ scaleX: 0, opacity: 0 }}
                 animate={{ scaleX: isUploading ? 1 : 0, opacity: isUploading ? 1 : 0 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
-                className="absolute inset-0 z-0 origin-left bg-[#f4c430]/20"
+                className="absolute inset-0 z-0 origin-left bg-[#2b7de9]/12"
               />
-              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#f4c430] text-[#3b2a00] shadow-[0_10px_20px_rgba(244,196,48,0.18)]">
+              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#2b7de9] text-white shadow-[0_10px_20px_rgba(43,125,233,0.18)]">
                 {isUploading ? (
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -908,19 +914,19 @@ function CreateTrendScreen({
                   <Upload className="h-6 w-6" strokeWidth={2.1} />
                 )}
               </div>
-              <div className="relative z-10 mt-3 text-[16px] font-semibold text-[#234677]">
+              <div className="relative z-10 mt-3 text-[16px] font-semibold text-[#1f1b15]">
                 {isUploading ? "Загрузка..." : "Загрузить фото"}
               </div>
-              <div className="relative z-10 mt-1 text-[13px] leading-5 text-[#7d8ca5]">
+              <div className="relative z-10 mt-1 text-[13px] leading-5 text-[#746e62]">
                 JPG, PNG
               </div>
             </button>
           )}
         </div>
 
-        <div className="space-y-3 rounded-[22px] bg-[#fbfcfe] p-4 ring-1 ring-[#e7edf6]">
+        <div className="space-y-3 rounded-[22px] bg-[#f7f5ef] p-4 ring-1 ring-[#e6e0d4]">
           <div>
-            <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7b889f]">
+            <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7a7267]">
               Соотношение сторон
             </div>
             <div className="mt-3 flex gap-2">
@@ -930,8 +936,8 @@ function CreateTrendScreen({
                   onClick={() => setAspectRatio(value)}
                   className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                     aspectRatio === value
-                      ? "bg-[#f4c430] text-[#3b2a00]"
-                      : "border border-[rgba(224,231,242,0.85)] bg-white text-[#5a6e90]"
+                      ? "bg-[#2b7de9] text-white"
+                      : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                   }`}
                 >
                   {value}
@@ -941,7 +947,7 @@ function CreateTrendScreen({
           </div>
 
           <div>
-            <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7b889f]">
+            <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7a7267]">
               Качество генерации
             </div>
             <div className="mt-3 flex gap-2">
@@ -954,8 +960,8 @@ function CreateTrendScreen({
                   onClick={() => setQuality(option.id)}
                   className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                     quality === option.id
-                      ? "bg-[#f4c430] text-[#3b2a00]"
-                      : "border border-[rgba(224,231,242,0.85)] bg-white text-[#5a6e90]"
+                      ? "bg-[#2b7de9] text-white"
+                      : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                   }`}
                 >
                   {option.label}
@@ -966,7 +972,7 @@ function CreateTrendScreen({
 
           {isVideoTrend ? (
             <div>
-              <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7b889f]">
+              <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7a7267]">
                 Длительность видео
               </div>
               <div className="mt-3 flex gap-2">
@@ -976,8 +982,8 @@ function CreateTrendScreen({
                     onClick={() => setDuration(value)}
                     className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                       duration === value
-                        ? "bg-[#f4c430] text-[#3b2a00]"
-                        : "border border-[rgba(224,231,242,0.85)] bg-white text-[#5a6e90]"
+                        ? "bg-[#2b7de9] text-white"
+                        : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                     }`}
                   >
                     {value} сек
@@ -995,7 +1001,7 @@ function CreateTrendScreen({
               hasUploadedPhoto: hasPhoto,
             })
           }
-          className="flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#ffe27a_0%,#f4c430_55%,#dba400_100%)] px-5 py-4 text-[16px] font-semibold text-[#3b2a00] shadow-[0_16px_32px_rgba(244,196,48,0.24)]"
+          className="flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_16px_32px_rgba(43,125,233,0.24)]"
         >
           <span>Создать за 1</span>
           <Sparkles className="h-5 w-5" strokeWidth={2.1} />
@@ -1007,10 +1013,10 @@ function CreateTrendScreen({
 
 function TaskCard({ task }) {
   return (
-    <div className="rounded-[22px] border border-[#dce4f2] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
+    <div className="rounded-[22px] border border-[#e3dfd5] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-3 rounded-[14px] bg-[#fff9e8] px-3 py-2">
-          <div className="min-w-0 text-[16px] font-semibold text-[#234677]">{task.title}</div>
+          <div className="min-w-0 text-[16px] font-semibold text-[#1f1b15]">{task.title}</div>
           <div className="flex shrink-0 items-center gap-1 rounded-full bg-[#fff4c9] px-3 py-1.5 text-[13px] font-semibold text-[#7a5a00]">
             <span>+{task.reward}</span>
             <Sparkles className="h-4 w-4" strokeWidth={2.1} />
@@ -1018,8 +1024,8 @@ function TaskCard({ task }) {
         </div>
 
         <div className="flex items-end justify-between gap-3">
-          <div className="max-w-[72%] text-[13px] leading-5 text-[#7d8ca5]">{task.description}</div>
-          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#3cc95a] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#31b24d]">
+          <div className="max-w-[72%] text-[13px] leading-5 text-[#6f6a61]">{task.description}</div>
+          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#226bca]">
             <Play className="h-4 w-4" strokeWidth={2.2} />
             Начать
           </button>
@@ -1038,11 +1044,11 @@ function ProductCard({ product, isSelected, onSelect }) {
       onClick={() => onSelect(product.id)}
       className={`relative w-full overflow-hidden rounded-[24px] border text-left shadow-[0_8px_24px_rgba(70,89,122,0.05)] transition ${
         isFeatured
-          ? "border-[rgba(184,212,247,0.9)] bg-[linear-gradient(180deg,#f0f7ff_0%,#e4f0ff_100%)]"
-          : "border-[rgba(225,232,242,0.9)] bg-[rgba(248,250,253,0.96)]"
-      } ${isSelected ? "ring-2 ring-[#f4c430] ring-offset-2 ring-offset-transparent" : ""}`}
+          ? "border-[rgba(35,32,26,0.95)] bg-[linear-gradient(180deg,#23201a_0%,#181510_100%)]"
+          : "border-[rgba(227,223,213,0.96)] bg-[rgba(250,250,247,0.98)]"
+      } ${isSelected ? "ring-2 ring-[#2b7de9] ring-offset-2 ring-offset-transparent" : ""}`}
     >
-      <div className={`relative px-5 py-[10px] ${isFeatured ? "text-[#7a5a00]" : "text-[#1d2333]"}`}>
+      <div className={`relative px-5 py-[10px] ${isFeatured ? "text-[#f4c430]" : "text-[#1d2333]"}`}>
         {product.badge ? (
           <div
             className={`absolute right-3 top-1 rounded-[12px] px-[10px] py-[5px] text-[10px] font-semibold leading-none shadow-[0_8px_18px_rgba(15,23,42,0.08)] ${product.badgeColor}`}
@@ -1053,20 +1059,20 @@ function ProductCard({ product, isSelected, onSelect }) {
 
         <div className="flex items-end justify-between gap-4">
           <div className="min-w-0 pr-3">
-            <div className={`text-[18px] font-medium ${isFeatured ? "text-[#9b7a16]" : "text-[#767f93]"}`}>
+            <div className={`text-[18px] font-medium ${isFeatured ? "text-[#9b7a16]" : "text-[#6f695c]"}`}>
               {product.subtitle}
             </div>
-            <div className={`mt-1 text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#7a5a00]" : "text-[#161c2c]"}`}>
+            <div className={`mt-1 text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#f4c430]" : "text-[#161c2c]"}`}>
               {product.amount} фотографий
             </div>
           </div>
           <div className="shrink-0 text-right">
             {hasDiscount ? (
-              <div className={`mb-0.5 text-[14px] font-semibold leading-none line-through ${isFeatured ? "text-[#7a8fb2]" : "text-[#8d98ad]"}`}>
+              <div className={`mb-0.5 text-[14px] font-semibold leading-none line-through ${isFeatured ? "text-[#a49b83]" : "text-[#8d8679]"}`}>
                 {product.price}
               </div>
             ) : null}
-            <div className={`text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#7a5a00]" : "text-[#161c2c]"}`}>
+            <div className={`text-[21px] font-semibold tracking-[-0.03em] ${isFeatured ? "text-[#f4c430]" : "text-[#161c2c]"}`}>
               {product.discountedPrice ?? product.price}
             </div>
           </div>
@@ -1123,7 +1129,7 @@ function ShopScreen({
         />
       </PinnedSectionHeader>
 
-      <div className="space-y-5 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+      <div className="space-y-5 rounded-[30px] bg-white px-4 pb-5 pt-2 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#e3dfd5]">
         {discountActive ? (
           <div className="flex items-center justify-between gap-3 overflow-hidden rounded-[16px] bg-[linear-gradient(90deg,#ff8b2c_0%,#ff5630_45%,#ff2a2a_100%)] px-4 py-1.5 text-white shadow-[0_10px_24px_rgba(255,102,56,0.18)]">
             <span className="text-[17px] font-bold uppercase tracking-[-0.03em]">
@@ -1137,7 +1143,7 @@ function ShopScreen({
 
         {!discountActive ? (
           <div className="space-y-3 px-1 pt-[5px]">
-            <div className="text-[22px] font-semibold leading-[1.02] tracking-[-0.04em] text-[#161c2c]">
+            <div className="text-[22px] font-semibold leading-[1.02] tracking-[-0.04em] text-[#1e1b16]">
               Твои идеальные фото за 1 минуту
             </div>
           </div>
@@ -1156,8 +1162,8 @@ function ShopScreen({
 
         <div className="space-y-3 px-2 pt-1">
           {shopBenefits.map((benefit) => (
-            <div key={benefit} className="flex items-start gap-3 text-[16px] font-medium leading-6 text-[#667389]">
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f4c430] text-[#3b2a00] shadow-[0_8px_18px_rgba(244,196,48,0.2)]">
+            <div key={benefit} className="flex items-start gap-3 text-[16px] font-medium leading-6 text-[#615a50]">
+              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1f1d18] text-[#f4c430] shadow-[0_8px_18px_rgba(31,29,24,0.12)]">
                 <Check className="h-4 w-4" strokeWidth={3} />
               </div>
               <div>{benefit}</div>
@@ -1176,15 +1182,15 @@ function ShopScreen({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-5">
           <div className="w-full max-w-[420px] rounded-[28px] bg-white px-6 pb-5 pt-7 text-center shadow-[0_24px_70px_rgba(15,23,42,0.26)]">
             <div className="text-[70px] leading-none">💔</div>
-            <div className="mt-4 text-[22px] font-semibold tracking-[-0.04em] text-[#1d2333]">
+            <div className="mt-4 text-[22px] font-semibold tracking-[-0.04em] text-[#1e1b16]">
               Так быстро уходите?
             </div>
-            <div className="mt-4 text-[17px] leading-7 text-[#6f7d95]">
+            <div className="mt-4 text-[17px] leading-7 text-[#6f6a61]">
               Мы для вас подготовили персональную скидку. Она сгорит через 10 минут 🙈
             </div>
             <button
               onClick={onActivateDiscount}
-              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#ffe27a_0%,#f4c430_55%,#dba400_100%)] px-5 py-4 text-[17px] font-semibold text-[#3b2a00] shadow-[0_16px_34px_rgba(244,196,48,0.22)]"
+              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_16px_34px_rgba(43,125,233,0.22)]"
             >
               Активировать скидку
             </button>
@@ -1209,8 +1215,8 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         />
 
         <div className="px-0 pt-0">
-          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(246,246,242,0.96)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex items-center gap-2 pr-2">
+          <div className="mt-[-5px] overflow-x-auto px-2 pb-1 pt-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex items-end gap-4 pr-2">
               {[
                 { id: "settings", label: "", icon: Settings },
                 { id: "tasks", label: "Задания", icon: ClipboardList },
@@ -1223,14 +1229,20 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                   <button
                     key={item.id}
                     onClick={() => setProfileTab(item.id)}
-                    className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
+                    className={`relative flex shrink-0 items-center gap-1.5 pb-2 text-[15px] transition ${
                       profileTab === item.id
-                        ? "border border-[#3b2a00] bg-[#3b2a00] text-[#f4c430]"
-                        : "border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
+                        ? "font-semibold text-[#16130f]"
+                        : "font-normal text-[#7a7366]"
                     }`}
                   >
                     <Icon className="h-4 w-4" strokeWidth={2.2} />
-                    <span>{item.label}</span>
+                    {item.label ? <span>{item.label}</span> : null}
+                    {profileTab === item.id ? (
+                      <motion.span
+                        layoutId="profile-tab-underline"
+                        className="absolute bottom-0 left-0 h-[2.5px] w-full rounded-full bg-[#16130f]"
+                      />
+                    ) : null}
                   </button>
                 );
               })}
@@ -1249,12 +1261,12 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
           ].map((item) => (
             <button
               key={item.label}
-              className="flex w-full items-center justify-between gap-4 rounded-[18px] border border-[#dce4f2] bg-white px-4 py-4 text-left shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
+              className="flex w-full items-center justify-between gap-4 rounded-[18px] border border-[#e3dfd5] bg-white px-4 py-4 text-left shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
             >
               <div className="min-w-0 flex-1">
-                <div className="text-[15px] font-semibold text-[#234677]">{item.label}</div>
+                <div className="text-[15px] font-semibold text-[#1f1b15]">{item.label}</div>
               </div>
-              <div className="shrink-0 text-[13px] font-medium text-[#8a97ad]">{item.value}</div>
+              <div className="shrink-0 text-[13px] font-medium text-[#7a7367]">{item.value}</div>
             </button>
           ))}
         </div>
@@ -1266,11 +1278,11 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         </div>
       ) : profileTab === "bonus" ? (
         <div className="space-y-3">
-          <div className="rounded-[22px] border border-[#dce4f2] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
+          <div className="rounded-[22px] border border-[#e3dfd5] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
             <div className="flex items-center justify-between gap-3 rounded-[16px] bg-[#fff9e8] px-4 py-3">
               <div>
-                <div className="text-[15px] font-semibold text-[#234677]">Ежедневный бонус</div>
-                <div className="mt-1 text-[13px] leading-5 text-[#7d8ca5]">
+                <div className="text-[15px] font-semibold text-[#1f1b15]">Ежедневный бонус</div>
+                <div className="mt-1 text-[13px] leading-5 text-[#6f6a61]">
                   Заходи каждый день и получай дополнительные фотографии на баланс.
                 </div>
               </div>
@@ -1281,17 +1293,17 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
             </div>
           </div>
 
-          <div className="rounded-[22px] border border-[#dce4f2] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
-            <div className="text-[15px] font-semibold text-[#234677]">Приглашай друзей</div>
-            <div className="mt-2 text-[13px] leading-5 text-[#7d8ca5]">
+          <div className="rounded-[22px] border border-[#e3dfd5] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
+            <div className="text-[15px] font-semibold text-[#1f1b15]">Приглашай друзей</div>
+            <div className="mt-2 text-[13px] leading-5 text-[#6f6a61]">
               За каждого нового друга можно получать бонусные фотографии и ускорять генерацию.
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#3cc95a] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#31b24d]">
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#2b7de9] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#226bca]">
                 <Send className="h-4 w-4" strokeWidth={2.2} />
                 Отправить
               </button>
-              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#fff4c9] px-4 py-3 text-[14px] font-semibold text-[#7a5a00] transition hover:bg-[#ffeaa0]">
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#1f1d18] px-4 py-3 text-[14px] font-semibold text-[#f4c430] transition hover:bg-[#16140f]">
                 <Copy className="h-4 w-4" strokeWidth={2.2} />
                 Скопировать
               </button>
@@ -1303,14 +1315,14 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
           {cards.slice(0, 6).map((card) => (
             <div
               key={card.id}
-              className="relative overflow-hidden rounded-[18px] border border-[#dbe4f2] bg-white shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
+              className="relative overflow-hidden rounded-[18px] border border-[#e3dfd5] bg-white shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
             >
               <img
                 src={card.image}
                 alt={card.title}
                 className="aspect-[0.92] w-full object-cover"
               />
-              <button className="absolute bottom-3 right-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#f4c430] text-[#3b2a00] shadow-[0_10px_22px_rgba(244,196,48,0.28)]">
+              <button className="absolute bottom-3 right-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#1f1d18] text-[#f4c430] shadow-[0_10px_22px_rgba(31,29,24,0.2)]">
                 <Download className="h-6 w-6" strokeWidth={2.2} />
               </button>
             </div>
@@ -1325,10 +1337,10 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
           ].map((item) => (
             <div
               key={item.text}
-              className="flex items-center justify-between gap-4 rounded-[18px] border border-[#dce4f2] bg-white px-4 py-4 text-[14px] font-medium text-[#607394] shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
+              className="flex items-center justify-between gap-4 rounded-[18px] border border-[#e3dfd5] bg-white px-4 py-4 text-[14px] font-medium text-[#60594e] shadow-[0_6px_22px_rgba(82,103,138,0.06)]"
             >
-              <div className="min-w-0 flex-1 text-[#607394]">{item.text}</div>
-              <div className="shrink-0 text-right text-[13px] text-[#9aa8bf]">
+              <div className="min-w-0 flex-1 text-[#60594e]">{item.text}</div>
+              <div className="shrink-0 text-right text-[13px] text-[#8a8275]">
                 {item.time}
               </div>
             </div>
@@ -1372,21 +1384,21 @@ function LoadingScreen({
 
       <div className="rounded-[22px] bg-[#f6f6f2] px-4 pb-4 pt-4 ring-1 ring-[#e4e1d9]">
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
+          <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#1f1b15]">
             <Sparkles className="h-5 w-5 text-[#dba400]" strokeWidth={2.2} />
             <span>Создание фото</span>
           </div>
 
           <div className="mt-3 rounded-[18px] bg-white/88 px-4 py-3 shadow-[0_8px_20px_rgba(42,36,24,0.06)]">
             <div className="flex items-center justify-between">
-              <div className="text-[12px] font-semibold text-[#234677]">87%</div>
+              <div className="text-[12px] font-semibold text-[#1f1b15]">87%</div>
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#ebe8df]">
               <motion.div
                 initial={{ width: "12%" }}
                 animate={{ width: ["12%", "48%", "72%", "87%"] }}
                 transition={{ duration: 2.4, ease: "easeInOut" }}
-                className="h-full rounded-full bg-[linear-gradient(90deg,#ffe27a_0%,#f4c430_55%,#dba400_100%)]"
+                className="h-full rounded-full bg-[linear-gradient(90deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)]"
               />
             </div>
           </div>
@@ -1405,7 +1417,7 @@ function LoadingScreen({
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(50,39,19,0.06)_0%,rgba(59,42,0,0.18)_100%)]" />
 
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-[#7a5a00] shadow-[0_12px_28px_rgba(244,196,48,0.16)] backdrop-blur-sm">
+            <div className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-[#2b7de9] shadow-[0_12px_28px_rgba(43,125,233,0.12)] backdrop-blur-sm">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
@@ -1443,8 +1455,8 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
 
       <div className="rounded-[22px] bg-[#f6f6f2] px-4 pb-4 pt-4 ring-1 ring-[#e4e1d9]">
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
-            <Check className="h-5 w-5 text-[#3cc95a]" strokeWidth={2.6} />
+          <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#1f1b15]">
+            <Check className="h-5 w-5 text-[#2b7de9]" strokeWidth={2.6} />
             <span>Фото готово</span>
           </div>
         </div>
@@ -1454,7 +1466,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
         <div className="relative overflow-hidden rounded-[24px]">
           <img src={card.image} alt={card.title} className="aspect-[1.08] w-full object-cover" />
 
-          <button className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#f4c430] px-4 py-3 text-[#3b2a00] shadow-[0_12px_24px_rgba(244,196,48,0.24)]">
+          <button className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#1f1d18] px-4 py-3 text-[#f4c430] shadow-[0_12px_24px_rgba(31,29,24,0.18)]">
             <Download className="h-5 w-5" strokeWidth={2.2} />
             <span className="text-[13px] font-semibold">Скачать</span>
           </button>
@@ -1462,7 +1474,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
 
         <div className="mt-3 flex items-center justify-between gap-2 rounded-[18px] bg-[#f3f1eb] px-4 py-3">
           <div className="flex min-w-0 flex-1 items-center gap-2">
-            <span className="shrink-0 text-[13px] font-semibold text-[#7d8ca5]">Поставь оценку</span>
+            <span className="shrink-0 text-[13px] font-semibold text-[#655d50]">Поставь оценку</span>
             <div className="flex min-w-0 items-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -1485,11 +1497,11 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
       </div>
 
       <div className="space-y-2">
-        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#3cc95a] px-5 py-4 text-[15px] font-semibold text-white shadow-[0_14px_28px_rgba(60,201,90,0.24)]">
+        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[15px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.22)]">
           <Plus className="h-5 w-5" strokeWidth={2.2} />
           Опубликовать в Сторис
         </button>
-        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#f4c430] px-5 py-4 text-[15px] font-semibold text-[#3b2a00] shadow-[0_14px_28px_rgba(244,196,48,0.24)]">
+        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#1f1d18] px-5 py-4 text-[15px] font-semibold text-[#f4c430] shadow-[0_14px_28px_rgba(31,29,24,0.18)]">
           <Send className="h-5 w-5" strokeWidth={2.2} />
           Отправить в чат
         </button>
@@ -1516,9 +1528,9 @@ function ErrorScreen({ onRetry, onOpenBalance, onOpenProfile, balance, isBonusCo
         </div>
 
         <div className="mt-4 text-center">
-          <div className="text-[24px] font-semibold tracking-[-0.03em] text-[#243247]">Ошибка</div>
-          <div className="mt-2 text-[16px] font-medium text-[#4f617e]">Что-то пошло не так</div>
-          <div className="mt-3 text-[14px] leading-6 text-[#7b889f]">
+          <div className="text-[24px] font-semibold tracking-[-0.03em] text-[#1f1b15]">Ошибка</div>
+          <div className="mt-2 text-[16px] font-medium text-[#4f433b]">Что-то пошло не так</div>
+          <div className="mt-3 text-[14px] leading-6 text-[#786f65]">
             Мы вернули токены на ваш баланс
           </div>
         </div>
@@ -1526,7 +1538,7 @@ function ErrorScreen({ onRetry, onOpenBalance, onOpenProfile, balance, isBonusCo
 
       <button
         onClick={onRetry}
-        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#f4c430] px-5 py-4 text-[16px] font-semibold text-[#3b2a00] shadow-[0_14px_28px_rgba(244,196,48,0.24)]"
+        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.22)]"
       >
         <Wand2 className="h-5 w-5" strokeWidth={2.2} />
         Попробовать еще раз
@@ -1571,19 +1583,25 @@ function SectionScreen({
           isBonusCounting={isBonusCounting}
         />
 
-        <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(246,246,242,0.96)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex items-center gap-2 pr-2">
+        <div className="mt-[-5px] overflow-x-auto px-2 pb-1 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex items-end gap-4 pr-2">
             {sections.map((item) => (
               <button
                 key={item.id}
                 onClick={() => onChangeSection(item)}
-                className={`shrink-0 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
+                className={`relative shrink-0 pb-2 text-[15px] transition ${
                   item.id === section.id
-                    ? "border border-[#3b2a00] bg-[#3b2a00] text-[#f4c430]"
-                    : "border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
+                    ? "font-semibold text-[#16130f]"
+                    : "font-normal text-[#7a7366]"
                 }`}
               >
                 {item.label}
+                {item.id === section.id ? (
+                  <motion.span
+                    layoutId="section-tab-underline"
+                    className="absolute bottom-0 left-0 h-[2.5px] w-full rounded-full bg-[#16130f]"
+                  />
+                ) : null}
               </button>
             ))}
           </div>
@@ -2011,22 +2029,22 @@ export default function App() {
               scale: isBonusClaimClosing ? 0.94 : 1,
             }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full max-w-[388px] rounded-[30px] bg-white px-4 py-4 shadow-[0_30px_80px_rgba(15,23,42,0.24)] ring-1 ring-[#dce4f2]"
+            className="w-full max-w-[388px] rounded-[30px] bg-white px-4 py-4 shadow-[0_30px_80px_rgba(15,23,42,0.24)] ring-1 ring-[#e2ddd2]"
           >
             <div className="mt-1 text-center">
-              <div className="flex items-center justify-center gap-2 text-[24px] font-semibold tracking-[-0.03em] text-[#234677]">
+              <div className="flex items-center justify-center gap-2 text-[24px] font-semibold tracking-[-0.03em] text-[#1f1b15]">
                 <Gift className="h-6 w-6 text-[#dba400]" strokeWidth={2.1} />
                 <span>Подарок</span>
               </div>
             </div>
 
-            <div className="mt-3 rounded-[22px] bg-white px-3 py-3 ring-1 ring-[#e6eef9] shadow-[0_10px_24px_rgba(70,89,122,0.08)]">
+            <div className="mt-3 rounded-[22px] bg-white px-3 py-3 ring-1 ring-[#e7e1d6] shadow-[0_10px_24px_rgba(42,36,24,0.08)]">
               <div className="flex items-center justify-between rounded-[18px] bg-white px-4 py-3">
                 <div>
-                  <div className="text-[13px] font-medium text-[#7d8ca5]">Стартовый бонус</div>
-                  <div className="mt-1 text-[22px] font-semibold tracking-[-0.03em] text-[#234677]">2 фотографии</div>
+                  <div className="text-[13px] font-medium text-[#7a7267]">Стартовый бонус</div>
+                  <div className="mt-1 text-[22px] font-semibold tracking-[-0.03em] text-[#1f1b15]">2 фотографии</div>
                 </div>
-                <div className="flex h-12 min-w-[92px] items-center justify-center gap-2 rounded-full bg-[#fff4c9] px-4 text-[#7a5a00]">
+                <div className="flex h-12 min-w-[92px] items-center justify-center gap-2 rounded-full bg-[#1f1d18] px-4 text-[#f4c430]">
                   <span className="text-[14px] font-semibold">20</span>
                   <Sparkles className="h-4.5 w-4.5" strokeWidth={2.1} />
                 </div>
@@ -2036,7 +2054,7 @@ export default function App() {
             <button
               onClick={claimWelcomeBonus}
               disabled={isBonusClaimClosing || isBonusCounting}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#f4c430] px-5 py-3.5 text-[16px] font-semibold text-[#3b2a00] shadow-[0_14px_28px_rgba(244,196,48,0.24)]"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#59b3ff_0%,#2b7de9_52%,#1f63c9_100%)] px-5 py-3.5 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(43,125,233,0.22)]"
             >
               <span>Забрать 20</span>
               <Sparkles className="h-5 w-5" strokeWidth={2.1} />
