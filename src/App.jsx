@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import {
   AlertTriangle,
   ArrowLeft,
+  ArrowUpRight,
+  AudioLines,
   ChevronRight,
   Check,
   ClipboardList,
@@ -32,12 +34,10 @@ import {
 } from "lucide-react";
 
 const filters = [
-  { id: "liked", label: "", icon: Heart },
   { id: "all", label: "Все", icon: Check },
-  { id: "popular", label: "Тренд", icon: Zap },
-  { id: "new", label: "Новый", icon: Star },
-  { id: "family", label: "Семье", icon: User },
-  { id: "pair", label: "Пара", icon: Heart },
+  { id: "new", label: "Новинки", icon: Star },
+  { id: "popular", label: "Популярное", icon: Zap },
+  { id: "photo", label: "Фото", icon: Image },
   { id: "video", label: "Видео", icon: Film },
 ];
 
@@ -47,6 +47,14 @@ const styleSections = [
   { id: "spring", label: "Весна" },
   { id: "business", label: "Деловой" },
   { id: "street", label: "Улица" },
+];
+
+const feedSectionTemplates = [
+  { id: "tiktok", label: "ТикТок тренды", audience: "84K", cardIds: [2, 5, 9, 12] },
+  { id: "march8-highlight", label: "#8марта", audience: "36K", cardIds: [6, 8, 3, 4] },
+  { id: "reels", label: "Рилс контент", audience: "112K", cardIds: [2, 4, 7, 12] },
+  { id: "weekly-hits", label: "Хиты недели", audience: "58K", cardIds: [1, 3, 9, 10] },
+  { id: "rising", label: "Набирает популярность", audience: "27K", cardIds: [8, 11, 5, 7] },
 ];
 
 const tasks = [
@@ -119,7 +127,7 @@ const cards = [
     id: 1,
     title: "Вечерний портрет",
     likes: 14,
-    badge: null,
+    badge: "choice",
     section: "business",
     categories: ["family"],
     image:
@@ -135,7 +143,7 @@ const cards = [
     id: 2,
     title: "Модный образ",
     likes: 6,
-    badge: "new",
+    badge: "track",
     section: "street",
     categories: ["video"],
     image:
@@ -263,7 +271,7 @@ const cards = [
     id: 10,
     title: "Портрет в студии",
     likes: 23,
-    badge: null,
+    badge: "choice",
     section: "business",
     categories: ["family"],
     image:
@@ -295,7 +303,7 @@ const cards = [
     id: 12,
     title: "Лайфстайл",
     likes: 91,
-    badge: null,
+    badge: "track",
     section: "spring",
     categories: ["family", "video"],
     image:
@@ -388,15 +396,19 @@ function useTelegramWebApp() {
 
 function CardBadge({ type }) {
   const styles = {
-    new: "bg-[#2b7de9] text-white",
+    new: "bg-[#48c864] text-white",
     popular: "bg-[#ffbf1f] text-[#463100]",
     free: "bg-[#3cc95a] text-white",
+    choice: "bg-[#2b7de9] text-white",
+    track: "bg-[#1f2430] text-white",
   };
 
   const labels = {
-    new: "Новый",
-    popular: "Тренд",
+    new: "Новое",
+    popular: "Вирусное",
     free: "Бесплатно",
+    choice: "Выбор NANA",
+    track: "Трек",
   };
 
   return (
@@ -404,9 +416,11 @@ function CardBadge({ type }) {
       className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[12px] font-semibold shadow-[0_8px_16px_rgba(15,23,42,0.12)] ${styles[type] ?? "bg-white text-[#234677]"}`}
     >
       <span className="flex items-center gap-1">
-        {type === "new" ? <Star className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
-        {type === "popular" ? <Zap className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
+        {type === "new" ? <Flower2 className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
+        {type === "popular" ? <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
         {type === "free" ? <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
+        {type === "choice" ? <Check className="h-3.5 w-3.5" strokeWidth={2.6} /> : null}
+        {type === "track" ? <AudioLines className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
         <span>{labels[type] ?? "Стиль"}</span>
       </span>
     </div>
@@ -415,7 +429,7 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[40px]";
+  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[30px]";
   const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-0";
 
   const BalanceDigits = ({ value }) => {
@@ -557,9 +571,9 @@ function FeedCard({ card, onClick }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
       onClick={() => onClick(card)}
-      className="relative overflow-hidden rounded-[18px] bg-[#edf2f8] text-left shadow-[0_6px_18px_rgba(82,103,138,0.05)]"
+      className="relative overflow-hidden rounded-[14px] bg-[#edf2f8] text-left shadow-[0_6px_18px_rgba(82,103,138,0.05)]"
     >
-      <div className="relative overflow-hidden rounded-[18px]">
+      <div className="relative overflow-hidden rounded-[14px]">
         <div className="overflow-hidden">
           <motion.div
             animate={{ x: `-${activeSlide * slideOffset}%` }}
@@ -572,7 +586,7 @@ function FeedCard({ card, onClick }) {
                 key={`${card.id}-feed-${index}`}
                 src={image}
                 alt={`${card.title} ${index + 1}`}
-                className="aspect-[0.78] shrink-0 object-cover"
+                className="aspect-[0.72] shrink-0 object-cover"
                 style={{ width: `${100 / gallery.length}%` }}
               />
             ))}
@@ -1088,7 +1102,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
           <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-2 pr-2">
               {[
-                { id: "settings", label: "Настройки", icon: Settings },
+                { id: "settings", label: "", icon: Settings },
                 { id: "tasks", label: "Задания", icon: ClipboardList },
                 { id: "bonus", label: "Бонус", icon: Gift },
                 { id: "photos", label: "Фотографии", icon: Image },
@@ -1420,7 +1434,7 @@ function SectionPanel({ section, onSelectCard }) {
     <div className="space-y-3 bg-white px-2 pb-6">
       <div className="grid grid-cols-2 gap-2">
         {section.cards.map((card) => (
-          <FeedCard key={card.id} card={card} onClick={onSelectCard} />
+          <FeedCard key={card.id} card={card} onClick={() => onSelectCard(card, section)} />
         ))}
       </div>
     </div>
@@ -1482,11 +1496,12 @@ function FeedScreen({
   balance,
   isBonusCounting,
 }) {
-  const feedSections = styleSections
-    .filter((section) => section.id !== "all")
+  const feedSections = feedSectionTemplates
     .map((section) => ({
       ...section,
-      cards: visibleCards.filter((card) => card.section === section.id),
+      cards: section.cardIds
+        .map((cardId) => visibleCards.find((card) => card.id === cardId))
+        .filter(Boolean),
     }))
     .filter((section) => section.cards.length > 0);
 
@@ -1504,23 +1519,26 @@ function FeedScreen({
 
       <div className="-mr-3 space-y-[0px] bg-white pb-3 pt-[18px]">
         {feedSections.map((section) => (
-          <section key={section.id} className="space-y-1.5">
+          <section key={section.id} className="space-y-0.5 pt-5">
             <div className="flex items-center justify-between gap-3 px-2">
               <button
                 onClick={() => onOpenSection(section)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[#6f87ab]"
+                className="flex w-full items-center justify-between gap-3 px-1 py-1 text-left"
               >
-                <h2 className="text-[15px] font-semibold tracking-[-0.03em] text-[#1c2b45]">
+                <h2 className="text-[16px] font-medium tracking-[-0.02em] text-[#101418]">
                   {section.label}
                 </h2>
-                <ChevronRight className="h-4 w-4 text-[#9eb2ce]" strokeWidth={2.4} />
+                <span className="flex shrink-0 items-center gap-1.5 text-[13px] font-medium text-[#6d7a90]">
+                  <User className="h-4 w-4" strokeWidth={2.1} />
+                  <span>{section.audience}</span>
+                </span>
               </button>
             </div>
 
-            <div className="flex gap-3 overflow-x-auto px-2 pb-1 pr-0">
+            <div className="flex gap-2 overflow-x-auto px-2 pb-1 pr-0">
               {section.cards.map((card) => (
                 <div key={card.id} className="w-[168px] shrink-0">
-                  <FeedCard card={card} onClick={onSelectCard} />
+                  <FeedCard card={card} onClick={() => onSelectCard(card, section)} />
                 </div>
               ))}
             </div>
@@ -1537,7 +1555,7 @@ export default function App() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [screen, setScreen] = useState("feed");
   const [selectedCard, setSelectedCard] = useState(cards[0]);
-  const [selectedSection, setSelectedSection] = useState(styleSections[1]);
+  const [selectedSection, setSelectedSection] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(3);
   const [loadingPreviewImage, setLoadingPreviewImage] = useState(cards[0].image);
   const [hasUploadedPhotoForLoading, setHasUploadedPhotoForLoading] = useState(false);
@@ -1556,11 +1574,10 @@ export default function App() {
   const visibleCards = useMemo(() => {
     let filteredCards = cards;
 
-    if (activeFilter === "liked") filteredCards = cards.filter((card) => card.likes >= 50);
-    else if (activeFilter === "popular") filteredCards = cards.filter((card) => card.badge === "popular");
+    if (activeFilter === "popular") filteredCards = cards.filter((card) => card.badge === "popular");
     else if (activeFilter === "new") filteredCards = cards.filter((card) => card.badge === "new");
-    else if (activeFilter === "family") filteredCards = cards.filter((card) => card.categories?.includes("family"));
-    else if (activeFilter === "pair") filteredCards = cards.filter((card) => card.categories?.includes("pair"));
+    else if (activeFilter === "photo")
+      filteredCards = cards.filter((card) => !card.categories?.includes("video"));
     else if (activeFilter === "video") filteredCards = cards.filter((card) => card.categories?.includes("video"));
 
     return filteredCards;
@@ -1568,33 +1585,40 @@ export default function App() {
 
   const availableSections = useMemo(
     () =>
-      styleSections
-        .filter((section) => section.id !== "all")
+      feedSectionTemplates
         .map((section) => ({
           ...section,
-          cards: visibleCards.filter((card) => card.section === section.id),
+          cards: section.cardIds
+            .map((cardId) => visibleCards.find((card) => card.id === cardId))
+            .filter(Boolean),
         }))
         .filter((section) => section.cards.length > 0),
     [visibleCards],
   );
 
   const currentSectionStyles = useMemo(
-    () => cards.filter((item) => item.section === selectedCard.section),
-    [selectedCard],
+    () =>
+      selectedSection?.cards?.some((item) => item.id === selectedCard.id)
+        ? selectedSection.cards
+        : cards.filter((item) => item.section === selectedCard.section),
+    [selectedCard, selectedSection],
   );
 
   const currentStyleSection = useMemo(
     () =>
-      availableSections.find((section) => section.id === selectedCard.section) ??
+      selectedSection?.cards?.some((item) => item.id === selectedCard.id)
+        ? selectedSection
+        : availableSections.find((section) => section.id === selectedCard.section) ??
       styleSections.find((section) => section.id === selectedCard.section) ??
       selectedSection,
     [availableSections, selectedCard, selectedSection],
   );
 
-  const handleSelectCard = (card) => {
+  const handleSelectCard = (card, sectionOverride) => {
     setSelectedCard(card);
     const nextSection =
-      availableSections.find((section) => section.id === card.section) ??
+      sectionOverride ??
+      availableSections.find((section) => section.cards?.some((item) => item.id === card.id)) ??
       styleSections.find((section) => section.id === card.section);
     if (nextSection) setSelectedSection(nextSection);
     setResultImage(card.image);
