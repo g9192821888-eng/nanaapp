@@ -31,6 +31,7 @@ import {
   Wand2,
   Gift,
   Send,
+  Share2,
 } from "lucide-react";
 
 const filters = [
@@ -429,7 +430,7 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-0";
+  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[30px]";
   const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-0";
 
   const BalanceDigits = ({ value }) => {
@@ -470,7 +471,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
       <div className={`mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 ${headerRowOffset}`}>
         <button
           onClick={onOpenProfile}
-          className="group flex min-w-0 items-center gap-3 rounded-full border border-[rgba(226,234,245,0.82)] bg-[rgba(250,252,255,0.86)] px-2 py-1.5 text-left shadow-[0_4px_14px_rgba(82,103,138,0.04)] transition active:scale-[0.98]"
+          className="group flex min-w-0 items-center gap-3 rounded-full border border-[rgba(219,219,212,0.92)] bg-[rgba(250,250,247,0.96)] px-2 py-1.5 text-left shadow-[0_4px_14px_rgba(43,39,28,0.04)] transition active:scale-[0.98]"
         >
           <img
             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
@@ -479,10 +480,10 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           />
           <div className="min-w-0">
             <div className="flex items-center gap-1">
-              <div className="truncate text-[18px] font-semibold text-[#1f3b67]">Сергей</div>
-              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9bb0d0] opacity-0 transition group-hover:opacity-100" />
+              <div className="truncate text-[18px] font-semibold text-[#231f17]">Сергей</div>
+              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#a09784] opacity-0 transition group-hover:opacity-100" />
             </div>
-            <div className="text-[11px] text-[#7e8ba3]">Мой профиль</div>
+            <div className="text-[11px] text-[#7b7365]">Мой профиль</div>
           </div>
         </button>
 
@@ -508,7 +509,7 @@ function PinnedSectionHeader({ children, className = "" }) {
 
   return (
     <div
-      className={`sticky top-0 z-20 -mx-3 bg-[rgba(244,247,252,0.94)] px-3 pb-0 backdrop-blur-[10px] ${!isTelegramClient ? "-mt-[30px] pt-[30px]" : ""} ${className}`}
+      className={`sticky top-0 z-20 -mx-3 bg-[rgba(246,246,242,0.96)] px-3 pb-0 backdrop-blur-[10px] ${!isTelegramClient ? "" : ""} ${className}`}
     >
       {children}
     </div>
@@ -517,16 +518,16 @@ function PinnedSectionHeader({ children, className = "" }) {
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-[-5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2">
+    <div className="mt-[-5px] flex gap-2 overflow-x-auto rounded-[20px] bg-[rgba(246,246,242,0.96)] px-2 py-2">
       <button
         type="button"
-        className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
+        className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
       >
         <Search className="h-4 w-4" strokeWidth={2.2} />
       </button>
       <button
         type="button"
-        className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
+        className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
       >
         <Heart className="h-4 w-4" strokeWidth={2.2} />
       </button>
@@ -539,8 +540,8 @@ function FilterBar({ activeFilter, setActiveFilter }) {
             onClick={() => setActiveFilter(filter.id)}
             className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
               isActive
-                ? "border border-[rgba(43,125,233,0.18)] bg-[rgba(43,125,233,0.92)] text-white"
-                : "border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
+                ? "border border-[#3b2a00] bg-[#3b2a00] text-[#f4c430]"
+                : "border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
             }`}
           >
             <Icon className="h-4 w-4" strokeWidth={2.2} fill={filter.id === "liked" ? "currentColor" : "none"} />
@@ -587,7 +588,7 @@ function FeedCard({ card, onClick }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
       onClick={() => onClick(card)}
-      className="relative overflow-hidden rounded-[14px] bg-[#edf2f8] text-left shadow-[0_6px_18px_rgba(82,103,138,0.05)]"
+      className="relative overflow-hidden rounded-[14px] bg-[#f1f1ee] text-left shadow-[0_6px_18px_rgba(82,103,138,0.05)]"
     >
       <div className="relative overflow-hidden rounded-[14px]">
         <div className="overflow-hidden">
@@ -625,32 +626,37 @@ function FeedCard({ card, onClick }) {
   );
 }
 
-function StyleScreen({
-  card,
-  sectionStyles,
-  sectionLabel,
-  onSelectStyle,
-  onOpenSection,
-  onBack,
-  onOpenBalance,
-  onOpenProfile,
-  onCreate,
-  balance,
-  isBonusCounting,
-}) {
+function getTrendUsage(card) {
+  const usageByCardId = {
+    1: "24K",
+    2: "84K",
+    3: "56K",
+    4: "38K",
+    5: "72K",
+    6: "41K",
+    7: "63K",
+    8: "19K",
+    9: "102K",
+    10: "48K",
+    11: "27K",
+    12: "91K",
+  };
+
+  return usageByCardId[card.id] ?? "32K";
+}
+
+function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
   const [isLiked, setIsLiked] = useState(false);
-  const isPairStyle = card.title === "Пара в городе";
-  const [hasPhoto, setHasPhoto] = useState(false);
-  const [hasSecondPhoto, setHasSecondPhoto] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [isUploadingSecond, setIsUploadingSecond] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const styleGalleryRef = useRef(null);
-  const touchStartXRef = useRef(0);
-  const uploadedPreview =
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80";
+  const galleryTouchStartRef = useRef({ x: 0, y: 0 });
+  const screenTouchStartRef = useRef({ x: 0, y: 0 });
   const styleGallery = card.gallery?.length ? card.gallery : [card.image];
   const canSlideGallery = styleGallery.length > 1;
+  const currentStyleIndex = Math.max(
+    0,
+    sectionStyles.findIndex((styleCard) => styleCard.id === card.id),
+  );
 
   const goToStyleSlide = (index, behavior = "smooth") => {
     if (!styleGalleryRef.current) return;
@@ -662,9 +668,16 @@ function StyleScreen({
     setActiveSlide(nextIndex);
   };
 
+  const goToAdjacentTrend = (direction) => {
+    if (!sectionStyles.length) return;
+    const nextIndex =
+      (currentStyleIndex + direction + sectionStyles.length) % sectionStyles.length;
+    onSelectStyle(sectionStyles[nextIndex]);
+  };
+
   useEffect(() => {
     setActiveSlide(0);
-    goToStyleSlide(0, "auto");
+    requestAnimationFrame(() => goToStyleSlide(0, "auto"));
   }, [card.id]);
 
   const handleGalleryScroll = (event) => {
@@ -674,14 +687,17 @@ function StyleScreen({
   };
 
   const handleGalleryTouchStart = (event) => {
-    touchStartXRef.current = event.touches[0]?.clientX ?? 0;
+    galleryTouchStartRef.current = {
+      x: event.touches[0]?.clientX ?? 0,
+      y: event.touches[0]?.clientY ?? 0,
+    };
   };
 
   const handleGalleryTouchEnd = (event) => {
     if (!canSlideGallery) return;
 
     const touchEndX = event.changedTouches[0]?.clientX ?? 0;
-    const deltaX = touchEndX - touchStartXRef.current;
+    const deltaX = touchEndX - galleryTouchStartRef.current.x;
     const swipeThreshold = 45;
 
     if (deltaX <= -swipeThreshold && activeSlide === styleGallery.length - 1) {
@@ -694,214 +710,292 @@ function StyleScreen({
     }
   };
 
+  const handleScreenTouchStart = (event) => {
+    screenTouchStartRef.current = {
+      x: event.touches[0]?.clientX ?? 0,
+      y: event.touches[0]?.clientY ?? 0,
+    };
+  };
+
+  const handleScreenTouchEnd = (event) => {
+    const touchEnd = event.changedTouches[0];
+    if (!touchEnd) return;
+
+    const deltaX = touchEnd.clientX - screenTouchStartRef.current.x;
+    const deltaY = touchEnd.clientY - screenTouchStartRef.current.y;
+
+    if (Math.abs(deltaY) < 60 || Math.abs(deltaY) <= Math.abs(deltaX)) return;
+
+    if (deltaY < 0) {
+      goToAdjacentTrend(1);
+    } else {
+      goToAdjacentTrend(-1);
+    }
+  };
+
+  return (
+    <div
+      className="-mx-3 overflow-hidden bg-black"
+      style={{ height: "var(--app-height, 100dvh)" }}
+      onTouchStart={handleScreenTouchStart}
+      onTouchEnd={handleScreenTouchEnd}
+    >
+      <div className="relative h-full w-full">
+        <div
+          ref={styleGalleryRef}
+          onScroll={handleGalleryScroll}
+          onTouchStart={handleGalleryTouchStart}
+          onTouchEnd={handleGalleryTouchEnd}
+          className={`flex h-full overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${canSlideGallery ? "snap-x snap-mandatory" : ""}`}
+        >
+          {styleGallery.map((image, index) => (
+            <img
+              key={`${card.id}-${index}`}
+              src={image}
+              alt={`${card.title} ${index + 1}`}
+              className={`h-full w-full shrink-0 object-cover ${canSlideGallery ? "snap-start" : ""}`}
+            />
+          ))}
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/82 via-black/18 to-transparent" />
+
+        {card.badge ? (
+          <div className="absolute left-4 top-5">
+            <CardBadge type={card.badge} />
+          </div>
+        ) : null}
+
+        {styleGallery.length > 1 ? (
+          <div className="absolute left-4 top-16 flex items-center gap-1.5">
+            {styleGallery.map((_, index) => (
+              <span
+                key={`${card.id}-dot-${index}`}
+                className={`h-1.5 rounded-full transition-all ${
+                  index === activeSlide ? "w-5 bg-white" : "w-1.5 bg-white/55"
+                }`}
+              />
+            ))}
+          </div>
+        ) : null}
+
+        <div className="absolute bottom-24 right-4 flex flex-col items-center gap-4 text-white">
+          <button
+            onClick={() => setIsLiked((prev) => !prev)}
+            className="flex flex-col items-center gap-1"
+          >
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
+              <Heart className="h-5 w-5" strokeWidth={2.2} fill={isLiked ? "currentColor" : "none"} />
+            </span>
+            <span className="text-[12px] font-semibold">{card.likes}</span>
+          </button>
+          <button className="flex flex-col items-center gap-1">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
+              <Share2 className="h-5 w-5" strokeWidth={2.2} />
+            </span>
+            <span className="text-[12px] font-semibold">Шер</span>
+          </button>
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 px-4 pb-5">
+          <div className="max-w-[78%]">
+            <div className="text-[22px] font-semibold tracking-[-0.03em] text-white">
+              {card.title}
+            </div>
+            <div className="mt-2 text-[14px] leading-6 text-white/86">{card.description}</div>
+            <div className="mt-3 flex items-center gap-2 text-[13px] font-medium text-white/90">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/14 backdrop-blur-sm">
+                <User className="h-4 w-4" strokeWidth={2.1} />
+              </span>
+              <span>{getTrendUsage(card)} выбрали</span>
+            </div>
+          </div>
+
+          <button
+            onClick={onRepeatTrend}
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#ffe27a_0%,#f4c430_55%,#dba400_100%)] px-5 py-4 text-[16px] font-semibold text-[#3b2a00] shadow-[0_18px_34px_rgba(244,196,48,0.26)]"
+          >
+            Повторить тренд
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CreateTrendScreen({
+  card,
+  onOpenBalance,
+  onOpenProfile,
+  balance,
+  isBonusCounting,
+  onCreate,
+}) {
+  const [hasPhoto, setHasPhoto] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [aspectRatio, setAspectRatio] = useState("9:16");
+  const [quality, setQuality] = useState("excellent");
+  const [duration, setDuration] = useState("10");
+
+  const uploadedPreview =
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80";
+  const isVideoTrend = card.categories?.includes("video");
+
   const handleUpload = () => {
+    if (isUploading) return;
     setIsUploading(true);
-    setTimeout(() => {
+    window.setTimeout(() => {
       setHasPhoto(true);
       setIsUploading(false);
     }, 900);
   };
 
-  const handleSecondUpload = () => {
-    setIsUploadingSecond(true);
-    setTimeout(() => {
-      setHasSecondPhoto(true);
-      setIsUploadingSecond(false);
-    }, 900);
-  };
-
-  const UploadTile = ({ hasImage, isBusy, onUpload, onReset, label }) =>
-    hasImage ? (
-      <div className="relative h-[168px] overflow-hidden rounded-[20px] border border-[#ead9a4] bg-[#fff9e8]">
-        <img src={uploadedPreview} alt="uploaded preview" className="h-full w-full object-cover" />
-        <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-[#f4c430] px-3 py-1.5 text-[#3b2a00] shadow-[0_10px_20px_rgba(244,196,48,0.22)]">
-          <Check className="h-4 w-4" strokeWidth={2.4} />
-          <span className="text-[13px] font-semibold">Загружено</span>
-        </div>
-        <button
-          onClick={onReset}
-          className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[12px] font-semibold text-[#7a5a00] backdrop-blur-sm"
-        >
-          Заменить
-        </button>
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/45 to-transparent px-4 pb-3 pt-10">
-          <div className="text-[13px] font-medium text-white/95">{label}</div>
-        </div>
-      </div>
-    ) : (
-      <button
-        onClick={isBusy ? undefined : onUpload}
-        className="relative flex h-[168px] w-full flex-col items-center justify-center overflow-hidden rounded-[20px] border-2 border-dashed border-[#ead9a4] bg-[#fff9e8] px-4 py-4 text-center transition hover:bg-[#fff9e8]"
-      >
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: isBusy ? 1 : 0, opacity: isBusy ? 1 : 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="absolute inset-0 z-0 origin-left bg-[#f4c430]/20"
-        />
-        <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#f4c430] text-[#3b2a00] shadow-[0_10px_20px_rgba(244,196,48,0.18)]">
-          {isBusy ? (
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
-              className="h-6 w-6 rounded-full border-2 border-white/90 border-t-transparent"
-            />
-          ) : (
-            <Upload className="h-6 w-6" strokeWidth={2.1} />
-          )}
-        </div>
-        <div className="relative z-10 mt-2.5 text-[15px] font-semibold text-[#234677]">
-          {isBusy ? "Загрузка..." : "Выбрать фото"}
-        </div>
-        <div className="relative z-10 mt-1 text-[12px] leading-5 text-[#7d8ca5]">
-          {isBusy ? "Подготавливаем изображение" : "JPG, PNG"}
-        </div>
-      </button>
-    );
-
   return (
-    <div className="space-y-3">
-      <PinnedSectionHeader className="pb-1 pt-0">
+    <div className="space-y-4">
+      <PinnedSectionHeader className="pt-0">
         <Header
           onOpenBalance={onOpenBalance}
           onOpenProfile={onOpenProfile}
           balance={balance}
           isBonusCounting={isBonusCounting}
         />
-
-        {sectionStyles?.length ? (
-          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex items-center gap-2 pr-2">
-              {sectionLabel ? (
-                <button
-                  onClick={onOpenSection}
-                  className="shrink-0 rounded-full border border-[rgba(216,226,240,0.9)] bg-[rgba(239,245,252,0.96)] px-3.5 py-2 text-[12px] font-semibold text-[#5a6e90] transition"
-                >
-                  {sectionLabel}:
-                </button>
-              ) : null}
-              {sectionStyles.map((styleCard) => (
-                <button
-                  key={styleCard.id}
-                  onClick={() => onSelectStyle(styleCard)}
-                  className={`shrink-0 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
-                    styleCard.id === card.id
-                      ? "border border-[rgba(43,125,233,0.18)] bg-[rgba(43,125,233,0.92)] text-white"
-                      : "border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
-                  }`}
-                >
-                  {styleCard.title}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
       </PinnedSectionHeader>
 
-      <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-        <div className="relative">
-          <div
-            ref={styleGalleryRef}
-            onScroll={handleGalleryScroll}
-            onTouchStart={handleGalleryTouchStart}
-            onTouchEnd={handleGalleryTouchEnd}
-            className={`flex overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${canSlideGallery ? "snap-x snap-mandatory" : ""}`}
-          >
-              {styleGallery.map((image, index) => (
-                <img
-                  key={`${card.id}-${index}`}
-                  src={image}
-                  alt={`${card.title} ${index + 1}`}
-                  className={`aspect-[1.08] w-full shrink-0 object-cover ${canSlideGallery ? "snap-start" : ""}`}
-                />
-              ))}
+      <div className="space-y-4 rounded-[28px] bg-white p-4 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
+        <div>
+          <div className="text-[24px] font-semibold tracking-[-0.03em] text-[#1d2333]">
+            {card.title}
           </div>
-          {card.badge ? <CardBadge type={card.badge} /> : null}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsLiked((prev) => !prev)}
-            className={`absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-sm transition ${
-              isLiked ? "bg-[#f4c430]/90 text-[#3b2a00]" : "bg-black/15 text-white"
-            }`}
-          >
-            <motion.div
-              key={isLiked ? "liked" : "idle"}
-              initial={{ scale: 0.8, opacity: 0.8 }}
-              animate={{ scale: isLiked ? [1, 1.28, 1.08] : 1, opacity: 1 }}
-              transition={{ duration: 0.28 }}
-            >
-              <Heart className="h-5 w-5" strokeWidth={2.1} fill={isLiked ? "currentColor" : "none"} />
-            </motion.div>
-          </motion.button>
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/45 to-transparent px-5 pb-5 pt-10 text-white">
-            <div className="mt-2 flex items-center gap-2 text-[12px] font-medium text-white/90">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm">
-                <User className="h-3.5 w-3.5" strokeWidth={2.2} />
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span>1.2K</span>
-                <span>выбрали</span>
-              </span>
+          <div className="mt-2 text-[14px] leading-6 text-[#6f7d95]">
+            Подготовь кадр для генерации и запусти повтор тренда в пару касаний.
+          </div>
+        </div>
+
+        <div>
+          {hasPhoto ? (
+            <div className="relative h-[188px] overflow-hidden rounded-[22px] border border-[#ead9a4] bg-[#fff9e8]">
+              <img src={uploadedPreview} alt="uploaded preview" className="h-full w-full object-cover" />
+              <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-[#f4c430] px-3 py-1.5 text-[#3b2a00] shadow-[0_10px_20px_rgba(244,196,48,0.22)]">
+                <Check className="h-4 w-4" strokeWidth={2.4} />
+                <span className="text-[13px] font-semibold">Фото загружено</span>
+              </div>
+              <button
+                onClick={() => setHasPhoto(false)}
+                className="absolute right-3 top-3 rounded-full bg-white/92 px-3 py-1.5 text-[12px] font-semibold text-[#7a5a00]"
+              >
+                Заменить
+              </button>
             </div>
-            <div className="mt-2 max-w-[85%] text-[15px] leading-6 text-white/85">{card.description}</div>
-          </div>
-          {styleGallery.length > 1 ? (
-            <div className="absolute bottom-3 left-5 flex items-center gap-1.5">
-              {styleGallery.map((_, index) => (
-                <span
-                  key={`${card.id}-dot-${index}`}
-                  className={`h-1.5 rounded-full transition-all ${
-                    index === activeSlide ? "w-5 bg-white" : "w-1.5 bg-white/55"
+          ) : (
+            <button
+              onClick={handleUpload}
+              className="relative flex h-[188px] w-full flex-col items-center justify-center overflow-hidden rounded-[22px] border-2 border-dashed border-[#ead9a4] bg-[#fff9e8] px-4 text-center"
+            >
+              <motion.div
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: isUploading ? 1 : 0, opacity: isUploading ? 1 : 0 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute inset-0 z-0 origin-left bg-[#f4c430]/20"
+              />
+              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#f4c430] text-[#3b2a00] shadow-[0_10px_20px_rgba(244,196,48,0.18)]">
+                {isUploading ? (
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+                    className="h-6 w-6 rounded-full border-2 border-white/90 border-t-transparent"
+                  />
+                ) : (
+                  <Upload className="h-6 w-6" strokeWidth={2.1} />
+                )}
+              </div>
+              <div className="relative z-10 mt-3 text-[16px] font-semibold text-[#234677]">
+                {isUploading ? "Загрузка..." : "Загрузить фото"}
+              </div>
+              <div className="relative z-10 mt-1 text-[13px] leading-5 text-[#7d8ca5]">
+                JPG, PNG
+              </div>
+            </button>
+          )}
+        </div>
+
+        <div className="space-y-3 rounded-[22px] bg-[#fbfcfe] p-4 ring-1 ring-[#e7edf6]">
+          <div>
+            <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7b889f]">
+              Соотношение сторон
+            </div>
+            <div className="mt-3 flex gap-2">
+              {["9:16", "4:5", "1:1"].map((value) => (
+                <button
+                  key={value}
+                  onClick={() => setAspectRatio(value)}
+                  className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
+                    aspectRatio === value
+                      ? "bg-[#f4c430] text-[#3b2a00]"
+                      : "border border-[rgba(224,231,242,0.85)] bg-white text-[#5a6e90]"
                   }`}
-                />
+                >
+                  {value}
+                </button>
               ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7b889f]">
+              Качество генерации
+            </div>
+            <div className="mt-3 flex gap-2">
+              {[
+                { id: "excellent", label: "Отлично" },
+                { id: "super", label: "Супер" },
+              ].map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => setQuality(option.id)}
+                  className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
+                    quality === option.id
+                      ? "bg-[#f4c430] text-[#3b2a00]"
+                      : "border border-[rgba(224,231,242,0.85)] bg-white text-[#5a6e90]"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {isVideoTrend ? (
+            <div>
+              <div className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#7b889f]">
+                Длительность видео
+              </div>
+              <div className="mt-3 flex gap-2">
+                {["5", "10", "15"].map((value) => (
+                  <button
+                    key={value}
+                    onClick={() => setDuration(value)}
+                    className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
+                      duration === value
+                        ? "bg-[#f4c430] text-[#3b2a00]"
+                        : "border border-[rgba(224,231,242,0.85)] bg-white text-[#5a6e90]"
+                    }`}
+                  >
+                    {value} сек
+                  </button>
+                ))}
+              </div>
             </div>
           ) : null}
         </div>
-      </div>
 
-      <div className="rounded-[28px] bg-white p-3.5 shadow-[0_8px_32px_rgba(70,89,122,0.08)] ring-1 ring-[#dce4f2]">
-        {isPairStyle ? (
-          <div className="grid grid-cols-2 gap-0 overflow-hidden rounded-[22px] border border-[#d9e5f5]">
-            <div className="border-r border-[#d9e5f5]">
-              <UploadTile
-                hasImage={hasPhoto}
-                isBusy={isUploading}
-                onUpload={handleUpload}
-                onReset={() => setHasPhoto(false)}
-                label="Первое фото загружено"
-              />
-            </div>
-            <div>
-              <UploadTile
-                hasImage={hasSecondPhoto}
-                isBusy={isUploadingSecond}
-                onUpload={handleSecondUpload}
-                onReset={() => setHasSecondPhoto(false)}
-                label="Второе фото загружено"
-              />
-            </div>
-          </div>
-        ) : (
-          <UploadTile
-            hasImage={hasPhoto}
-            isBusy={isUploading}
-            onUpload={handleUpload}
-            onReset={() => setHasPhoto(false)}
-            label="Твое фото готово к генерации"
-          />
-        )}
-      </div>
-
-      <div>
         <button
           onClick={() =>
             onCreate({
               previewImage: uploadedPreview,
-              hasUploadedPhoto: isPairStyle ? hasPhoto || hasSecondPhoto : hasPhoto,
+              hasUploadedPhoto: hasPhoto,
             })
           }
-          className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#f4c430] px-5 py-4 text-[16px] font-semibold text-[#3b2a00] shadow-[0_14px_28px_rgba(244,196,48,0.28)] transition hover:bg-[#e4b315]"
+          className="flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#ffe27a_0%,#f4c430_55%,#dba400_100%)] px-5 py-4 text-[16px] font-semibold text-[#3b2a00] shadow-[0_16px_32px_rgba(244,196,48,0.24)]"
         >
           <span>Создать за 1</span>
           <Sparkles className="h-5 w-5" strokeWidth={2.1} />
@@ -1115,7 +1209,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
         />
 
         <div className="px-0 pt-0">
-          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(246,246,242,0.96)] px-2 py-2 pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-2 pr-2">
               {[
                 { id: "settings", label: "", icon: Settings },
@@ -1131,8 +1225,8 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                     onClick={() => setProfileTab(item.id)}
                     className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
                       profileTab === item.id
-                        ? "border border-[rgba(43,125,233,0.18)] bg-[rgba(43,125,233,0.92)] text-white"
-                        : "border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
+                        ? "border border-[#3b2a00] bg-[#3b2a00] text-[#f4c430]"
+                        : "border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
                     }`}
                   >
                     <Icon className="h-4 w-4" strokeWidth={2.2} />
@@ -1276,18 +1370,18 @@ function LoadingScreen({
         />
       </PinnedSectionHeader>
 
-      <div className="rounded-[22px] bg-[#f8fbff] px-4 pb-4 pt-4 ring-1 ring-[#e3ebf7]">
+      <div className="rounded-[22px] bg-[#f6f6f2] px-4 pb-4 pt-4 ring-1 ring-[#e4e1d9]">
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
             <Sparkles className="h-5 w-5 text-[#dba400]" strokeWidth={2.2} />
             <span>Создание фото</span>
           </div>
 
-          <div className="mt-3 rounded-[18px] bg-white/80 px-4 py-3 shadow-[0_8px_20px_rgba(43,125,233,0.08)]">
+          <div className="mt-3 rounded-[18px] bg-white/88 px-4 py-3 shadow-[0_8px_20px_rgba(42,36,24,0.06)]">
             <div className="flex items-center justify-between">
               <div className="text-[12px] font-semibold text-[#234677]">87%</div>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#edf4ff]">
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#ebe8df]">
               <motion.div
                 initial={{ width: "12%" }}
                 animate={{ width: ["12%", "48%", "72%", "87%"] }}
@@ -1308,7 +1402,7 @@ function LoadingScreen({
               hasUploadedPhoto ? "scale-[0.96] opacity-60 blur-[1px]" : ""
             }`}
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(30,64,175,0.10)_0%,rgba(43,125,233,0.24)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(50,39,19,0.06)_0%,rgba(59,42,0,0.18)_100%)]" />
 
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-[#7a5a00] shadow-[0_12px_28px_rgba(244,196,48,0.16)] backdrop-blur-sm">
@@ -1347,7 +1441,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
         />
       </PinnedSectionHeader>
 
-      <div className="rounded-[22px] bg-[#f8fbff] px-4 pb-4 pt-4 ring-1 ring-[#e3ebf7]">
+      <div className="rounded-[22px] bg-[#f6f6f2] px-4 pb-4 pt-4 ring-1 ring-[#e4e1d9]">
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#234677]">
             <Check className="h-5 w-5 text-[#3cc95a]" strokeWidth={2.6} />
@@ -1366,7 +1460,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
           </button>
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-2 rounded-[18px] bg-[#f7fbff] px-4 py-3">
+        <div className="mt-3 flex items-center justify-between gap-2 rounded-[18px] bg-[#f3f1eb] px-4 py-3">
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <span className="shrink-0 text-[13px] font-semibold text-[#7d8ca5]">Поставь оценку</span>
             <div className="flex min-w-0 items-center gap-1">
@@ -1376,7 +1470,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
                   onClick={() => setRating(star)}
                   className="shrink-0 text-[22px] leading-none transition active:scale-[0.92]"
                 >
-                  <span className={star <= rating ? "text-[#ffbf1f]" : "text-[#cfd9ea]"}>
+                  <span className={star <= rating ? "text-[#ffbf1f]" : "text-[#d7d2c6]"}>
                     {star <= rating ? "★" : "☆"}
                   </span>
                 </button>
@@ -1384,7 +1478,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
             </div>
           </div>
 
-          <button className="ml-2 shrink-0 rounded-full bg-[#dfe9f9] px-3 py-1.5 text-[11px] font-semibold text-[#5a6e90] shadow-[0_6px_14px_rgba(133,155,191,0.16)]">
+          <button className="ml-2 shrink-0 rounded-full bg-[#ebe7dd] px-3 py-1.5 text-[11px] font-semibold text-[#5f5748] shadow-[0_6px_14px_rgba(91,79,56,0.08)]">
             Отправить
           </button>
         </div>
@@ -1477,7 +1571,7 @@ function SectionScreen({
           isBonusCounting={isBonusCounting}
         />
 
-        <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(250,251,254,0.9)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-[-5px] overflow-x-auto rounded-[20px] bg-[rgba(246,246,242,0.96)] px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="flex items-center gap-2 pr-2">
             {sections.map((item) => (
               <button
@@ -1485,8 +1579,8 @@ function SectionScreen({
                 onClick={() => onChangeSection(item)}
                 className={`shrink-0 rounded-full px-3.5 py-2 text-[12px] font-semibold transition ${
                   item.id === section.id
-                    ? "border border-[rgba(43,125,233,0.18)] bg-[rgba(43,125,233,0.92)] text-white"
-                    : "border border-[rgba(224,231,242,0.8)] bg-[rgba(248,250,253,0.9)] text-[#5a6e90]"
+                    ? "border border-[#3b2a00] bg-[#3b2a00] text-[#f4c430]"
+                    : "border border-[rgba(218,218,212,0.9)] bg-[rgba(250,250,247,0.96)] text-[#27231d]"
                 }`}
               >
                 {item.label}
@@ -1694,6 +1788,13 @@ export default function App() {
     const handleBack = () => {
       setScreen((currentScreen) => {
         if (currentScreen === "feed") return currentScreen;
+        if (currentScreen === "create") return "style";
+        if (currentScreen === "style") return selectedSection ? "section" : "feed";
+        if (currentScreen === "section") return "feed";
+        if (currentScreen === "profile") return "feed";
+        if (currentScreen === "loading") return "create";
+        if (currentScreen === "error") return "create";
+        if (currentScreen === "result") return "feed";
         if (currentScreen === "shop") {
           if (!shopDiscountActive) {
             setPendingScreenAfterShop("feed");
@@ -1718,7 +1819,7 @@ export default function App() {
     return () => {
       backButton.offClick(handleBack);
     };
-  }, [screen, shopDiscountActive]);
+  }, [screen, shopDiscountActive, selectedSection]);
 
   const claimWelcomeBonus = () => {
     if (isBonusCounting || isBonusClaimClosing) return;
@@ -1813,19 +1914,18 @@ export default function App() {
           <StyleScreen
             card={selectedCard}
             sectionStyles={currentSectionStyles}
-            sectionLabel={currentStyleSection?.label ?? ""}
             onSelectStyle={(card) => {
               setSelectedCard(card);
               const nextSection =
-                availableSections.find((section) => section.id === card.section) ??
-                styleSections.find((section) => section.id === card.section);
+                availableSections.find((section) => section.cards?.some((item) => item.id === card.id)) ??
+                selectedSection;
               if (nextSection) setSelectedSection(nextSection);
             }}
-            onOpenSection={() => {
-              if (currentStyleSection) setSelectedSection(currentStyleSection);
-              setScreen("section");
-            }}
-            onBack={() => setScreen("feed")}
+            onRepeatTrend={() => setScreen("create")}
+          />
+        ) : screen === "create" ? (
+          <CreateTrendScreen
+            card={selectedCard}
             onOpenBalance={handleOpenBalance}
             onOpenProfile={handleOpenProfile}
             balance={balance}
