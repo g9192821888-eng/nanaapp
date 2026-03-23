@@ -435,7 +435,7 @@ function CardBadge({ type }) {
 
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
   const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[30px]";
+  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[10px]";
   const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-0";
 
   const BalanceDigits = ({ value }) => {
