@@ -437,13 +437,13 @@ function CardBadge({ type }) {
 
   return (
     <div
-      className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[rgba(93,112,146,0.12)] bg-[rgba(255,255,255,0.92)] px-3 text-[11px] font-medium tracking-[0.01em] text-[#4e5f7e] backdrop-blur-[8px]"
+      className="inline-flex h-6 items-center gap-1 rounded-full border border-[rgba(93,112,146,0.12)] bg-[rgba(255,255,255,0.92)] px-[10px] text-[10px] font-medium tracking-[0.01em] text-[#4e5f7e] backdrop-blur-[8px]"
     >
-      {type === "new" ? <Star className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
-      {type === "popular" ? <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
-      {type === "free" ? <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
-      {type === "choice" ? <Check className="h-3.5 w-3.5" strokeWidth={2.6} /> : null}
-      {type === "track" ? <AudioLines className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
+      {type === "new" ? <Star className="h-3 w-3" strokeWidth={2.2} /> : null}
+      {type === "popular" ? <ArrowUpRight className="h-3 w-3" strokeWidth={2.4} /> : null}
+      {type === "free" ? <Ticket className="h-3 w-3" strokeWidth={2.4} /> : null}
+      {type === "choice" ? <Check className="h-3 w-3" strokeWidth={2.6} /> : null}
+      {type === "track" ? <AudioLines className="h-3 w-3" strokeWidth={2.2} /> : null}
       <span>{labels[type] ?? "Стиль"}</span>
     </div>
   );
@@ -515,11 +515,9 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           </div>
         </button>
 
-        <div className="h-8 w-px bg-[rgba(148,163,184,0.18)]" />
-
         <button
           onClick={onOpenBalance}
-          className="ml-auto flex items-center gap-2 rounded-[18px] bg-white px-3 py-2 text-[#111827] ring-1 ring-[rgba(31,41,55,0.08)] transition active:scale-[0.99]"
+          className="ml-auto flex items-center gap-2 px-1 py-2 text-[#111827] transition active:scale-[0.99]"
         >
           <div className="flex items-center gap-1 text-[14px] font-semibold">
             <BalanceDigits value={balance} />
@@ -546,23 +544,31 @@ function PinnedSectionHeader({ children, className = "" }) {
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="flex gap-2 overflow-x-auto px-1 pb-1 pt-2">
+    <div className="overflow-x-auto px-2 pb-1 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex items-end gap-4 pr-2">
       {filters.map((filter) => {
         const isActive = activeFilter === filter.id;
         return (
           <button
             key={filter.id}
             onClick={() => setActiveFilter(filter.id)}
-            className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[13px] font-medium transition ${
+            className={`relative shrink-0 pb-2 text-[15px] transition ${
               isActive
-                ? "border-[rgba(79,70,229,0.14)] bg-[#eef2ff] text-[#4f46e5]"
-                : "border-[rgba(148,163,184,0.16)] bg-white text-[#6b7280]"
+                ? "font-semibold text-[#16130f]"
+                : "font-normal text-[#9ca3af]"
             }`}
           >
             <span>{filter.label}</span>
+            {isActive ? (
+              <motion.span
+                layoutId="search-filter-underline"
+                className="absolute bottom-0 left-0 h-[2.5px] w-full rounded-full bg-[#16130f]"
+              />
+            ) : null}
           </button>
         );
       })}
+      </div>
     </div>
   );
 }
@@ -617,13 +623,13 @@ function FeedCard({ card, onClick }) {
                 key={`${card.id}-feed-${index}`}
                 src={image}
                 alt={`${card.title} ${index + 1}`}
-                className="aspect-[0.86] shrink-0 object-cover transition duration-500 group-hover:scale-[1.02]"
+                className="aspect-[1.03] shrink-0 object-cover transition duration-500 group-hover:scale-[1.02]"
                 style={{ width: `${100 / gallery.length}%` }}
               />
             ))}
           </motion.div>
         </div>
-        {card.badge ? <div className="absolute left-3 top-3"><CardBadge type={card.badge} /></div> : null}
+        {card.badge ? <div className="absolute left-2 top-2"><CardBadge type={card.badge} /></div> : null}
       </div>
 
       <div className="px-3 pb-3 pt-3">
@@ -660,7 +666,7 @@ function SearchMode({
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Поиск по стилям"
+            placeholder="Поиск по трендам"
             className="w-full bg-transparent text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9ca3af]"
           />
         </div>
@@ -672,10 +678,7 @@ function SearchMode({
         </button>
       </div>
 
-      <div className="space-y-3">
-        <div className="px-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#9ca3af]">
-          Категории
-        </div>
+      <div>
         <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </div>
 
@@ -1367,7 +1370,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                     className={`relative flex shrink-0 items-center gap-1.5 pb-2 text-[15px] transition ${
                       profileTab === item.id
                         ? "font-semibold text-[#16130f]"
-                        : "font-normal text-[#7a7366]"
+                        : "font-normal text-[#9ca3af]"
                     }`}
                   >
                     <Icon
@@ -1835,14 +1838,13 @@ function FeedScreen({
               </button>
               <button
                 onClick={() => setShowFavoritesOnly((current) => !current)}
-                className={`flex h-12 shrink-0 items-center gap-2 rounded-[20px] border px-4 text-[14px] font-medium transition ${
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] border transition ${
                   showFavoritesOnly
                     ? "border-[rgba(79,70,229,0.14)] bg-[#eef2ff] text-[#4f46e5]"
                     : "border-[rgba(148,163,184,0.16)] bg-white text-[#6b7280]"
                 }`}
               >
                 <Bookmark className="h-4 w-4" strokeWidth={2.1} />
-                <span>Избранное</span>
               </button>
             </div>
           </div>
