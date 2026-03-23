@@ -11,8 +11,8 @@ import {
   Check,
   ClipboardList,
   Copy,
+  Headset,
   Heart,
-  Plus,
   Search,
   Settings,
   Share,
@@ -62,11 +62,11 @@ const styleSections = [
 ];
 
 const feedSectionTemplates = [
-  { id: "tiktok", label: "ТикТок тренды", audience: "84K", cardIds: [2, 5, 9, 12] },
-  { id: "march8-highlight", label: "#8марта", audience: "36K", cardIds: [6, 8, 3, 4] },
-  { id: "reels", label: "Рилс контент", audience: "112K", cardIds: [2, 4, 7, 12] },
-  { id: "weekly-hits", label: "Хиты недели", audience: "58K", cardIds: [1, 3, 9, 10] },
-  { id: "rising", label: "Набирает популярность", audience: "27K", cardIds: [8, 11, 5, 7] },
+  { id: "tiktok", label: "Crazy Effects", emoji: "🤯", audience: "84K", cardIds: [2, 5, 9, 12] },
+  { id: "march8-highlight", label: "Hot Picks", emoji: "🔥", audience: "36K", cardIds: [6, 8, 3, 4] },
+  { id: "reels", label: "Hyper Transform", emoji: "🚀", audience: "112K", cardIds: [2, 4, 7, 12] },
+  { id: "weekly-hits", label: "New Effects", emoji: "✨", audience: "58K", cardIds: [1, 3, 9, 10] },
+  { id: "rising", label: "Most Wanted", emoji: "🖤", audience: "27K", cardIds: [8, 11, 5, 7] },
 ];
 
 const tasks = [
@@ -495,11 +495,11 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   return (
     <div className={`px-1 pb-0 ${headerTopSpacing}`}>
       <div
-        className={`mx-auto flex w-full max-w-[516px] items-center gap-3 px-3 py-2 ${headerRowOffset}`}
+        className={`mx-auto flex w-full max-w-[516px] items-center gap-3 px-3 py-[7px] ${headerRowOffset}`}
       >
         <button
           onClick={onOpenProfile}
-          className="group flex min-w-0 flex-1 items-center gap-2.5 rounded-[18px] px-1 py-1 text-left transition active:scale-[0.99]"
+          className="group flex min-w-0 flex-1 items-center gap-2.5 rounded-[18px] px-1 py-[3px] text-left transition active:scale-[0.99]"
         >
           <img
             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
@@ -509,24 +509,35 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
           <div className="min-w-0">
             <div className="flex items-center gap-1">
               <div className="truncate text-[16px] font-semibold tracking-[-0.02em] text-[#111827]">Сергей</div>
-              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9aa3b2] opacity-0 transition group-hover:opacity-100" />
+              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#a89f8b] opacity-0 transition group-hover:opacity-100" />
             </div>
-            <div className="text-[12px] text-[#6b7280]">Профиль</div>
+            <div className="text-[12px] text-[#7c6f5c]">Профиль</div>
           </div>
         </button>
 
-        <button
-          onClick={onOpenBalance}
-          className="ml-auto flex items-center gap-2 px-1 py-2 text-[#111827] transition active:scale-[0.99]"
-        >
-          <div className="flex items-center gap-1 text-[14px] font-semibold">
-            <BalanceDigits value={balance} />
-            <Sparkles className={`h-3.5 w-3.5 ${isBonusCounting ? "text-[#4f46e5]" : "text-[#94a3b8]"}`} strokeWidth={2.1} />
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            type="button"
+            className="flex h-10 shrink-0 items-center gap-2 rounded-[16px] border border-[rgba(196,168,120,0.2)] bg-white px-3 text-[13px] font-medium text-[#111827] transition active:scale-[0.99]"
+          >
+            <Headset className="h-4 w-4" strokeWidth={2.1} />
+            <span>Тех поддержка</span>
+          </button>
+
+          <button
+            onClick={onOpenBalance}
+            className="flex h-10 shrink-0 items-center rounded-[16px] border border-[rgba(196,168,120,0.2)] bg-white px-3 text-[13px] font-medium text-[#111827] transition active:scale-[0.99]"
+          >
+            Пополнить
+          </button>
+
+          <div className="flex h-10 shrink-0 items-center gap-1.5 rounded-[16px] bg-[#faf4df] px-3 text-[#111827] ring-1 ring-[rgba(212,166,44,0.14)]">
+            <div className="flex items-center gap-1 text-[14px] font-semibold">
+              <BalanceDigits value={balance} />
+              <Sparkles className={`h-3.5 w-3.5 ${isBonusCounting ? "text-[#c89211]" : "text-[#b5ab92]"}`} strokeWidth={2.1} />
+            </div>
           </div>
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#eef2ff] text-[#4f46e5]">
-            <Plus className="h-4 w-4" />
-          </div>
-        </button>
+        </div>
       </div>
     </div>
   );
@@ -535,7 +546,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 function PinnedSectionHeader({ children, className = "" }) {
   return (
     <div
-      className={`sticky top-0 z-20 -mx-3 bg-[rgba(250,250,248,0.94)] px-3 pb-0 backdrop-blur-[14px] ${className}`}
+      className={`sticky top-0 z-20 -mx-3 bg-white px-3 pb-0 backdrop-blur-[14px] ${className}`}
     >
       {children}
     </div>
@@ -555,7 +566,7 @@ function FilterBar({ activeFilter, setActiveFilter }) {
             className={`relative shrink-0 pb-2 text-[15px] transition ${
               isActive
                 ? "font-semibold text-[#16130f]"
-                : "font-normal text-[#9ca3af]"
+                : "font-normal text-[#a89f8b]"
             }`}
           >
             <span>{filter.label}</span>
@@ -608,7 +619,7 @@ function FeedCard({ card, onClick }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28 }}
       onClick={() => onClick(card)}
-      className="group relative overflow-hidden rounded-[24px] border border-[rgba(148,163,184,0.14)] bg-white text-left shadow-[0_10px_24px_rgba(15,23,42,0.04)]"
+      className="group relative overflow-hidden rounded-[24px] bg-transparent text-left"
     >
       <div className="relative overflow-hidden rounded-[24px]">
         <div className="overflow-hidden rounded-[20px]">
@@ -623,23 +634,19 @@ function FeedCard({ card, onClick }) {
                 key={`${card.id}-feed-${index}`}
                 src={image}
                 alt={`${card.title} ${index + 1}`}
-                className="aspect-[1.03] shrink-0 object-cover transition duration-500 group-hover:scale-[1.02]"
+                className="aspect-[11/15] shrink-0 object-cover transition duration-500 group-hover:scale-[1.02]"
                 style={{ width: `${100 / gallery.length}%` }}
               />
             ))}
           </motion.div>
         </div>
-        {card.badge ? <div className="absolute left-2 top-2"><CardBadge type={card.badge} /></div> : null}
-      </div>
-
-      <div className="px-3 pb-3 pt-3">
-        <div className="flex items-start justify-between gap-3">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-3 pb-3 pt-10">
           <div className="min-w-0">
-            <div className="truncate text-[14px] font-medium leading-none tracking-[-0.01em] text-[#111827]">
+            <div className="truncate text-[14px] font-medium leading-none tracking-[-0.01em] text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.28)]">
               {card.title}
             </div>
           </div>
-          <div className="flex shrink-0 items-center gap-1 text-[13px] font-medium text-[#6b7280]">
+          <div className="flex shrink-0 items-center gap-1 text-[13px] font-medium text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.28)]">
             <Heart className="h-4 w-4" strokeWidth={2} />
             <span>{card.likes}</span>
           </div>
@@ -661,18 +668,18 @@ function SearchMode({
   return (
     <div className="space-y-5 px-1 pb-6 pt-4">
       <div className="flex items-center gap-2">
-        <div className="flex h-11 flex-1 items-center gap-2 rounded-[18px] border border-[rgba(148,163,184,0.16)] bg-white px-3 text-[#111827] shadow-[0_8px_18px_rgba(15,23,42,0.03)]">
-          <Search className="h-4 w-4 text-[#9ca3af]" strokeWidth={2.2} />
+        <div className="flex h-11 flex-1 items-center gap-2 rounded-[18px] border border-[rgba(212,166,44,0.18)] bg-[rgba(255,251,240,0.96)] px-3 text-[#111827] shadow-[0_8px_18px_rgba(68,53,24,0.04)]">
+          <Search className="h-4 w-4 text-[#b5ab92]" strokeWidth={2.2} />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Поиск по трендам"
-            className="w-full bg-transparent text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9ca3af]"
+            className="w-full bg-transparent text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#b5ab92]"
           />
         </div>
         <button
           onClick={onClose}
-          className="text-[14px] font-medium text-[#6b7280]"
+          className="text-[14px] font-medium text-[#7c6f5c]"
         >
           Отмена
         </button>
@@ -683,7 +690,7 @@ function SearchMode({
       </div>
 
       <div className="space-y-4">
-        <div className="px-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#9ca3af]">
+        <div className="px-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#a89f8b]">
           Найдено {results.length}
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -886,7 +893,7 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
 
               <button
                 onClick={onRepeatTrend}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_18px_34px_rgba(82,183,255,0.24)]"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[#ffe23b] px-5 py-4 text-[16px] font-semibold text-[#111111] shadow-[0_18px_34px_rgba(212,166,44,0.18)]"
               >
                 Повторить тренд
               </button>
@@ -1039,9 +1046,9 @@ function CreateTrendScreen({
                 initial={{ scaleX: 0, opacity: 0 }}
                 animate={{ scaleX: isUploading ? 1 : 0, opacity: isUploading ? 1 : 0 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
-                className="absolute inset-0 z-0 origin-left bg-[#52b7ff]/12"
+                className="absolute inset-0 z-0 origin-left bg-[#f4c430]/12"
               />
-              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#52b7ff] text-white shadow-[0_10px_20px_rgba(82,183,255,0.18)]">
+              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#f4c430] text-[#2f2410] shadow-[0_10px_20px_rgba(212,166,44,0.18)]">
                 {isUploading ? (
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -1074,7 +1081,7 @@ function CreateTrendScreen({
                   onClick={() => setAspectRatio(value)}
                   className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                     aspectRatio === value
-                      ? "bg-[#52b7ff] text-white"
+                      ? "bg-[#f4c430] text-[#2f2410]"
                       : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                   }`}
                 >
@@ -1098,7 +1105,7 @@ function CreateTrendScreen({
                   onClick={() => setQuality(option.id)}
                   className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                     quality === option.id
-                      ? "bg-[#52b7ff] text-white"
+                      ? "bg-[#f4c430] text-[#2f2410]"
                       : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                   }`}
                 >
@@ -1120,7 +1127,7 @@ function CreateTrendScreen({
                     onClick={() => setDuration(value)}
                     className={`rounded-full px-4 py-2 text-[13px] font-semibold transition ${
                       duration === value
-                        ? "bg-[#52b7ff] text-white"
+                        ? "bg-[#f4c430] text-[#2f2410]"
                         : "border border-[rgba(219,216,207,0.95)] bg-white text-[#2a2620]"
                     }`}
                   >
@@ -1139,7 +1146,7 @@ function CreateTrendScreen({
               hasUploadedPhoto: hasPhoto,
             })
           }
-          className="flex w-full items-center justify-center gap-2 rounded-[24px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_16px_32px_rgba(82,183,255,0.24)]"
+          className="flex w-full items-center justify-center gap-2 rounded-[24px] bg-[#ffe23b] px-5 py-4 text-[16px] font-semibold text-[#111111] shadow-[0_16px_32px_rgba(212,166,44,0.18)]"
         >
           <span>Создать за 10</span>
           <Sparkles className="h-5 w-5" strokeWidth={2.1} />
@@ -1153,7 +1160,7 @@ function TaskCard({ task }) {
   return (
     <div className="rounded-[22px] border border-[#e3dfd5] bg-white p-4 shadow-[0_8px_24px_rgba(70,89,122,0.06)]">
       <div className="space-y-3">
-        <div className="flex items-center justify-between gap-3 rounded-[14px] bg-[#fff9e8] px-3 py-2">
+        <div className="flex items-center justify-between gap-3 px-1 py-1">
           <div className="min-w-0 text-[16px] font-semibold text-[#1f1b15]">{task.title}</div>
           <div className="flex shrink-0 items-center gap-1 rounded-full bg-[#fff4c9] px-3 py-1.5 text-[13px] font-semibold text-[#7a5a00]">
             <span>+{task.reward}</span>
@@ -1163,7 +1170,7 @@ function TaskCard({ task }) {
 
         <div className="flex items-end justify-between gap-3">
           <div className="max-w-[72%] text-[13px] leading-5 text-[#6f6a61]">{task.description}</div>
-          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#52b7ff] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#3ea7f2]">
+          <button className="flex shrink-0 items-center justify-center gap-2 rounded-[16px] bg-[#ffe23b] px-4 py-3 text-[14px] font-semibold text-[#111111] transition hover:bg-[#f2d52f]">
             <Play className="h-4 w-4" strokeWidth={2.2} />
             Начать
           </button>
@@ -1184,7 +1191,7 @@ function ProductCard({ product, isSelected, onSelect }) {
         isFeatured
           ? "border-[rgba(35,32,26,0.95)] bg-[linear-gradient(180deg,#23201a_0%,#181510_100%)]"
           : "border-[rgba(227,223,213,0.96)] bg-[rgba(250,250,247,0.98)]"
-      } ${isSelected ? "ring-2 ring-[#2b7de9] ring-offset-2 ring-offset-transparent" : ""}`}
+      } ${isSelected ? "ring-2 ring-[#d4a017] ring-offset-2 ring-offset-transparent" : ""}`}
     >
       <div className={`relative px-5 py-[10px] ${isFeatured ? "text-[#f4c430]" : "text-[#1d2333]"}`}>
         {product.badge ? (
@@ -1310,7 +1317,7 @@ function ShopScreen({
         </div>
 
         <div className="pt-2">
-          <button className="flex w-full items-center justify-center rounded-[28px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_18px_34px_rgba(82,183,255,0.22)]">
+          <button className="flex w-full items-center justify-center rounded-[28px] bg-[#ffe23b] px-5 py-4 text-[17px] font-semibold text-[#111111] shadow-[0_18px_34px_rgba(212,166,44,0.18)]">
             Перейти к оплате
           </button>
         </div>
@@ -1328,7 +1335,7 @@ function ShopScreen({
             </div>
             <button
               onClick={onActivateDiscount}
-              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[17px] font-semibold text-white shadow-[0_16px_34px_rgba(82,183,255,0.22)]"
+              className="mt-6 flex w-full items-center justify-center rounded-[24px] bg-[#ffe23b] px-5 py-4 text-[17px] font-semibold text-[#111111] shadow-[0_16px_34px_rgba(212,166,44,0.18)]"
             >
               Активировать скидку
             </button>
@@ -1370,7 +1377,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                     className={`relative flex shrink-0 items-center gap-1.5 pb-2 text-[15px] transition ${
                       profileTab === item.id
                         ? "font-semibold text-[#16130f]"
-                        : "font-normal text-[#9ca3af]"
+                        : "font-normal text-[#a89f8b]"
                     }`}
                   >
                     <Icon
@@ -1440,7 +1447,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
               За каждого нового друга можно получать бонусные фотографии и ускорять генерацию.
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#52b7ff] px-4 py-3 text-[14px] font-semibold text-white transition hover:bg-[#3ea7f2]">
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#ffe23b] px-4 py-3 text-[14px] font-semibold text-[#111111] transition hover:bg-[#f2d52f]">
                 <Send className="h-4 w-4" strokeWidth={2.2} />
                 Отправить
               </button>
@@ -1539,7 +1546,7 @@ function LoadingScreen({
                 initial={{ width: "12%" }}
                 animate={{ width: ["12%", "48%", "72%", "87%"] }}
                 transition={{ duration: 2.4, ease: "easeInOut" }}
-                className="h-full rounded-full bg-[linear-gradient(90deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)]"
+                className="h-full rounded-full bg-[linear-gradient(90deg,#fde7a3_0%,#f4c430_52%,#d4a017_100%)]"
               />
             </div>
           </div>
@@ -1558,7 +1565,7 @@ function LoadingScreen({
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(50,39,19,0.06)_0%,rgba(59,42,0,0.18)_100%)]" />
 
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-[#2b7de9] shadow-[0_12px_28px_rgba(43,125,233,0.12)] backdrop-blur-sm">
+            <div className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-[#c89211] shadow-[0_12px_28px_rgba(212,166,44,0.12)] backdrop-blur-sm">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
@@ -1597,7 +1604,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
       <div className="rounded-[22px] bg-[#f6f6f2] px-4 pb-4 pt-4 ring-1 ring-[#e4e1d9]">
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-[#1f1b15]">
-            <Check className="h-5 w-5 text-[#2b7de9]" strokeWidth={2.6} />
+            <Check className="h-5 w-5 text-[#c89211]" strokeWidth={2.6} />
             <span>Фото готово</span>
           </div>
         </div>
@@ -1638,7 +1645,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
       </div>
 
       <div className="space-y-2">
-        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[15px] font-semibold text-white shadow-[0_14px_28px_rgba(82,183,255,0.22)]">
+        <button className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#ffe23b] px-5 py-4 text-[15px] font-semibold text-[#111111] shadow-[0_14px_28px_rgba(212,166,44,0.18)]">
           <Plus className="h-5 w-5" strokeWidth={2.2} />
           Опубликовать в Сторис
         </button>
@@ -1679,7 +1686,7 @@ function ErrorScreen({ onRetry, onOpenBalance, onOpenProfile, balance, isBonusCo
 
       <button
         onClick={onRetry}
-        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-4 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(82,183,255,0.22)]"
+        className="flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#ffe23b] px-5 py-4 text-[16px] font-semibold text-[#111111] shadow-[0_14px_28px_rgba(212,166,44,0.18)]"
       >
         <Wand2 className="h-5 w-5" strokeWidth={2.2} />
         Попробовать еще раз
@@ -1797,6 +1804,19 @@ function FeedScreen({
     setActiveFilter("all");
   };
 
+  const feedSections = useMemo(
+    () =>
+      feedSectionTemplates
+        .map((section) => ({
+          ...section,
+          cards: section.cardIds
+            .map((cardId) => feedCards.find((card) => card.id === cardId))
+            .filter(Boolean),
+        }))
+        .filter((section) => section.cards.length > 0),
+    [feedCards],
+  );
+
   return (
     <>
       <PinnedSectionHeader className="pt-0">
@@ -1821,27 +1841,20 @@ function FeedScreen({
       ) : (
         <div className="space-y-6 bg-white pb-6 pt-5">
           <div className="space-y-3 px-1">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h1 className="text-[30px] font-semibold leading-[1.02] tracking-[-0.05em] text-[#111827]">
-                  Повтори тот самый тренд
-                </h1>
-              </div>
-            </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsSearchMode(true)}
-                className="flex h-12 flex-1 items-center gap-3 rounded-[20px] border border-[rgba(148,163,184,0.16)] bg-[rgba(249,250,251,0.9)] px-4 text-left text-[14px] font-medium text-[#9ca3af]"
+                className="flex h-12 flex-1 items-center gap-3 rounded-[20px] border border-[rgba(212,166,44,0.18)] bg-[rgba(255,251,240,0.96)] px-4 text-left text-[14px] font-medium text-[#b5ab92]"
               >
                 <Search className="h-4 w-4" strokeWidth={2.2} />
-                <span>Поиск по стилям и категориям</span>
+                <span>Поиск по трендам</span>
               </button>
               <button
                 onClick={() => setShowFavoritesOnly((current) => !current)}
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] border transition ${
                   showFavoritesOnly
-                    ? "border-[rgba(79,70,229,0.14)] bg-[#eef2ff] text-[#4f46e5]"
-                    : "border-[rgba(148,163,184,0.16)] bg-white text-[#6b7280]"
+                    ? "border-[rgba(212,166,44,0.2)] bg-[#faf4df] text-[#c89211]"
+                    : "border-[rgba(196,168,120,0.18)] bg-white text-[#7c6f5c]"
                 }`}
               >
                 <Bookmark className="h-4 w-4" strokeWidth={2.1} />
@@ -1849,9 +1862,23 @@ function FeedScreen({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 px-1">
-            {feedCards.map((card) => (
-              <FeedCard key={card.id} card={card} onClick={() => onSelectCard(card)} />
+          <div className="space-y-7 bg-white">
+            {feedSections.map((section) => (
+              <section key={section.id} className="space-y-3">
+                <div className="px-1">
+                  <h2 className="text-[22px] font-semibold leading-none tracking-[-0.04em] text-[#111111]">
+                    {section.label} <span>{section.emoji}</span>
+                  </h2>
+                </div>
+
+                <div className="flex gap-3 overflow-x-auto px-1 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {section.cards.map((card) => (
+                    <div key={card.id} className="w-[186px] shrink-0">
+                      <FeedCard card={card} onClick={() => onSelectCard(card)} />
+                    </div>
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
         </div>
@@ -2230,7 +2257,7 @@ export default function App() {
             <button
               onClick={claimWelcomeBonus}
               disabled={isBonusClaimClosing || isBonusCounting}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[linear-gradient(135deg,#7dd8ff_0%,#52b7ff_52%,#2b7de9_100%)] px-5 py-3.5 text-[16px] font-semibold text-white shadow-[0_14px_28px_rgba(82,183,255,0.22)]"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#ffe23b] px-5 py-3.5 text-[16px] font-semibold text-[#111111] shadow-[0_14px_28px_rgba(212,166,44,0.18)]"
             >
               <span>Забрать 20</span>
               <Sparkles className="h-5 w-5" strokeWidth={2.1} />
