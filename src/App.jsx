@@ -495,7 +495,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
   return (
     <div className={`px-1 pb-0 ${headerTopSpacing}`}>
       <div
-        className={`mx-auto flex w-full max-w-[516px] items-center gap-3 rounded-[24px] border border-[rgba(31,41,55,0.08)] bg-[rgba(251,251,249,0.94)] px-3 py-2 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur-[12px] ${headerRowOffset}`}
+        className={`mx-auto flex w-full max-w-[516px] items-center gap-3 px-3 py-2 ${headerRowOffset}`}
       >
         <button
           onClick={onOpenProfile}
@@ -617,7 +617,7 @@ function FeedCard({ card, onClick }) {
                 key={`${card.id}-feed-${index}`}
                 src={image}
                 alt={`${card.title} ${index + 1}`}
-                className="aspect-[0.78] shrink-0 object-cover transition duration-500 group-hover:scale-[1.02]"
+                className="aspect-[0.86] shrink-0 object-cover transition duration-500 group-hover:scale-[1.02]"
                 style={{ width: `${100 / gallery.length}%` }}
               />
             ))}
@@ -626,13 +626,10 @@ function FeedCard({ card, onClick }) {
         {card.badge ? <div className="absolute left-3 top-3"><CardBadge type={card.badge} /></div> : null}
       </div>
 
-      <div className="space-y-2 px-3 pb-3 pt-3">
+      <div className="px-3 pb-3 pt-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-[12px] font-medium uppercase tracking-[0.08em] text-[#9ca3af]">
-              {getCardCategoryLabel(card)}
-            </div>
-            <div className="mt-1 text-[16px] font-semibold leading-[1.15] tracking-[-0.02em] text-[#111827]">
+            <div className="truncate text-[14px] font-medium leading-none tracking-[-0.01em] text-[#111827]">
               {card.title}
             </div>
           </div>
@@ -1766,12 +1763,18 @@ function FeedScreen({
 }) {
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+
+  const feedCards = useMemo(() => {
+    if (!showFavoritesOnly) return visibleCards;
+    return visibleCards.filter((card) => card.badge === "choice");
+  }, [showFavoritesOnly, visibleCards]);
 
   const searchResults = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
-    if (!normalizedQuery) return visibleCards;
+    if (!normalizedQuery) return feedCards;
 
-    return visibleCards.filter((card) => {
+    return feedCards.filter((card) => {
       const searchableText = [
         card.title,
         card.description,
@@ -1783,7 +1786,7 @@ function FeedScreen({
 
       return searchableText.includes(normalizedQuery);
     });
-  }, [searchQuery, visibleCards]);
+  }, [feedCards, searchQuery]);
 
   const closeSearchMode = () => {
     setIsSearchMode(false);
@@ -1817,25 +1820,35 @@ function FeedScreen({
           <div className="space-y-3 px-1">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#9ca3af]">
-                  NANA styles
-                </div>
-                <h1 className="mt-2 text-[30px] font-semibold leading-[1.02] tracking-[-0.05em] text-[#111827]">
-                  Лента стильных образов
+                <h1 className="text-[30px] font-semibold leading-[1.02] tracking-[-0.05em] text-[#111827]">
+                  Повтори тот самый тренд
                 </h1>
               </div>
             </div>
-            <button
-              onClick={() => setIsSearchMode(true)}
-              className="flex h-12 w-full items-center gap-3 rounded-[20px] border border-[rgba(148,163,184,0.16)] bg-[rgba(249,250,251,0.9)] px-4 text-left text-[14px] font-medium text-[#9ca3af]"
-            >
-              <Search className="h-4 w-4" strokeWidth={2.2} />
-              <span>Поиск по стилям и категориям</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsSearchMode(true)}
+                className="flex h-12 flex-1 items-center gap-3 rounded-[20px] border border-[rgba(148,163,184,0.16)] bg-[rgba(249,250,251,0.9)] px-4 text-left text-[14px] font-medium text-[#9ca3af]"
+              >
+                <Search className="h-4 w-4" strokeWidth={2.2} />
+                <span>Поиск по стилям и категориям</span>
+              </button>
+              <button
+                onClick={() => setShowFavoritesOnly((current) => !current)}
+                className={`flex h-12 shrink-0 items-center gap-2 rounded-[20px] border px-4 text-[14px] font-medium transition ${
+                  showFavoritesOnly
+                    ? "border-[rgba(79,70,229,0.14)] bg-[#eef2ff] text-[#4f46e5]"
+                    : "border-[rgba(148,163,184,0.16)] bg-white text-[#6b7280]"
+                }`}
+              >
+                <Bookmark className="h-4 w-4" strokeWidth={2.1} />
+                <span>Избранное</span>
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3 px-1">
-            {visibleCards.map((card) => (
+            {feedCards.map((card) => (
               <FeedCard key={card.id} card={card} onClick={() => onSelectCard(card)} />
             ))}
           </div>
