@@ -839,7 +839,6 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
   const renderTrendPanel = (trend, panelType) => {
     const trendGallery = trend.gallery?.length ? trend.gallery : [trend.image];
     const isCurrent = panelType === "current";
-    const usage = getTrendUsage(trend);
 
     return (
       <div className="relative h-full w-full overflow-hidden">
@@ -850,6 +849,7 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
             onTouchStart={handleGalleryTouchStart}
             onTouchEnd={handleGalleryTouchEnd}
             className={`flex h-full overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${canSlideGallery ? "snap-x snap-mandatory" : ""}`}
+            style={{ touchAction: canSlideGallery ? "pan-x" : "none" }}
           >
             {styleGallery.map((image, index) => (
               <img
@@ -866,39 +866,11 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/82 via-black/18 to-transparent" />
 
-        {trend.badge ? (
-          <div className="absolute left-4 top-5">
-            <CardBadge type={trend.badge} />
-          </div>
-        ) : null}
-
-        <div className="pointer-events-none absolute inset-x-0 top-5 px-5">
-          <div className="text-center text-[23px] font-semibold tracking-[-0.03em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.28)]">
-            {trend.title}
-          </div>
-        </div>
-
         {isCurrent ? (
           <>
             <div className="absolute inset-x-0 bottom-0 px-4 pb-5">
-              <div className="max-w-[78%]">
-                <div className="mt-3 flex items-center gap-2 text-[13px] font-medium text-white/90">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/14 backdrop-blur-sm">
-                    <User className="h-4 w-4" strokeWidth={2.1} />
-                  </span>
-                  <span>{usage} выбрали</span>
-                </div>
-              </div>
-
-              <button
-                onClick={onRepeatTrend}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[#ffe23b] px-5 py-4 text-[16px] font-semibold text-[#111111] shadow-[0_18px_34px_rgba(212,166,44,0.18)]"
-              >
-                Повторить тренд
-              </button>
-
               {styleGallery.length > 1 ? (
-                <div className="mt-4 flex items-center justify-center gap-1.5">
+                <div className="mb-4 flex items-center justify-center gap-1.5">
                   {styleGallery.map((_, index) => (
                     <span
                       key={`${trend.id}-dot-${index}`}
@@ -909,31 +881,42 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
                   ))}
                 </div>
               ) : null}
+
+              <div className="max-w-[78%] text-[22px] font-semibold tracking-[-0.03em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.28)]">
+                {trend.title}
+              </div>
+
+              <button
+                onClick={onRepeatTrend}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-[24px] bg-[#ffe23b] px-5 py-4 text-[16px] font-semibold text-[#111111] shadow-[0_18px_34px_rgba(212,166,44,0.18)]"
+              >
+                Повторить тренд
+              </button>
             </div>
 
-            <div className="absolute right-4 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-6 text-white">
+            <div className="absolute right-4 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-4 text-white">
               <button
                 onClick={() => setIsLiked((prev) => !prev)}
                 className="flex flex-col items-center gap-2"
               >
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
-                  <Heart className="h-9 w-9" strokeWidth={2.1} fill={isLiked ? "currentColor" : "none"} />
+                <span className="flex h-10 w-10 items-center justify-center">
+                  <Heart className="h-6 w-6" strokeWidth={2.1} fill={isLiked ? "currentColor" : "none"} />
                 </span>
-                <span className="text-[14px] font-semibold leading-none">{trend.likes}</span>
+                <span className="text-[10px] font-semibold leading-none">{trend.likes}</span>
               </button>
               <button className="flex flex-col items-center gap-2">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
-                  <Send className="h-9 w-9" strokeWidth={2.1} />
+                <span className="flex h-10 w-10 items-center justify-center">
+                  <Send className="h-6 w-6" strokeWidth={2.1} />
                 </span>
-                <span className="text-[14px] font-semibold leading-none">
+                <span className="text-[10px] font-semibold leading-none">
                   {Math.max(12, Math.round(trend.likes / 3))}
                 </span>
               </button>
               <button className="flex flex-col items-center gap-2">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/28 backdrop-blur-sm">
-                  <Bookmark className="h-9 w-9" strokeWidth={2.1} />
+                <span className="flex h-10 w-10 items-center justify-center">
+                  <Bookmark className="h-6 w-6" strokeWidth={2.1} />
                 </span>
-                <span className="text-[14px] font-semibold leading-none">
+                <span className="text-[10px] font-semibold leading-none">
                   {Math.max(5, Math.round(trend.likes / 5))}
                 </span>
               </button>
@@ -954,7 +937,7 @@ function StyleScreen({ card, sectionStyles, onSelectStyle, onRepeatTrend }) {
         <motion.div
           drag="y"
           dragDirectionLock
-          dragElastic={0.12}
+          dragElastic={0.03}
           dragMomentum={false}
           dragConstraints={{ top: -screenHeight * 2, bottom: 0 }}
           onDragEnd={handleTrendDragEnd}
@@ -1450,7 +1433,7 @@ function ProfileScreen({ onBack, onOpenBalance, onOpenProfile, balance, isBonusC
                 <Send className="h-4 w-4" strokeWidth={2.2} />
                 Отправить
               </button>
-              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#1f1d18] px-4 py-3 text-[14px] font-semibold text-[#f4c430] transition hover:bg-[#16140f]">
+              <button className="flex items-center justify-center gap-2 rounded-[16px] bg-[#f3f4f6] px-4 py-3 text-[14px] font-semibold text-[#111111] transition hover:bg-[#e5e7eb]">
                 <Copy className="h-4 w-4" strokeWidth={2.2} />
                 Скопировать
               </button>
@@ -1613,7 +1596,7 @@ function ResultScreen({ card, onBack, onOpenBalance, onOpenProfile, balance, isB
         <div className="relative overflow-hidden rounded-[24px]">
           <img src={card.image} alt={card.title} className="aspect-[1.08] w-full object-cover" />
 
-          <button className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#1f1d18] px-4 py-3 text-[#f4c430] shadow-[0_12px_24px_rgba(31,29,24,0.18)]">
+          <button className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#ffe23b] px-4 py-3 text-[#111111] shadow-[0_12px_24px_rgba(212,166,44,0.18)]">
             <Download className="h-5 w-5" strokeWidth={2.2} />
             <span className="text-[13px] font-semibold">Скачать</span>
           </button>
