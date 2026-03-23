@@ -38,14 +38,20 @@ import {
 } from "lucide-react";
 
 const filters = [
-  { id: "search", label: "", icon: Search },
-  { id: "liked", label: "", icon: Bookmark },
-  { id: "all", label: "Все", icon: Check },
-  { id: "new", label: "Новинки", icon: Star },
-  { id: "popular", label: "Популярное", icon: Zap },
-  { id: "photo", label: "Фото", icon: Image },
-  { id: "video", label: "Видео", icon: Film },
+  { id: "all", label: "Все" },
+  { id: "march8", label: "8 марта" },
+  { id: "spring", label: "Весна" },
+  { id: "business", label: "Деловой" },
+  { id: "street", label: "Улица" },
 ];
+
+const sectionLabels = {
+  all: "Все",
+  march8: "8 марта",
+  spring: "Весна",
+  business: "Деловой",
+  street: "Улица",
+};
 
 const styleSections = [
   { id: "all", label: "Все" },
@@ -328,6 +334,26 @@ function hasTelegramContext() {
   return !!(tg && (tg.initData?.length || tg.initDataUnsafe?.user));
 }
 
+function getTelegramClientType() {
+  if (typeof window === "undefined") return "browser";
+
+  const tg = window.Telegram?.WebApp;
+  if (!(tg && (tg.initData?.length || tg.initDataUnsafe?.user))) return "browser";
+
+  const platform = String(tg.platform || "").toLowerCase();
+
+  if (platform === "android" || platform === "ios") return "mobile";
+  if (platform === "tdesktop" || platform === "macos" || platform === "unigram") return "desktop";
+  if (platform.startsWith("web")) return "web";
+
+  const userAgent = window.navigator.userAgent.toLowerCase();
+
+  if (/iphone|ipad|ipod|android|mobile/.test(userAgent)) return "mobile";
+  if (/macintosh|windows|linux/.test(userAgent)) return "desktop";
+
+  return "web";
+}
+
 function useTelegramWebApp() {
   const [isTelegram, setIsTelegram] = useState(false);
 
@@ -401,14 +427,6 @@ function useTelegramWebApp() {
 }
 
 function CardBadge({ type }) {
-  const styles = {
-    new: "bg-[#3c8dff] text-white",
-    popular: "bg-[#ffbf1f] text-[#463100]",
-    free: "bg-[#49b8ff] text-white",
-    choice: "bg-[#f4c430] text-[#3b2a00]",
-    track: "bg-[#1f2430] text-white",
-  };
-
   const labels = {
     new: "Новинка",
     popular: "Вирусное",
@@ -419,24 +437,27 @@ function CardBadge({ type }) {
 
   return (
     <div
-      className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[12px] font-semibold shadow-[0_8px_16px_rgba(15,23,42,0.12)] ${styles[type] ?? "bg-white text-[#1f1b15]"}`}
+      className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[rgba(93,112,146,0.12)] bg-[rgba(255,255,255,0.92)] px-3 text-[11px] font-medium tracking-[0.01em] text-[#4e5f7e] backdrop-blur-[8px]"
     >
-      <span className="flex items-center gap-1">
-        {type === "new" ? <Star className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
-        {type === "popular" ? <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
-        {type === "free" ? <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
-        {type === "choice" ? <Check className="h-3.5 w-3.5" strokeWidth={2.6} /> : null}
-        {type === "track" ? <AudioLines className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
-        <span>{labels[type] ?? "Стиль"}</span>
-      </span>
+      {type === "new" ? <Star className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
+      {type === "popular" ? <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
+      {type === "free" ? <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} /> : null}
+      {type === "choice" ? <Check className="h-3.5 w-3.5" strokeWidth={2.6} /> : null}
+      {type === "track" ? <AudioLines className="h-3.5 w-3.5" strokeWidth={2.2} /> : null}
+      <span>{labels[type] ?? "Стиль"}</span>
     </div>
   );
 }
 
+function getCardCategoryLabel(card) {
+  return sectionLabels[card.section] ?? card.categories?.[0] ?? "Стиль";
+}
+
 function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting = false }) {
-  const isTelegramClient = typeof window !== "undefined" && hasTelegramContext();
-  const headerTopSpacing = isTelegramClient ? "pt-[180px]" : "pt-[10px]";
-  const headerRowOffset = isTelegramClient ? "mt-[-75px]" : "mt-0";
+  const telegramClientType = getTelegramClientType();
+  const isTelegramMobile = telegramClientType === "mobile";
+  const headerTopSpacing = isTelegramMobile ? "pt-[180px]" : "pt-[10px]";
+  const headerRowOffset = isTelegramMobile ? "mt-[-75px]" : "mt-0";
 
   const BalanceDigits = ({ value }) => {
     const safeValue = Math.max(0, Math.min(99, value));
@@ -473,37 +494,41 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 
   return (
     <div className={`px-1 pb-0 ${headerTopSpacing}`}>
-      <div className={`mx-auto flex w-full max-w-[516px] items-center justify-between gap-3 ${headerRowOffset}`}>
+      <div
+        className={`mx-auto flex w-full max-w-[516px] items-center gap-3 rounded-[24px] border border-[rgba(31,41,55,0.08)] bg-[rgba(251,251,249,0.94)] px-3 py-2 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur-[12px] ${headerRowOffset}`}
+      >
         <button
           onClick={onOpenProfile}
-          className="group flex min-w-0 items-center gap-3 rounded-full border border-[rgba(219,219,212,0.92)] bg-[rgba(250,250,247,0.96)] px-2 py-1.5 text-left shadow-[0_4px_14px_rgba(43,39,28,0.04)] transition active:scale-[0.98]"
+          className="group flex min-w-0 flex-1 items-center gap-2.5 rounded-[18px] px-1 py-1 text-left transition active:scale-[0.99]"
         >
           <img
             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
             alt="avatar"
-            className="h-12 w-12 rounded-full object-cover"
+            className="h-10 w-10 rounded-full object-cover"
           />
           <div className="min-w-0">
             <div className="flex items-center gap-1">
-              <div className="truncate text-[18px] font-semibold text-[#231f17]">Сергей</div>
-              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#a09784] opacity-0 transition group-hover:opacity-100" />
+              <div className="truncate text-[16px] font-semibold tracking-[-0.02em] text-[#111827]">Сергей</div>
+              <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-[#9aa3b2] opacity-0 transition group-hover:opacity-100" />
             </div>
-            <div className="text-[11px] text-[#7b7365]">Мой профиль</div>
+            <div className="text-[12px] text-[#6b7280]">Профиль</div>
           </div>
         </button>
 
-        <div className="ml-auto flex items-center overflow-hidden rounded-full border border-[rgba(36,31,24,0.18)] bg-white text-[#1f1b15] shadow-[0_6px_16px_rgba(25,20,12,0.08)]">
-          <div className="flex items-center gap-1 px-3 py-1.5 text-[14px] font-semibold">
+        <div className="h-8 w-px bg-[rgba(148,163,184,0.18)]" />
+
+        <button
+          onClick={onOpenBalance}
+          className="ml-auto flex items-center gap-2 rounded-[18px] bg-white px-3 py-2 text-[#111827] ring-1 ring-[rgba(31,41,55,0.08)] transition active:scale-[0.99]"
+        >
+          <div className="flex items-center gap-1 text-[14px] font-semibold">
             <BalanceDigits value={balance} />
-            <Sparkles className="h-3.5 w-3.5" strokeWidth={2.1} />
+            <Sparkles className={`h-3.5 w-3.5 ${isBonusCounting ? "text-[#4f46e5]" : "text-[#94a3b8]"}`} strokeWidth={2.1} />
           </div>
-          <button
-            onClick={onOpenBalance}
-            className="flex h-10 w-10 items-center justify-center bg-[#1f1d18] text-[#f4c430]"
-          >
-            <Plus className="h-4.5 w-4.5" />
-          </button>
-        </div>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#eef2ff] text-[#4f46e5]">
+            <Plus className="h-4 w-4" />
+          </div>
+        </button>
       </div>
     </div>
   );
@@ -512,7 +537,7 @@ function Header({ onOpenBalance, onOpenProfile, balance = 184, isBonusCounting =
 function PinnedSectionHeader({ children, className = "" }) {
   return (
     <div
-      className={`sticky top-0 z-20 -mx-3 bg-[rgba(246,246,242,0.96)] px-3 pb-0 backdrop-blur-[10px] ${className}`}
+      className={`sticky top-0 z-20 -mx-3 bg-[rgba(250,250,248,0.94)] px-3 pb-0 backdrop-blur-[14px] ${className}`}
     >
       {children}
     </div>
@@ -521,26 +546,20 @@ function PinnedSectionHeader({ children, className = "" }) {
 
 function FilterBar({ activeFilter, setActiveFilter }) {
   return (
-    <div className="mt-[-5px] flex items-end gap-4 overflow-x-auto px-2 pb-1 pt-2">
+    <div className="flex gap-2 overflow-x-auto px-1 pb-1 pt-2">
       {filters.map((filter) => {
-        const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
         return (
           <button
             key={filter.id}
             onClick={() => setActiveFilter(filter.id)}
-            className={`relative flex shrink-0 items-center gap-1.5 pb-2 text-[15px] transition ${
-              isActive ? "font-semibold text-[#16130f]" : "font-normal text-[#7a7366]"
+            className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[13px] font-medium transition ${
+              isActive
+                ? "border-[rgba(79,70,229,0.14)] bg-[#eef2ff] text-[#4f46e5]"
+                : "border-[rgba(148,163,184,0.16)] bg-white text-[#6b7280]"
             }`}
           >
-            <Icon className="h-4 w-4" strokeWidth={2.2} />
-            {filter.label ? <span>{filter.label}</span> : null}
-            {isActive ? (
-              <motion.span
-                layoutId="header-filter-underline"
-                className="absolute bottom-0 left-0 h-[2.5px] w-full rounded-full bg-[#16130f]"
-              />
-            ) : null}
+            <span>{filter.label}</span>
           </button>
         );
       })}
@@ -579,14 +598,14 @@ function FeedCard({ card, onClick }) {
   return (
     <motion.button
       whileTap={{ scale: 0.98 }}
-      initial={{ opacity: 0, y: 18 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
+      transition={{ duration: 0.28 }}
       onClick={() => onClick(card)}
-      className="relative overflow-hidden rounded-[14px] bg-[#f1f1ee] text-left shadow-[0_6px_18px_rgba(82,103,138,0.05)]"
+      className="group relative overflow-hidden rounded-[24px] border border-[rgba(148,163,184,0.14)] bg-white text-left shadow-[0_10px_24px_rgba(15,23,42,0.04)]"
     >
-      <div className="relative overflow-hidden rounded-[14px]">
-        <div className="overflow-hidden">
+      <div className="relative overflow-hidden rounded-[24px]">
+        <div className="overflow-hidden rounded-[20px]">
           <motion.div
             animate={{ x: `-${activeSlide * slideOffset}%` }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -598,26 +617,82 @@ function FeedCard({ card, onClick }) {
                 key={`${card.id}-feed-${index}`}
                 src={image}
                 alt={`${card.title} ${index + 1}`}
-                className="aspect-[0.72] shrink-0 object-cover"
+                className="aspect-[0.78] shrink-0 object-cover transition duration-500 group-hover:scale-[1.02]"
                 style={{ width: `${100 / gallery.length}%` }}
               />
             ))}
           </motion.div>
         </div>
-        {card.badge ? <CardBadge type={card.badge} /> : null}
+        {card.badge ? <div className="absolute left-3 top-3"><CardBadge type={card.badge} /></div> : null}
+      </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent px-3 pb-2 pt-10">
-          <div className="max-w-[75%] text-[14px] font-semibold leading-tight text-white drop-shadow-sm">
-            {card.title}
+      <div className="space-y-2 px-3 pb-3 pt-3">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-[12px] font-medium uppercase tracking-[0.08em] text-[#9ca3af]">
+              {getCardCategoryLabel(card)}
+            </div>
+            <div className="mt-1 text-[16px] font-semibold leading-[1.15] tracking-[-0.02em] text-[#111827]">
+              {card.title}
+            </div>
           </div>
-        </div>
-
-        <div className="pointer-events-none absolute bottom-2 right-2 flex items-center gap-1 text-white">
-          <Heart className="h-5 w-5 fill-current" />
-          <span className="text-[14px] font-medium leading-none">{card.likes}</span>
+          <div className="flex shrink-0 items-center gap-1 text-[13px] font-medium text-[#6b7280]">
+            <Heart className="h-4 w-4" strokeWidth={2} />
+            <span>{card.likes}</span>
+          </div>
         </div>
       </div>
     </motion.button>
+  );
+}
+
+function SearchMode({
+  query,
+  setQuery,
+  activeFilter,
+  setActiveFilter,
+  results,
+  onClose,
+  onSelectCard,
+}) {
+  return (
+    <div className="space-y-5 px-1 pb-6 pt-4">
+      <div className="flex items-center gap-2">
+        <div className="flex h-11 flex-1 items-center gap-2 rounded-[18px] border border-[rgba(148,163,184,0.16)] bg-white px-3 text-[#111827] shadow-[0_8px_18px_rgba(15,23,42,0.03)]">
+          <Search className="h-4 w-4 text-[#9ca3af]" strokeWidth={2.2} />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Поиск по стилям"
+            className="w-full bg-transparent text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9ca3af]"
+          />
+        </div>
+        <button
+          onClick={onClose}
+          className="text-[14px] font-medium text-[#6b7280]"
+        >
+          Отмена
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        <div className="px-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#9ca3af]">
+          Категории
+        </div>
+        <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+      </div>
+
+      <div className="space-y-4">
+        <div className="px-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#9ca3af]">
+          Найдено {results.length}
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {results.map((card) => (
+            <FeedCard key={card.id} card={card} onClick={onSelectCard} />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -1683,21 +1758,38 @@ function FeedScreen({
   activeFilter,
   setActiveFilter,
   visibleCards,
-  onOpenSection,
   onSelectCard,
   onOpenBalance,
   onOpenProfile,
   balance,
   isBonusCounting,
 }) {
-  const feedSections = feedSectionTemplates
-    .map((section) => ({
-      ...section,
-      cards: section.cardIds
-        .map((cardId) => visibleCards.find((card) => card.id === cardId))
-        .filter(Boolean),
-    }))
-    .filter((section) => section.cards.length > 0);
+  const [isSearchMode, setIsSearchMode] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const searchResults = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    if (!normalizedQuery) return visibleCards;
+
+    return visibleCards.filter((card) => {
+      const searchableText = [
+        card.title,
+        card.description,
+        getCardCategoryLabel(card),
+        ...(card.categories ?? []),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(normalizedQuery);
+    });
+  }, [searchQuery, visibleCards]);
+
+  const closeSearchMode = () => {
+    setIsSearchMode(false);
+    setSearchQuery("");
+    setActiveFilter("all");
+  };
 
   return (
     <>
@@ -1708,37 +1800,47 @@ function FeedScreen({
           balance={balance}
           isBonusCounting={isBonusCounting}
         />
-        <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </PinnedSectionHeader>
 
-      <div className="-mr-3 space-y-[0px] bg-white pb-3 pt-[9px]">
-        {feedSections.map((section) => (
-          <section key={section.id} className="space-y-0.5 pt-5">
-            <div className="flex items-center justify-between gap-3 px-2">
-              <button
-                onClick={() => onOpenSection(section)}
-                className="flex w-full items-center justify-between gap-3 px-1 py-1 text-left"
-              >
-                <h2 className="text-[16px] font-medium tracking-[-0.02em] text-[#101418]">
-                  {section.label}
-                </h2>
-                <span className="flex shrink-0 items-center gap-1.5 text-[13px] font-medium text-[#6d7a90]">
-                  <User className="h-4 w-4" strokeWidth={2.1} />
-                  <span>{section.audience}</span>
-                </span>
-              </button>
-            </div>
-
-            <div className="flex gap-2 overflow-x-auto px-2 pb-1 pr-0">
-              {section.cards.map((card) => (
-                <div key={card.id} className="w-[168px] shrink-0">
-                  <FeedCard card={card} onClick={() => onSelectCard(card, section)} />
+      {isSearchMode ? (
+        <SearchMode
+          query={searchQuery}
+          setQuery={setSearchQuery}
+          activeFilter={activeFilter}
+          setActiveFilter={setActiveFilter}
+          results={searchResults}
+          onClose={closeSearchMode}
+          onSelectCard={(card) => onSelectCard(card)}
+        />
+      ) : (
+        <div className="space-y-6 bg-white pb-6 pt-5">
+          <div className="space-y-3 px-1">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#9ca3af]">
+                  NANA styles
                 </div>
-              ))}
+                <h1 className="mt-2 text-[30px] font-semibold leading-[1.02] tracking-[-0.05em] text-[#111827]">
+                  Лента стильных образов
+                </h1>
+              </div>
             </div>
-          </section>
-        ))}
-      </div>
+            <button
+              onClick={() => setIsSearchMode(true)}
+              className="flex h-12 w-full items-center gap-3 rounded-[20px] border border-[rgba(148,163,184,0.16)] bg-[rgba(249,250,251,0.9)] px-4 text-left text-[14px] font-medium text-[#9ca3af]"
+            >
+              <Search className="h-4 w-4" strokeWidth={2.2} />
+              <span>Поиск по стилям и категориям</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 px-1">
+            {visibleCards.map((card) => (
+              <FeedCard key={card.id} card={card} onClick={() => onSelectCard(card)} />
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -1766,16 +1868,8 @@ export default function App() {
   const [discountTimeLeft, setDiscountTimeLeft] = useState("10:00");
 
   const visibleCards = useMemo(() => {
-    let filteredCards = cards;
-
-    if (activeFilter === "liked") filteredCards = cards.filter((card) => card.badge === "choice");
-    else if (activeFilter === "popular") filteredCards = cards.filter((card) => card.badge === "popular");
-    else if (activeFilter === "new") filteredCards = cards.filter((card) => card.badge === "new");
-    else if (activeFilter === "photo")
-      filteredCards = cards.filter((card) => !card.categories?.includes("video"));
-    else if (activeFilter === "video") filteredCards = cards.filter((card) => card.categories?.includes("video"));
-
-    return filteredCards;
+    if (activeFilter === "all") return cards;
+    return cards.filter((card) => card.section === activeFilter);
   }, [activeFilter]);
 
   const availableSections = useMemo(
